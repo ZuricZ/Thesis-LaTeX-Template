@@ -38,7 +38,7 @@
 \usepackage[babel]{csquotes} % correct quotation marks, e.g. \enquote{some text}; alternatively \glqq und \grqq
 
 % Math packages
-\usepackage[intlimits,sumlimits]{amsmath} % setting placements of limits
+\usepackage{amsmath} % setting placements of limits [intlimits,sumlimits]
 \usepackage{amssymb}
 \usepackage{amstext}	
 \usepackage{amsfonts}
@@ -93,6 +93,7 @@
 % Colour
 \usepackage{color} % package for color support
 \usepackage{colortbl} % for colors in tables
+\usepackage[textsize=tiny]{todonotes}
 
 % PDF packages
 \usepackage[pdftex]{hyperref}
@@ -139,7 +140,7 @@
 \newcommand\doubleclearpage{\cleartooddpage}
 
 % labels/cross references for 'description' lists:
-\usepackage{enumitem}
+\usepackage[shortlabels]{enumitem}
 \makeatletter
 \def\namedlabel#1#2{\begingroup
     #2%

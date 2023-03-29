@@ -78,8 +78,8 @@
 %%%%%%%%%%%%%%%%%%%
 % Nomenclature    %
 %%%%%%%%%%%%%%%%%%%
-\myclearpage\mypagestyle{lists}\mylisthead{\nomname}
-\printnomenclature[2cm]
+% \myclearpage\mypagestyle{lists}\mylisthead{\nomname}
+% \printnomenclature[2cm]
 
 
 %%%%%%%%%%%%%%%%%%%
@@ -95,27 +95,32 @@
 % Result chapters %
 %%%%%%%%%%%%%%%%%%%
 \myclearpage\mypagestyle{myfancy}
-\chapter{First result chapter}
+\chapter{Robust pricing, hedging and joint calibration via neural SDEs}
 \label{chap:reschap1}
  \input{content/reschap1/main}
 
 \myclearpage\mypagestyle{myfancy}
-\chapter{Second result chapter}
+\chapter[Random neural networks for rough volatility SPDEs]{A random neural network approach to pricing SPDEs for rough volatility}
 \label{chap:reschap2}
  \input{content/reschap2/main}
 
 \myclearpage\mypagestyle{myfancy}
-\chapter{Third result chapter}
+\chapter[Large and Moderate Deviations for Importance Sampling]{Large and Moderate Deviations for Importance Sampling in the Heston Model}
 \label{chap:reschap3}
  \input{content/reschap3/main}
+
+ \myclearpage\mypagestyle{myfancy}
+\chapter[generalized grey Bergomi model]{Joint VIX and SPX Calibration under generalized grey Bergomi model}
+\label{chap:reschap4}
+ \input{content/reschap4/main}
 
 %%%%%%%%%%%%%%%%%%%%%
 % Summary           %
 %%%%%%%%%%%%%%%%%%%%%
-\myclearpage\mypagestyle{myfancy}
-\chapter{Summary}
-\label{chap:summary}
-\input{content/conclusion/summary}
+% \myclearpage\mypagestyle{myfancy}
+% \chapter{Summary}
+% \label{chap:summary}
+% \input{content/conclusion/summary}
 
 %%%%%%%%%%%%%%%%%%%%%
 % Conclusion        %
@@ -142,14 +147,14 @@
 % the file references/references.bib is automagically generated and contains the content
 % of all .bib files within the directory 'references'. Thus, only include the file
 % 'references/references' here:
-\bibliography{references/books, references/Theses, references/futuristic_and_mystical}
+\bibliography{references/LargeDev, references/ggBergomi, references/NSDE, references/RWNN}
 
 %%%%%%%%%%%%%%%%%%%%%
 % Appendix          %
 %%%%%%%%%%%%%%%%%%%%%
 \myclearpage\mypagestyle{myfancy}
 \appendix
-\chapter{Appendix}
+% \chapter{Appendix}
 \input{content/appendix/appendix}
 
 %

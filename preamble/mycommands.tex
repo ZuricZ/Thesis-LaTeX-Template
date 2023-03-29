@@ -1,22 +1,146 @@
 % header/mycommands.tex
 \usepackage{xspace}
 
+
+\numberwithin{equation}{section}
+
+\newtheorem{theorem}{Theorem}%[section]
+\numberwithin{theorem}{subsection}
+\newtheorem{proposition}{Proposition}
+\numberwithin{proposition}{subsection}
+
+\newtheorem{definition}{Definition}
+\numberwithin{definition}{subsection}
+\newtheorem{example}{Example}
+\numberwithin{example}{subsection}
+
+\newtheorem{lemma}{Lemma}
+\numberwithin{lemma}{subsection}
+\newtheorem{remark}{Remark}
+\numberwithin{remark}{subsection}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{assumption}{Assumption}
+\numberwithin{assumption}{subsection}
+
 % defining some commands:
 
-% spaces:
-\newcommand\R{\mathbb{R}}
-\newcommand\Rr{\mathbb{R}^2}
-\newcommand\Rrr{\mathbb{R}^3}
-\newcommand\di{{d_{\text{i}}}}
+\newcommand{\Xx}{\mathcal{X}}
+\newcommand{\Yy}{\mathcal{Y}}
+\newcommand{\Aa}{\mathcal{A}}
+\newcommand{\Bb}{\mathcal{B}}
+\newcommand{\Cc}{\mathcal{C}}
+\newcommand{\Dd}{\mathcal{D}}
+\newcommand{\Ff}{\mathcal{F}}
+\newcommand{\Gg}{\mathcal{G}}
+\newcommand{\Ss}{\mathcal{Ss}}
+\newcommand{\Ii}{\mathcal{I}}
+\newcommand{\Ll}{\mathcal{L}}
+\newcommand{\Mm}{\mathcal{M}}
+\newcommand{\Nn}{\mathcal{N}}
+\newcommand{\Oo}{\mathcal{O}}
+\newcommand{\Pp}{\mathcal{P}}
+\newcommand{\Uu}{\mathcal{U}}
+\newcommand{\Rr}{\mathcal{R}}
+\newcommand{\BV}{\mathcal{BV}}
 
-% FEM:
-\newcommand\popo{P1-P1\xspace}
-\newcommand\pdpt{$\text{P1}_{\text{DG}}\text{-P2}$\xspace}
-\newcommand\pcg{$\text{P1}_{\text{CG}}$\xspace}
-\newcommand\pdg{$\text{P1}_{\text{DG}}$\xspace}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\LL}{\mathbb{L}}
+\newcommand{\HH}{\mathbb{H}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\Var}{\mathbb{V}\mathrm{ar}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\UU}{\mathbb{U}}
 
-% Time:
-\newcommand\dt{\Delta t}
+\newcommand{\Df}{\mathfrak{D}}
+\newcommand{\Ef}{\mathfrak{E}}
+\newcommand{\Ifr}{\mathfrak{I}}
+\newcommand{\Lf}{\mathfrak{L}}
+\newcommand{\Zf}{\mathfrak{Z}}
+\newcommand{\Uf}{\mathfrak{U}}
+\newcommand{\Hf}{\mathfrak{H}}
+\newcommand{\Ffr}{\mathfrak{F}}
+
+\newcommand{\phib}{\boldsymbol{\phi}}
+\newcommand{\Sb}{\boldsymbol{S}}
+\newcommand{\Am}{\mathrm{A}}
+\newcommand{\Imat}{\mathrm{I}}
+\newcommand{\bm}{\mathrm{b}}
+\newcommand{\betam}{\boldsymbol{\beta}}
+
+\newcommand{\xxbf}{\mathbf{x}}
+\newcommand{\yybf}{\mathbf{y}}
+\newcommand{\zzbf}{\mathbf{z}}
+\newcommand{\varrhob}{\boldsymbol\varrho}
+
+
+\newcommand{\defEqual}{\coloneqq}
+\newcommand{\ct}{\circ_{t}}
+\newcommand{\cT}{\circ_{T}}
+\newcommand{\Wf}{\boldsymbol{\mathrm{W}}}
+\newcommand{\Xf}{\boldsymbol{\mathrm{X}}}
+\newcommand{\Yf}{\boldsymbol{\mathrm{Y}}}
+\newcommand{\vrho}{\boldsymbol{\mathrm{\varrho}}}
+\newcommand{\rrho}{\overline{\rho}}
+\newcommand{\Wp}{W^{\perp}}
+\newcommand{\brho}{\overline{\rho}}
+\newcommand{\D}{\mathrm{d}}
+\newcommand{\E}{\mathrm{e}}
+\newcommand{\II}{\mathrm{I}}
+\newcommand{\IIV}{\mathrm{I}^{V}}
+\newcommand{\IIW}{\mathrm{I}^{W}}
+\newcommand{\IIX}{\mathrm{I}^{X}}
+\newcommand{\IIXV}{\mathrm{I}^{V,X}}
+
+\newcommand{\LDP}{\mathrm{LDP}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\seps}{\sqrt{\eps}}
+\newcommand{\trans}{{}^t \!}
+\newcommand{\abold}{\boldsymbol{\mathrm{a}}}
+\newcommand{\qbold}{\boldsymbol{q}}
+\newcommand{\uu}{\boldsymbol{\mathrm{u}}}
+\newcommand{\ww}{\boldsymbol{\mathrm{w}}}
+\newcommand{\yy}{\boldsymbol{\mathrm{y}}}
+\newcommand{\hh}{\boldsymbol{\mathrm{h}}}
+\newcommand{\xx}{\boldsymbol{\mathrm{x}}}
+\newcommand{\zz}{\boldsymbol{\mathrm{z}}}
+\newcommand{\hm}{\mathrm{h}}
+\newcommand{\xm}{\mathrm{x}}
+\newcommand{\mm}{\mathrm{m}}
+\newcommand{\ind}{1\hspace{-2.1mm}{1}} %Indicator Function
+\newcommand{\row}[2]{\begin{pmatrix} #1 & #2\\ \end{pmatrix}}
+\newcommand{\col}[2]{\begin{pmatrix} #1 \\ #2 \end{pmatrix}}
+\newcommand{\half}{\frac{1}{2}}
+
+\newcommand{\I}{{\mathrm{i}\mkern1mu}}
+
+\newcommand{\Abold}{\boldsymbol{\mathrm{A}}}
+\newcommand{\Bbold}{\boldsymbol{\mathrm{B}}}
+\newcommand{\Qbold}{\boldsymbol{\mathrm{Q}}}
+
+\newcommand{\SPX}{\mathrm{SPX}}
+\newcommand{\VIX}{\mathrm{VIX}}
+\newcommand{\RWNN}{\mathcal{RWNN}}
+\newcommand{\NNn}{\mathcal{NN}}
+\newcommand{\relu}{\varsigma}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\arginf}{arg\,inf}
+\DeclareMathOperator*{\argsup}{arg\,sup}
+
+% Comments
+\newcommand\red[1]{\textcolor{red}{#1}}
+\newcommand\blue[1]{\textcolor{blue}{#1}}
+
+\newcommand{\jack}[2][]
+{\todo[color=cyan, #1]{#2}}
+\newcommand{\zan}[2][]
+{\todo[color=green, #1]{#2}}
 
 % over/under brackets:
 \newcommand\myoverbracket[4][black]{\color{#2}\overbracket[1.5pt][5pt]{\color{#1}#3}^{#4}\color{black}}
