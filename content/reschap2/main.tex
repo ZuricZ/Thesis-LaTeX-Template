@@ -1,1 +1,1075 @@
-\section{Mathematical Model}
+\section{Introduction}
+Dating back to the Black-Scholes equation~\cite{Black1973TheLiabilities}, PDEs have been used to model the evolution of the prices of European-style options. 
+However, rough volatility models give rise to a non-Markovian framework, where the value function for a European option is not deterministic anymore, but is instead random and satisfies a backward stochastic partial differential equation (BSPDE) as was shown in~\cite{Bayer2022PricingSPDEs}.
+Moreover, even in classical diffusive models, the so-called curse of dimensionality poses a challenge when solving PDEs in high dimension;
+until recently, only the backward stochastic differential equation (BSDE) approach by~\cite{Pardoux1990AdaptedEquation} was available to tackle this, 
+which is not really feasible in dimension beyond six.
+
+On a positive note, machine learning methods have spread inside quantitative finance in recent years, and neural networks, in particular, have become a powerful tool to overcome problems in high-dimensional situations, because of their superior computational performance across a wide range of applications~\cite{Buehler2019DeepHedging, Gierjatowicz2023RobustEquations, Ruf2020NeuralReview};
+more precisely in the context of PDEs, examples of applications thereof can be found in~\cite{E2017DeepEquations, Han2018SolvingLearning, Sirignano2018DGM:Equations, Jacquier2019DeepVolatility, Saporito2021Path-DependentEquations, Beck2021DeepPDEs}. 
+For a more thorough literature review on the use of neural networks in finance and finance-related PDEs, we refer the reader to the surveys in~\cite{Beck2023AnEquations, Germain2021NeuralFinance}.
+
+In this Chapter, we focus on the works by Hur{\'e}, Pham and Warin~\cite{Hure2020DeepPDEs}, and by Bayer, Qiu and Yao~\cite{Bayer2022PricingSPDEs}, where the classical backward resolution technique is combined with neural networks to estimate both the value function and its gradient. 
+Not only does this approach successfully reduce the curse of dimensionality, but also appears more effective in both accuracy and computational efficiency than existing Euler-based approaches.
+
+Besides research on numerical aspects, a lot of progress has been made on the theoretical foundations for neural network-based methods, 
+in particular showing that they are able to approximate solutions of certain types of PDEs~\cite{Elbrachter2021DNNPricing, Hutzenthaler2020AEquations, Reisinger2020RectifiedSystems, Gonon2023DeepEquations}. 
+These results are significant as they show that deep neural networks can be used to solve complex problems that were previously thought intractable. 
+However, in practice, optimal parameters of any given neural network minimising a loss function ultimately have to be calculated approximately. This is usually done through some kind of stochastic gradient descent (SGD) algorithm, which inadvertently introduces an optimisation error. Because of the non-convexity of the network's loss surface and the stochastic nature of the SGD, the optimisation error is notoriously hard to treat rigorously. 
+One such attempt by Gonon~\cite{Gonon2021RandomDimensionality} instead involves the use of neural networks in which only certain weights are trainable and the remaining are randomly fixed. 
+This suggests that these random-weight neural networks are, in fact, capable of learning non-degenerate Black-Scholes-type PDEs without succumbing to the curse of dimensionality. Following this, we combine the classical BSDE approach~\cite{Pardoux1990AdaptedEquation, Briand2003LpEquations} with random-weight neural networks (RWNNs)~\cite{Huang2006UniversalNodes, Rahimi2007RandomMachines, Rahimi2008WeightedLearning}.
+
+Our final algorithm then reduces to a least-square Monte-Carlo, as introduced by Longstaff and Schwartz~\cite{Longstaff2001ValuingApproach} (see also~\cite{Anker2017SDEPDEs} for related applications), where the usually arbitrary choice of basis is `outsourced' to the reservoir of the corresponding RWNN. The basis is computationally efficient and ultimately allows us to express the approximation error in terms of the number of stochastic nodes in the network. Moreover, vectorisation of the Randomised Least Square along the sampling direction allows us to evaluate the sum of outer tensor products using the \texttt{einsum} function (available in \texttt{NumPy} and \texttt{PyTorch}) and achieve an even greater speed-up. 
+
+To summarise, in contrast with Bayer-Qiu-Yao~\cite{Bayer2022PricingSPDEs}, our numerical scheme employs RWNNs as opposed to the conventional feed-forward neural networks, resulting in significantly faster training times without sacrificing the accuracy of the scheme. 
+Moreover, this structure allows us to provide error bounds in terms of the number of hidden nodes, granting additional insights into the network's performance. Given the comparable performance of RWNNs and conventional feed-forward neural networks, we argue that this work illuminates an essential lesson, namely that the additional complexity of deep neural networks can sometimes be redundant at the cost of precise error bounds.
+We note in passing that RWNNs have already been used in Finance to price American options~\cite{Herrera2021OptimalNetworks}, 
+for financial data forecasting~\cite{Liu2018FinancialNetwork}, for PIDEs~\cite{Gonon2023DeepEquations},
+and we refer the interested reader to~\cite{Cao2018AWeights} for a general overview of their applications in data science.
+
+The Chapter is structured as follows: Section~\ref{sec:ReLu-RWNN} provides a brief overview of a type of Random-weight Neural Networks (RWNNs) from Section~\ref{sec:RWNN} used in this study, including their key features and characteristics. 
+In Section~\ref{sec:markovian_case}, we outline the scheme for the Markovian case and discuss the non-Markovian case in Section~\ref{sec:non-Markovian_case}.
+The convergence analysis is presented in Section~\ref{sec:convergence_analysis}. Additionally, Section~\ref{sec:RWNN_numerical_results} presents numerical results, which highlight the practical relevance of the scheme and its performance for different models.
+Some of the technical proofs are postponed to Appendix~\ref{apx:technical_proofs} to ease the flow of the work.
+
+
+\textbf{Notations:}
+$\RR^+ = [0,\infty)$ represents the non-negative real numbers;
+% $\RWNN$ refers to a set of random neural networks, defined in Section~\ref{sec:RWNN};
+for an open subset $E\subset \RR^d$, 
+$1\leq p \leq \infty$ and $s \in \NN$ 
+we define the Sobolev space
+$$
+\Ww^{s, p}(E, \RR^m)
+\defEqual  \Big\{f \in L^p(E, \RR^m): \; \partial_{\xxbf}^{\boldsymbol{\alpha}} f \in L^p(E, \RR^m), \text{for all } |\boldsymbol{\alpha}| \leq s\Big\},
+$$
+where $\boldsymbol{\alpha} = \left(\alpha_1, \ldots, \alpha_d\right)$, $|\boldsymbol{\alpha}|=\alpha_1+\ldots+\alpha_d$, and the derivatives $\partial_{\xxbf}^{\boldsymbol{\alpha}} f = \partial_{x_1}^{\alpha_1} \dots \partial_{x_d}^{\alpha_d} f$ are taken in a weak sense.
+
+\section{Random-weight neural network with ReLu activations}\label{sec:ReLu-RWNN}
+
+In recent years ReLu neural networks have been predominately used in deep learning, because of their simplicity, efficiency and ability to address the so-called vanishing gradient problem \cite{LeCun2012EfficientBackProp}. In many ways, ReLu networks also give a more tractable structure to the optimisation problem compared to their smooth counterparts such as $\tanh$ and sigmoid. 
+Gonon, Grigoryeva and Ortega~\cite{Gonon2020ApproximationSystems} derived error bounds to the convergence of a single layer RWNN with ReLu activations.
+
+\subsection{Derivatives of ReLu-RWNN}
+\label{sec:RWNNderivatives}
+While networks with ${\relu(y)\defEqual \max\{y,0\}}$ activation functions are performing well numerically, the function is, however, not differentiable at zero (see \cite{Berner2019TowardsEstimates} for a short exposition on the chain-rule in ReLu networks). As ReLu-RWNNs will be used in our approach to approximate solutions of partial differential equations, a discussion on its derivatives is in order. 
+To that end we let $\brelu(\yybf)\defEqual(\relu(y_1),\dots,\relu(y_K))$ and $\Hb(y)=\ind_{(0,\infty)}(\yybf)\in\RR^K$ for $\yybf\in\RR^K$, where the indicator function is again applied component-wise. 
+
+
+\begin{lemma}\label{lem:RWNNderivative}
+For any linear function $\ell(\xxbf)=\Am \xxbf + \bm$, with $\Am\in\RR^{K\times d}$ and $\bm\in\RR^K$, then
+\[
+\nabla_x(\brelu\circ \ell)(\xxbf) = \operatorname{diag}(\Hb(\Am \xxbf+\bm))\Am,
+\qquad \text{for a.e. } \xxbf\in\RR^d.
+\]
+\end{lemma}
+\begin{proof}
+Let $\Aa\defEqual\left\{\xxbf\in\RR^d: (\brelu\circ\ell)(\xxbf)=0\right\}
+=\left\{\xxbf\in\RR^d:\ell(\xxbf)\leq 0\right\}$. 
+Then ${(\brelu\circ\ell)(\xxbf)=\ell(\xxbf)}$ for all $\xxbf\in\RR^d\setminus\Aa$.
+Since~$\ell$ is Lipschitz,
+differentiability on level sets \cite[Section~3.1.2,~Corollary~I]{Evans1992MeasureFunctions} implies that
+$\nabla_{\xxbf}\left(\brelu\circ\ell\right)(\xxbf) = \boldsymbol{0}\in\RR^d$
+for almost every $\xxbf\in\Aa$,
+and hence
+\begin{align*}
+\nabla_{\xxbf}(\brelu\circ\ell)(\xxbf)
+&=\operatorname{diag}\left(\ind_{\{\ell(\xxbf)\in\RR^d\setminus\Aa\}}\right)\nabla_{\xxbf}\ell(\xxbf) \\
+&=\operatorname{diag}\left(\ind_{(0,\infty)}(\ell(\xxbf))\right)\nabla_{\xxbf}\ell(\xxbf) \\
+&=\operatorname{diag}(\Hb(\Am \xxbf+\bm))\Am\,.
+\end{align*}
+\end{proof}
+Thus by Lemma~\ref{lem:RWNNderivative}, the first derivative of $\Psi(\cdot;\Theta)\in\RWNN^{\relu}_K$ is equal to 
+\begin{equation}\label{eq:RWNN1stderivative}
+    \nabla_{\xxbf}\Psi_K(\xxbf; \Theta)
+    = \Theta\operatorname{diag}(\Hb(\Am \xxbf+\bm))\Am
+    \qquad \text{for a.e. } \xxbf\in\RR^d.
+\end{equation}
+The above statements hold almost everywhere, it is thus appropriate we introduce a notion of \textit{approximate differentiability}.
+\begin{definition}[{Approximate~limit,~\cite[Section~1.7.2]{Evans1992MeasureFunctions}}]
+Consider a Lebesgue-measurable set $E \subset \RR^d$, a measurable function $f: E \rightarrow \RR^m$ and a point $\xx_0 \in E$. We say $l \in \RR^m$ is the approximate limit of~$f$ at~$\xx_0$, and write
+$\aplim_{\xxbf \rightarrow x_0} f(\xxbf)=l$,
+if for each $\eps>0$,
+\[
+\lim _{r \downarrow 0} \frac{\lambda\left(\Bb_r(\xx_0) \cap\left\{\xxbf\in E:\;|f(\xxbf)-l| \geq \eps\right\}\right)}{\lambda(\Bb_r(\xx_0))}=0,
+\]
+with~$\lambda$ the Lebesgue measure and $\Bb_r(\xx_0)$ the closed ball with radius $r>0$ and center~$\xx_0$.
+\end{definition}
+\begin{definition}[{Approximate differentiability,~\cite[Section~6.1.3]{Evans1992MeasureFunctions}}]\label{def:approximatediff}
+Consider a measurable set $E\subset \RR^d$, a measurable map $f:E\rightarrow \RR^m$ and a point $\xx_0\in E$. 
+The map~$f$ is approximately differentiable at~$\xx_0$ if there exists a linear map $\Dxx:\RR^d\rightarrow\RR^m$ such that
+\[
+\aplim_{\xxbf \rightarrow x_{0}} \frac{f(\xxbf)-f(\xx_{0})-\Dxx(\xxbf-\xx_{0})}{|\xxbf-\xx_{0}|}=0.
+\]
+Then~$\Dxx$ is called the approximate differential of~$f$ at~$\xx_0$.
+\end{definition}
+\begin{remark}\label{rem:usualdiffrules}
+The usual rules from classical derivatives, such as the uniqueness of the differential, and differentiability of sums, products and quotients, apply to approximately differentiable functions. 
+Moreover, the chain rule applies to compositions $\varphi\circ f$ when~$f$ is approximately differentiable at~$\xx_0$ and $\varphi$ is classically differentiable at $f(\xx_0)$.
+\end{remark}
+\begin{remark}[{\cite[Theorem~4, Section~6.1.3]{Evans1992MeasureFunctions}}]\label{rem:approxweakeq}
+For $f\in \Ww_{\mathrm{loc}}^{1, p}\left(\mathbb{R}^{d}\right)$ and ${1 \leq p \leq \infty}$, $f$~is approximately differentiable almost everywhere and its approximate derivative equals its weak derivative almost everywhere. 
+We will thus use the operator~$\Dxx$ to denote the weak derivative and approximate derivative interchangeably, to distinguish them from the classical derivative denoted by $\nabla$.
+\end{remark}
+
+\begin{lemma}\label{lem:diffexpectationeq}
+Let $E\subset \RR^d$ be a measurable set with finite measure, $X:\Omega\rightarrow\nobreak E$ a continuous random variable on some probability space $(\Omega, \Ff, \PP)$,
+$\varphi\in\Cc^1(\RR^m)$, $\Phi_{\mathrm{ap}}: E\rightarrow \RR^m$ an approximately differentiable function, and $\Phi\in\Cc^1(\RR^d; \RR^m)$
+its continuously differentiable extension to $\RR^d$.
+Then
+$\EE[\varphi(\Dx\Phi_{\mathrm{ap}}(X))] = \EE[\varphi(\nabla_x\Phi(X))]
+$.
+
+\end{lemma}
+\begin{proof}
+By~\cite[Theorem 3.1.6]{Federer1996GeometricTheory} a function $\Phi_{\mathrm{ap}}: E \rightarrow \mathbb{R}^{m}$ is approximately differentiable almost everywhere if for every $\eps>0$ there is a compact set $F \subset E$ such that the Lebesgue measure $\lambda(E \backslash F)<\eps$ and $\left.\Phi_{\mathrm{ap}}\right|_{F}$ is $\Cc^{1}$. 
+Since~$\varphi$ is everywhere differentiable, 
+it maps null-sets to null-sets~\cite[Lemma 7.25]{Rudin1986RealAnalysis}. 
+The claim follows since~$\PP$ is absolutely continuous with respect to the Lebesgue measure~$\lambda$, $X$~being a continuous random variable.
+
+\end{proof}
+\begin{corollary}\label{coro:diffexpectationeq2}
+    Let $E\subset \RR^d$ be a measurable set with finite measure, ${X:\Omega\rightarrow E}$ a continuous random variable on some probability space~$(\Omega, \Ff, \PP)$, $\varphi\in\Cc^1(\RR^m)$, $\Phi:E\rightarrow \RR^m$ an approximately differentiable function, and~${\Psi\in\Ww^{1,p}(E,\RR^m)}$
+    for $p\geq 1$ such that $\Phi = \Psi$ almost everywhere. Then
+    $\EE[\varphi(\Dxx\Phi(X))] = \EE[\varphi(\Dxx\Psi(X))]$.
+\end{corollary}
+\begin{proof}
+This is a direct consequence of Lemma~\ref{lem:diffexpectationeq}, after noting that the two notions of derivatives are the same on $\Ww^{1,p}(E,\RR^m)$ (see Remark~\ref{rem:approxweakeq}).
+\end{proof}
+
+From a practical perspective, the second-order derivative of the network with respect to the input will be zero for all intents and purposes. 
+However, as will become apparent in Lemma~\ref{lem:derivativeBounds}, we need to investigate it further, in particular the measure zero set of points where ReLu-RWNN is not differentiable. Rewriting the diagonal operator in terms of the natural basis $\{e_{i}\}$ and evaluating the function $\Hb$ component-wise yields
+$$
+\nabla_{\xxbf}\Psi_K(\xxbf; \Theta)=\Theta \left(\sum_{j=1}^{K} e_{j} e_{j}^\top H\left(e_{j}^\top \Am \xxbf+b_{j}\right) \right) \Am.
+$$
+The $i$-th component of the second derivative is thus
+\begin{align*}
+\left[\nabla_{\xxbf}^2\Psi_K(\xxbf; \Theta)\right]_i
+&= \Theta\left( \sum_{j=1}^{K} e_{j} e_{j}^\top a_{j i}H'\left(e_{j}^\top \Am \xxbf+b_{j}\right)\right)\Am \\
+&= \Theta \operatorname{diag} \left(a_{i}\right) \operatorname{diag} \left(\Hb'(\Am \xxbf+\bm)\right) \Am,
+\end{align*}
+where $a_i$ denotes the $i$-th column of the matrix~$\Am$. 
+Next, we let
+$$\delta_0^{\eps}(\xxbf) \defEqual \frac{H(\xxbf)-H(\xxbf-\eps)}{\eps}$$
+for $\xxbf\in\RR$ and define the left derivative of $H$ as $H'=\lim_{\eps\downarrow 0}\delta_0^\eps=\delta_0$ in the distributional sense. This finally gives the second derivative of the network:
+$$
+\left[\nabla_{\xxbf}^2\Psi_K(\xxbf; \Theta)\right]_i
+ = \Theta\operatorname{diag}\left(a_{i}\right)\operatorname{diag}\left(\boldsymbol\delta_0(\Am \xxbf+\bm)\right) \Am,
+$$
+where $\boldsymbol \delta_0$ denotes the vector function applying $\delta_0$ component-wise.
+
+
+\subsection{Randomised least squares}
+\label{sec:randomizedLS}
+Let $Y\in\RR^d$ and $X\in\RR^k$ random variables defined on some probability space $(\Omega, \Ff, \PP)$ and let $\betam\in\RR^{d\times k}$ be a deterministic coefficient matrix. 
+If the loss function is the mean square error (MSE), we can derive the estimator for the randomised least square~(RLS):
+\begin{align*}
+    \nabla_{\betam} \EE\left[\|Y-\betam X\|^2\right] &= \nabla_{\betam} \EE[(Y-\betam X)^\top(Y-\betam X)] \\ 
+    &= \EE\left[\nabla_{\betam} (Y^\top Y - Y^\top \betam X - X^\top\betam^\top Y + X^\top\betam^\top\betam X)\right] \\
+    &= \EE\left[2\betam XX^\top - 2YX^\top\right],
+\end{align*}
+which gives the minimiser\footnote{The matrix $\EE[XX^\top]$ may not be invertible, but its generalised Moore-Penrose inverse always exists.}
+$\betam = \EE\left[YX^\top\right] \EE\left[XX^\top\right]^{-1}$,
+and its estimator
+\[
+\widehat\betam \defEqual  \left(\sum^n_{j=1} Y_j X_{j}^{\top}\right)\left(\sum^n_{j=1} X_jX_j^\top\right)^{-1}.
+\]
+Depending on the realisation of the reservoir of the RWNN, the covariates of~$X$ may be collinear, 
+so that~$X$ is close to rank deficient. 
+A standard remedy is to use the Ridge regularised version~\cite{Hoerl1970RidgeProblems} of the estimator
+\[
+\widehat\betam_R = \left(\sum^n_{j=1} Y_j X_{j}^{\top}\right)\left(\sum^n_{j=1} X_jX_j^\top+\lambda I\right)^{-1},
+\quad \text{for } \lambda>0,
+\]
+which results in a superior, more robust performance in our experiments.
+\begin{remark}
+The above derivation holds true for the approximate derivative~$\Dx$ as well because all operations above hold for approximately differentiable functions~(Remark~\ref{rem:usualdiffrules}).
+\end{remark}
+\begin{remark}
+One of the advantages of RLS estimators is the ability to vectorise them over the sampling dimension (i.e. over $n$~samples) in order to use tensor functionalities of packages such as \textup{\texttt{NumPy}} and \textup{\texttt{PyTorch}} to efficiently evaluate the sum of outer products using the \textup{\texttt{einsum}} function. Details are provided in the code available at \href{https://github.com/ZuricZ/RWNN_PDE_solver}{\textup{\texttt{ZuricZ/RWNN\_PDE\_solver}}}.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Markovian case}\label{sec:markovian_case}
+Let the process $\XX$ of the traded and non-traded components of the underlying under the risk-neutral measure $\QQ$ be given by the following $d$-dimensional SDE:
+\begin{equation}\label{eq:markovianSDE}
+\XX_s^{t,\xxbf} = \xxbf + \int_t^s \mu(r, \XX_r^{t,\xxbf})\D r
++ \int_t^s \Sigma\left(r, \XX_r^{t,\xxbf}\right)\D W_r,
+\end{equation}
+where $\mu: [0, T]\times\RR^d\rightarrow\RR^d$
+and $\Sigma:[0, T]\times\RR^d\rightarrow\RR^{d\times d}$ adhere to Assumption~\ref{ass:wellposednessBSDE}, 
+and~$W$ is a standard $d$-dimensional Brownian motion on the probability space $(\Omega, \Ff, \QQ)$ equipped
+with the natural filtration $\FF = \{\Ff_t\}_{0\leq t\leq T}$ of~$W$. 
+By the Feynman-Kac formula, options whose discounted expected payoff under~$\QQ$ can be represented as
+\begin{equation}
+    u(t, \xxbf)=\EE\left[\int_t^T \E^{-r(s-t)} f\left(s, \XX_s^{t, \xxbf}\right) \D s + \E^{-r(T-t)} g\left(\XX_T^{t, \xxbf}\right)\right]\quad \textup{ for all } (t, \xxbf) \in[0, T] \times \Aa,
+\end{equation}
+for~$\Aa\subset\RR^d$ with interest rate $r\geq 0$ and continuous functions $f:[0,T]\times\RR^d\to\RR$
+and $g:\RR^d\to\RR$ can be viewed as solutions to the Cauchy linear parabolic PDE
+\begin{equation*}
+\left\{
+\begin{array}{rl}
+\partial_t u + \Ll u + f - ru= 0, & \text { on }[0, T) \times \Aa, \\
+u(T, \cdot)= g, & \text { on } \Aa,
+\end{array}
+\right.
+\end{equation*}
+where
+\begin{align}\label{eq:infinitesimal_generator}
+\Ll u \defEqual \frac{1}{2}\operatorname{Tr}
+\left(\Sigma\Sigma^\top \nabla_{\xxbf}^2 u\right) +  (\nabla_{\xxbf} u)\mu,
+\qquad\text{on }[0,T)\times \Aa,
+\end{align}
+is the infinitesimal generator associated with diffusion~\eqref{eq:markovianSDE}.
+In this Markovian setting, we thus adopt a set-up similar to~\cite{Hure2020DeepPDEs} and consider a slightly more general PDE
+\begin{equation}\label{eq:markovianPDE}
+\left\{
+\begin{array}{rll}
+    \partial_t u(t,\xxbf) + \Ll u(t,\xxbf) + 
+    f\Big(t, \xxbf, u(t,\xxbf), \nabla_{\xxbf} u(t,\xxbf) \cdot \Sigma(t,\xxbf)\Big) &= 0, & \text{on }[0, T) \times \Aa,\\
+     u(T, \xxbf) &= g(\xxbf), & \text{on }\Aa,
+\end{array}
+\right.
+\end{equation}
+with $f:[0,T]\times \RR^d \times \RR \times \RR^{d} \rightarrow \RR$ 
+such that Assumption~\ref{ass:wellposednessBSDE} is satisfied, which guarantees the existence and uniqueness of the solution to the corresponding backward stochastic differential equation (BSDE)~\cite[Section 4]{Pardoux1990AdaptedEquation}.
+The corresponding second-order generator is again given by~\eqref{eq:infinitesimal_generator}.
+
+The following assumption is only required to cast the problem into a regression. 
+Otherwise, the optimisation (below) can still be solved using other methods, such as stochastic gradient descent. Another solution would be to use the so-called splitting method to linearise the PDE (as in~\cite{Beck2021DeepPDEs} and the references therein for example).
+
+\begin{assumption}\label{ass:faffine}
+The function $f:[0,T]\times \RR^d \times \RR \times \RR^{d}\times\RR^{d} \rightarrow \RR$ has an affine structure in $\yybf \in \RR^m$ and in $\zzbf^1,\zzbf^2 \in \RR^{d}$:
+$$
+f\left(t, \xxbf, \yybf, \zzbf^1, \zzbf^2\right)
+= a(t,\xxbf)\yybf + b(t, \xxbf)\zzbf^1 + c(t, \xxbf) \zzbf^2 + \widetilde{f}(t, \xxbf),
+$$
+for some real-valued functions $a,b,c,\widetilde{f}$ on $[0,T]\times\RR^d$ that map to conformable dimensions. 
+\end{assumption}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Random weighted neural network scheme}
+The first step in so-called deep BSDE schemes~\cite{E2017DeepEquations, Han2018SolvingLearning, Hure2020DeepPDEs} is to establish the BSDE associated with the PDE~\eqref{eq:markovianPDE} and the process~\eqref{eq:markovianSDE} through the nonlinear Feynman-Kac formula. By~\cite{Pardoux1990AdaptedEquation} there exist $\FF$-adapted processes $(Y, Z)$, which are unique solutions to the BSDE
+\begin{equation}\label{eq:markovianBSDE}
+Y_{t}=g\left(\XX_{T}\right)+\int_{t}^{T} f\left(s, \XX_{s}, Y_{s}, Z_{s}\right) \D s-\int_{t}^{T} Z_{s} \D W_{s},
+\qquad\text{for any }t \in [0,T],
+\end{equation}
+and which are connected to the PDE~\eqref{eq:markovianPDE} via
+$$
+Y_t = u(t, \XX_t) \qquad \text{and} \qquad Z_t = \nabla_x u(t,\XX_t)\cdot\Sigma(t,\XX_t).  
+$$
+with terminal condition $u(T, \cdot)=g$. Next, the BSDE~\eqref{eq:markovianBSDE} is rewritten in forward form
+\begin{equation*}
+    Y_{t}=Y_0 - \int_{0}^{t} f\left(s, \XX_{s}, Y_{s}, Z_{s}\right) \D s + \int_{0}^{t} Z_{s} \D W_{s},
+\qquad\text{for any }t \in [0,T],
+\end{equation*}
+and both processes are discretised according to the Euler-Maruyama scheme. To this end let $\pi\defEqual \left\{0=t_{0}<t_{1}<\ldots<t_{N}=T\right\}$ be a partition of the time interval $[0,T]$ with modulus $|\pi|=\max_{i=\{0,1, \dots, N-1\}} \Deli $ and $\Deli \defEqual  t_{i+1}-t_{i}$. Then the scheme is given by
+\begin{equation}\label{eq:EulerMaruyama}
+\left\{
+\begin{array}{rl}
+    \XX_{t_{i+1}} &= \XX_{t_{i}} + \mu(t_{i}, \XX_{t_{i}})\Deli  + \Sigma(t_{i}, \XX_{t_{i}})\DelWi, \\
+    Y_{t_{i+1}} &= Y_{t_{i}} - f\left(t_{i}, \XX_{t_{i}}, Y_{t_{i}}, Z_{t_i}\right)\Deli + Z_{t_i}\DelWi,
+\end{array}
+\right.
+\end{equation}
+where naturally $\DelWi\defEqual  W_{t_{i+1}} - W_{t_i}$.
+Then for all $i\in\{N-1,\dots,0\}$ we approximate~$u(t_i,\cdot)$ with $\Uf_i(\cdot;\Theta^i)\in\RWNN_{K}^\varrho$ 
+and~$Z_{t_i}$ as
+\begin{equation*}
+\begin{array}{rll}
+u(t_i,\XX_{t_i}) = Y_{t_i}
+&\hspace*{-0.25cm}\approx \Uf_i(\XX_{t_i};\Theta^i)
+&\hspace*{-0.25cm}\defEqual\Theta^i \Phi_K^i(\XX_{t_i}),\\
+Z_{t_i} &\hspace*{-0.25cm}\approx \Zf_{i}(\XX_{t_i}) 
+&\hspace*{-0.25cm}\defEqual \Dxx \Uf_i(\XX_{t_i};\Theta^i)\cdot\Sigma(t_i,\XX_{t_i})
+ = \Theta^i \Dxx \Phi_K^i(\XX_{t_i})\cdot\Sigma(t_i,\XX_{t_i}).
+ \end{array}
+\end{equation*}
+Recall that the derivative~$\Zf_{i}(\XX_{t_i})$ is the approximate derivative from Definition~\ref{def:approximatediff}. The following formulation of the loss function $\ell$ using the approximate derivative is sensible by Lemma~\ref{lem:diffexpectationeq}: notice that for the optimal parameter $\Theta^{i+1, *}$ in step $(i+1)$, the optimal approximation $\widehat \Uf_{i+1}(\XX_{t_{i+1}})\defEqual\Uf_{i+1}(\XX_{t_{i+1}}; \Theta^{i+1, *})$ 
+does not depend on $\Theta^i$, hence under Assumption~\ref{ass:faffine} with $c=0$ the loss function at the $i$-th discretisation step reads
+\begin{small}
+\begin{align*}
+    &\ell(\Theta^i) \\
+    &\defEqual \EE^\Phi\left[\left\| \widehat \Uf_{i+1}(\XX_{t_{i+1}}) - \left[\Uf_i(\XX_{t_i};\Theta^i) - f\Big(t_{i}, \XX_{t_{i}}, \Uf_i(\XX_{t_i};\Theta^i), \Zf_{i}(\XX_{t_i}; \Theta^i)\Big)\Deli + \Zf_{i}(\XX_{t_i}; \Theta^i)\DelWi\right] \right\|^2\right] \\
+    &= \EE^\Phi\left[\left\| \widehat \Uf_{i+1}(\XX_{t_{i+1}}) - \left[(\Uf_i(\XX_{t_i};\Theta^i) - \left(a_{i}\Uf_i(\XX_{t_i};\Theta^i) + b_{i}\Zf_{i}(\XX_{t_i}; \Theta^i) + \widetilde{f}_{i}\right)\Deli + \Zf_{i}(\XX_{t_i}; \Theta^i)\DelWi\right] \right\|^2\right] \\
+    &= \EE^\Phi\left[\left\| \widehat \Uf_{i+1}(\XX_{t_{i+1}}) + \widetilde{f}_{i}\Deli - \Theta^i\Big\{(1-a_{i}\Deli)\Phi_K^i(\XX_{t_i}) + \Dx \Phi_K^i(\XX_{t_i}) \Sigma_i \left(b_{i}\Deli  + \DelWi\right)\Big\} \right\|^2\right] \\
+    &= \EE^\Phi\left[\left\| \Y^i - \Theta^i \X^i \right\|^2\right]
+\end{align*}
+\end{small}%
+where $p_{i} \defEqual  p(t_i, \XX_{t_i})$ for $p \in \{a, b, \widetilde{f}, \Sigma\}$, and the expectation $\EE^\Phi$ is of course conditional on the realisation of the random basis $\Phi_K^i$, i.e., conditional on the random weights and biases of the RWNN. Furthermore, we used the notations
+\[
+\Y^i \defEqual \widehat \Uf_{i+1}(\XX_{t_{i+1}}) + \widetilde{f}_{i}\Deli
+    \qquad\text{and}\qquad
+\X^i \defEqual 
+(1-a_{i}\Deli)\Phi_K(\XX_{t_i}) + \Dxx\Phi_K(\XX_{t_i})\cdot \Sigma_i \left(b_{i}\Deli  + \DelWi\right).
+\]
+The problem can now be solved via least squares from Section~\ref{sec:randomizedLS}, yielding the estimator
+$$
+\Theta^{i,*} = \EE^\Phi\left[\Y^i\X^{i\top}\right]
+\EE^\Phi\left[\X^i\X^{i\top}\right]^{-1}.
+$$
+
+\subsection{Algorithm}
+We now summarise the algorithmic procedure of our RWNN scheme. See how the algorithm resembles the Least-Square Monte-Carlo method of~\cite{Longstaff2001ValuingApproach} after considering sample estimator version of RLS from Section~\ref{sec:randomizedLS}:
+\begin{algorithm}[ht]\caption{RWNN scheme}\label{alg:markovian}
+\begin{algorithmic}
+\STATE{\textit{Input}:
+\begin{ALC@g}
+\STATE $\pi=\left\{0=t_{0}<t_{1}<\ldots<t_{N}=T\right\}$ time grid
+\end{ALC@g}
+}
+\STATE{\textit{Initialisation}: 
+\begin{ALC@g}
+\STATE $\Phi_K^i$ reservoirs with $K\in\NN$ hidden nodes with weights and biases distributed as $\Uu_{[-R,R]}$ with $R>0$ for all $i\in\{0,\dots,N-1\}$
+\end{ALC@g}
+}
+\STATE{\textbf{do}: 
+\begin{enumerate}[ ]
+    \item Generate $n\in\NN$ paths of
+    $\{\XX_{t_i}^{\pi,j}\}_{i=0}^{N}$ for $j\in\{1,\dots,n\}$ with the Euler-Maruyama scheme~\eqref{eq:EulerMaruyama}
+    \item Set $\widehat \Uf_N(\xxbf) = g(\xxbf)$ for all $\xxbf\in\RR^d$
+\end{enumerate}
+}
+\FOR{$i\in \{N-1,\dots,0\}$}
+\STATE{Approximate $u(t_i, \cdot)$ with $\Uf(\cdot; \Theta^i)\in\RWNN^{\relu}_K$ based on reservoir $\Phi^i_K$}
+\STATE{Evaluate the derivative of $\Uf(\cdot; \Theta^i)$ according to~\eqref{eq:RWNN1stderivative}}
+\STATE{Solve the regression problem (possibly using the Ridge estimator, see Section~\ref{sec:randomizedLS}) \begin{align*}
+\Theta^{i,*} &=\argmin_{\Theta^i} \ell(\Theta^i) = \argmin_{\Theta^i} \EE^{\Phi,n}\left[\left\| \Y^i - \Theta^i\X^i \right\|^2\right]
+\end{align*} where \begin{align*}
+    \Y^i &\defEqual \Uf_i(\XX_{t_i};\Theta^i) + \widetilde f\Deli  \\
+    \X^i &\defEqual (1-a)\Phi_K^i(\XX_{t_i}) + (\nabla_x \Phi_K^i(\XX_{t_i})) \Sigma_i \left(b\Deli  + \DelWi\right).\end{align*} and $\EE^{\Phi,n}$ is evaluated over the empirical measure of $\{\XX_{t_i}^{\pi,j}\}_{i=0}^{N}$ for $j\in\{1,\dots,n\}$}
+\STATE{Update $\widehat \Uf_i=\Uf_{i}\left(\cdot, \Theta^{i,*}\right)$}
+\ENDFOR
+\RETURN $\Uf = \{\Uf(\cdot;\Theta^{i,*})\}_{i=0}^{N}$.
+\end{algorithmic}
+\end{algorithm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{The non-Markovian case}\label{sec:non-Markovian_case}
+
+We now consider a stochastic volatility model under a risk-neutral measure so that $\XX=\nobreak(X, V)$, where the dynamics of log-price process~$X$ are given by
+\begin{equation}\label{eq:Xdynamics}
+\D X_{s}^{t, x} = \left(r-\frac{V_{s}}{2}\right)\D s
+ + \sqrt{V_{s}}\Big(\rho_1 \D W^1_{s} + \rho_2 \D W^2_{s}\Big), \qquad 0 \leq t \leq s \leq T,
+\end{equation}
+starting from 
+$X_{t}^{t, x} =x\in\RR$,
+with interest rate $r\in\RR$,
+correlation $\rho_1 \in [-1,1]$,
+and denote $\rho_2\defEqual \sqrt{1-\rho_1^{2}}$,
+and $W^1, W^2$ are two independent Brownian motions.
+We allow for a general variance process process~$V$, satisfying the following:
+\begin{samepage}
+\begin{assumption}\label{ass:volatilityProcess}
+The process~$V$ has continuous trajectories, is non-negative, adapted to the natural filtration of~$W^1$ and integrable, i.e.
+$\EE\left[\int_{0}^{t} V_{s} \D s\right]<\infty$, for any~$t\geq 0$.
+\end{assumption}
+\end{samepage}
+By no-arbitrage, the fair price of a European option with payoff $h:\RR^+\rightarrow\RR^+$ reads
+$$
+u(t, x) \defEqual \EE\left[\E^{-r(T-t)} h\left(\E^{X_{T}^{t, x}+r T}\right) \middle\vert \Ff_{t}\right], 
+\quad \text{for all }(t, x) \in[0, T] \times \RR,
+$$
+subject to~\eqref{eq:Xdynamics}.
+Since~$\XX$ is not Markovian, one cannot characterise the value function $u(t, x)$ via a deterministic PDE. 
+Bayer, Qiu and Yao~\cite{Bayer2022PricingSPDEs} proved that~$u$ can be viewed as a random field which, together with another random field~$\psi$, satisfies the backward stochastic partial differential equation (BSPDE)
+\begin{equation}\label{eq:BSPDEPricing}
+-\D u(t,x) = \left[\frac{V_{t}}{2} \partial_x^{2} u(t, x)+\rho \sqrt{V_{t}} \partial_x \psi(t,x)-\frac{V_{t}}{2} \partial_x u(t,x)-r u(t,x)\right] \D t-\psi(t,x) \D W^1_{t},
+\end{equation}
+in a distributional sense, for $(t, x) \in[0, T] \times \RR$, with boundary condition~${u(T, x) = h\left(\E^{x+r T}\right)}$.
+where the variance process $\{V_{t}\}_{t \geq 0}$ is defined exogenously under Assumption~\ref{ass:volatilityProcess}. 
+We in fact consider the slightly more general BSPDEs
+\begin{equation}\label{eq:BSPDEGeneral}
+\left\{\begin{array}{rl}
+-\D u(t,x) &= \displaystyle \bigg\{\frac{V_{t}}{2} \Dx^{2} u(t,x)+\rho \sqrt{V_{t}} \Dx \psi(t,x)-\frac{V_{t}}{2} \Dx u(t,x) \\
+& \quad \displaystyle + f\left(t, \E^{x}, u(t,x), \rho_2\sqrt{V_{t}} \Dx u(t,x), \psi(t,x)+ \rho_1 \sqrt{V_{t}} \Dx u(t,x)\right)\bigg\} \D t \\
+& \quad \displaystyle -\psi(t,x) \D W^1_{t}, \quad(t, x) \in[0, T) \times \RR, \\
+u(T,x) &= \displaystyle g \left(\E^{x}\right), \quad x \in \RR,
+\end{array}\right.
+\end{equation}
+for $g:\RR^+\rightarrow \RR$. We present exact conditions on~$f$ and~$g$ ensuring well-posedness in Assumption~\ref{ass:wellposednessBSPDE},
+but additionally require the existence of a weak-Sobolev solution (see Assumption~\ref{ass:RWNNscheme} for more details). 
+Note that~\eqref{eq:BSPDEPricing} is just a particular case of the general BSPDE~\eqref{eq:BSPDEGeneral} for the choice~${f(t, x, y, z, \widetilde{z}) \equiv -ry}$ and~${g(\E^{x})\equiv h(\E^{x+rT})}$. 
+Again, this general form is shown to be well-posed in the distributional sense under Assumption~\ref{ass:wellposednessBSPDE} (borrowed from~\cite{Bayer2022PricingSPDEs}). 
+By~\cite{Briand2003LpEquations} the corresponding BSDE is then,
+for $0 \leq t \leq s \leq T$,
+\begin{equation}\label{eq:BSDEGeneral}
+\left\{\begin{aligned}
+-\D Y_{s}^{t, x} &=f\left(s, \E^{X_{s}^{t, x}}, Y_{s}^{t, x}, {Z_{s}^{1}}^{t, x}, {Z_{s}^{2}}^{t, x}\right) \D s - {Z_{s}^{1}}^{t, x} \D W^1_{s} - {Z_{s}^{2}}^{t, x} \D W^2_{s},\\
+Y_{T}^{t, x} &=g\left(\E^{X_{T}^{t, x}}\right),
+\end{aligned}\right.
+\end{equation}
+where $(Y_{s}^{t, x}, {Z_{s}^{1}}^{t, x}, {Z_{s}^{2}}^{t, x})$ is defined as the solution to BSDE~\eqref{eq:BSDEGeneral} in the weak sense. 
+
+\subsection{Random neural network scheme}
+Let the quadruple $\left(X_{s}, Y_{s}, Z^1_{s}, Z^2_{s}\right)$ be the solution to the forward BSDE (FBSDE)
+\begin{equation}\label{eq:logprocess}
+\left\{\begin{aligned}
+-\D Y_{s} &=f\left(s, \E^{X_{s}}, Y_{s}, Z^1_{s}, Z^2_{s}\right) \D s- Z^1_{s} \D W^1_{s}-Z^2_{s} \D W^2_{s},\\
+\D X_{s} &=-\frac{V_{s}}{2} \D s+\sqrt{V_{s}}\left(\rho_1 \D W^1_{s} + \rho_2\D W^2_{s}\right),\\
+V_{s} &= \xi_{s} \Ee\left(\eta \widehat{W}_{s}\right), \quad \text { with } \quad \widehat{W}_{s}=\int_{0}^{s} \mathcal{K}(s, r) \D W^1_{r}, \quad ,
+\end{aligned}\right.
+\end{equation}
+for $s \in[0, T]$, with terminal condition
+$Y_{T} = g\left(\E^{X_{T}}\right)$, initial condition
+$X_{0} = x$ and~$\mathcal{K}$ a locally square-integrable kernel. 
+For notational convenience below, 
+we use $\rho_2 \defEqual  \sqrt{1-\rho_1^2}$, with 
+$\rho_1 \in [-1,1]$.
+Here~$\Ee(\cdot)$ denotes the Wick stochastic exponential and is defined as $\Ee(\zeta)\defEqual \exp\left(\zeta-\frac12\EE[|\zeta|^2]\right)$ for a zero-mean Gaussian variable $\zeta$. 
+Then by \cite[Theorem~2.4]{Bayer2022PricingSPDEs},
+\begin{align}
+Y_{t} &= u\left(t, X_{t}\right),  & \text{ for } t\in[0,T], \\
+Z^1_{t} &= \psi\left(t, X_{t}\right) + 
+\rho_1 \sqrt{V_{t}} \Dx u\left(t, X_{t}\right), & \textup{ for } t\in[0,T), \\
+Z^2_{t} &= \rho_2\sqrt{V_{t}} \Dx u\left(t, X_{t}\right), & \textup{ for } t\in[0,T),
+\end{align}
+where $(u, \psi)$ is the unique weak solution to~\eqref{eq:BSDEGeneral}. Accordingly, the forward equation reads
+\begin{equation*}
+Y_t = Y_0-\int_{0}^{t} f\left(s, \E^{X_{s}}, Y_s, Z_s^1, Z_s^2\right) \D s +\int_{0}^{t}Z_s^1 \D W^1_{s}+\int_{0}^{t} Z_s^2 \D W^2_{s},
+\qquad\text{ for }t \in[0, T].
+\end{equation*}
+By simulating $(W^1, W^2, V)$, 
+the forward process~$X$ may be approximated by an Euler scheme--with the same notations as in the Markovian case--and the forward representation above yields the approximation
+$$
+u\left(t_{i+1}, X_{t_{i+1}}\right) \approx u(t_{i}, X_{t_i}) - f\left(t_i, \E^{X_{t_{i}}}, u\left({t_{i}}, X_{t_{i}}\right), Z^1_{t_i}, Z^2_{t_i}\right) \Deli  + Z^1_{t_i} \Delta^{W^1}_{i} + Z^2_{t_i} \Delta^{W^2}_{i},
+$$
+with
+$$
+Z^1_{t_i}  = \rho_1 \sqrt{V_{t_{i}}} \Dx u\left({t_{i}}, X_{t_{i}}\right) + \psi\left({t_{i}}, X_{t_{i}}\right)
+\qquad\text{and}\qquad
+Z^2_{t_i}  = \rho_2\sqrt{V_{t_{i}}} \Dx u\left({t_{i}}, X_{t_{i}}\right).
+$$
+By Lemma~\ref{lem:sol_as_RWNN} we can, for each time step $i\in\{0, \dots, N-1\}$, approximate the solutions~$u(t_i,\cdot)$ and~$\psi(t_i,\cdot)$ by two separate networks~$\Uf_i$ and~$\Psi_i$ in $\RWNN_K^{\relu}$: 
+\begin{alignat*}{3}
+    Y_{t_i} &\approx \Uf_i(X_{t_i}; \Theta^i) && = \Theta^i \Phi^{\Theta,i}_K(X_{t_i}), \\
+    Z^1_{t_i} &\approx \Zf^1_i(X_{t_i}; \Theta^i, \Xi^i) && = \Theta^i \left(\Dx \Phi_K^{\Theta,i}(X_{t_i})\right) \rho_1\sqrt{V_{t_i}} + \Xi^i\Phi^{\Xi,i}_K(X_{t_i}), \\
+    Z^2_{t_i} &\approx \Zf^2_i(X_{t_i}; \Theta^i, \Xi^i) && = \Theta^i \left(\Dx \Phi_K^{\Theta,i}(X_{t_i})\right) \rho_2\sqrt{V_{t_i}}.
+\end{alignat*}
+Here $\Phi_K^\Xi$ and $\Phi_K^\Theta$ are realisations of random bases (reservoirs) of the RWNNs with respective parameters~$\Xi$ and~$\Theta$. 
+The next part relies on Assumption~\ref{ass:faffine}, namely
+$$
+f\left(t_i, \E^{X_{t_{i}}},  Y_{t_i},  Z^1_{t_i},  Z^2_{t_i}\right) = a(t_i,X_{t_i}) Y_{t_i} + b(t_i,X_{t_i}) Z^1_{t_i} + c(t_i,X_{t_i}) Z^2_{t_i} + \widetilde{f}(t_i,X_{t_i}),
+$$
+for some functions $a,b,c,\widetilde{f}$ mapping to~$\RR$, so that, as in the Markovian case, the minimisation of the expected quadratic loss at every time step $i\in\{N-1,\dots,0\}$ reads
+\begin{small}
+\begin{align*}
+    &\ell(\Theta^i, \Xi^i) \\ &\defEqual \EE^\Phi\Bigg[\bigg|\widehat\Uf_{i+1}(X_{t_{i+1}})-\bigg\{\Uf_i(X_{t_i}; \Theta^i)-f\Big(t_{i}, X_{t_{i}}, \Uf_i(X_{t_i}; \Theta^i), \Zf^1_i(X_{t_i}; \Theta^i, \Xi^i), \Zf^2_i(X_{t_i}; \Theta^i, \Xi^i)\Big)\Deli \\
+    & \hspace{3cm} + \sum_{k=1}^2\widehat \Zf^k_i(X_{t_i}; \Theta^i, \Xi^i)\Delta^{W^k}_{i}\bigg\}\bigg|^2\Bigg] \\
+    &= \EE^\Phi\Bigg[\bigg|\widehat\Uf_{i+1}(X_{t_{i+1}})-\bigg\{\Uf_i(X_{t_i}; \Theta^i)-\left(a\Uf_i(X_{t_i}; \Theta^i) + b\Zf^1_i(X_{t_i}; \Theta^i, \Xi^i) + c\Zf^2_i(X_{t_i}; \Theta^i, \Xi^i) + \widetilde{f}\right)\Deli \\
+    & \hspace{3cm} + \sum_{k=1}^2\Zf^k_i(X_{t_i}; \Theta^i, \Xi^i)\Delta^{W^k}_{i}\bigg\}\bigg|^2\Bigg] \\
+    &= \EE^\Phi\Bigg[\bigg|\widehat\Uf_{i+1}(X_{t_{i+1}}) + \widetilde{f}\Deli  - \bigg\{ \Xi^i\Phi_K^{\Xi,i}(X_{t_i})\left(\Delta^{W^1}_{i}-b\Deli \right) \\
+    & \hspace{3cm} + \Theta^i\left((1-a\Deli )\Phi_K^{\Theta,i}(X_{t_i}) + \Dx\Phi_K^{\Theta,i}(X_{t_i})\sqrt{V_{t_i}}\left(\Delta^{B}_{i} - (b\rho_1 + c\rho_2)\Deli \right) \right) \bigg\}\bigg|^2\Bigg] \\
+    &= \EE^\Phi\left[\left|\Y^i - \Xi^i \X_1^i -
+    \Theta^i\X_2^i \right|^2\right],
+\end{align*}
+\end{small}%
+with $\Delta^{B}_{i}=(\rho_1\Delta^{W^1}_{i} + \rho_2\Delta^{W^2}_{i})$ and where $\widehat\Uf_{i+1}(X_{t_{i+1}})\defEqual \Uf_{i+1}(X_{t_{i+1}}; \Theta^{i+1,*})$ was set in the previous time step and is now constant (without dependence on~$\Theta^i$). We defined
+\begin{equation}\label{eq:SystemNonMark}
+\left\{
+\begin{array}{rl}
+\Y^i & \defEqual  \displaystyle \widehat\Uf_{i+1}(X_{t_{i+1}}) + \widetilde{f}\Deli , \\
+     \X_1^i &\defEqual  \displaystyle \Phi_K^\Xi(X_{t_i})\left(\Delta^{W^1}_{i}-b\Deli \right), \\ 
+    \X_2^i &\defEqual  \displaystyle (1-a\Deli )\Phi_K^\Theta(X_{t_i}) + \Dx\Phi_K^\Theta(X_{t_i})
+    \sqrt{V_{t_i}}\left(\Delta^{B}_{i}-(b\rho_1 + c\rho_2)\Deli  \right).
+\end{array}
+\right.
+\end{equation}
+In matrix form, this yields
+$
+\ell(\Theta^i, \Xi^i) = \EE^\Phi[\|\Y^i - \betam^i\X^i\|^2]$,
+with 
+$\betam^i=\begin{bmatrix}\Xi^i, \Theta^i\end{bmatrix}$
+and
+$\X^i= \begin{bmatrix}\X_1^i, \X_2^i\end{bmatrix}^{\top}$,
+for which the RLS from Section~\ref{sec:randomizedLS}
+yields the solution
+\begin{equation}\label{eq:betaestimator}
+    \betam^i = \EE^\Phi\left[
+    \left[\Y^i\X_1^{i\top} \quad \Y^i\X_2^{i\top}\right] \right]
+    \EE^\Phi\left[
+    \left[\begin{array}{cc}
+         \X_1^i\X_1^{i\top} & \X_1^i\X_2^{i\top} \\
+         \X_2^i\X_1^{i\top} & \X_2^i\X_2^{i\top}
+    \end{array}\right]\right]^{-1}.
+\end{equation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Algorithm}
+We summarise the steps of the algorithm  below:
+\begin{algorithm}[H]\caption{RWNN non-Markovian scheme}\label{alg:nonmarkovian}
+\begin{algorithmic}
+\STATE{\textit{Inputs}:
+time grid $\pi=\left\{0=t_{0}<t_{1}<\ldots<t_{N}=T\right\}$;
+number~$K$ of hidden nodes; $R>0$;
+}
+\STATE{\textit{Initialisation}: 
+\begin{ALC@g}
+\STATE $\left(\{\Phi_K^{\Theta,i}\}^{N-1}_{i=0}, \{\Phi_K^{\Xi,i}\}^{N-1}_{i=0}\right)$ reservoirs with weights and biases distributed as~$\Uu_{[-R,R]}$;
+\end{ALC@g}
+}
+\STATE{\textbf{do}: 
+\begin{enumerate}[ ]
+    \item Generate $n$ paths of
+    $(\{X_{t_i}^{\pi,j}\}_{i=0}^{N}, \{V_{t_i}^{\pi,j}\}_{i=0}^{N})$ for $j\in\{1,\dots,n\}$ with Euler-Maruyama
+    \item Set $\widehat{Y}_{N}(x)=g(x)$ for all $x\in\RR$
+\end{enumerate}
+}
+\FOR{$i\in \{N-1,\dots,0\}$}
+\STATE{Approximate $u(t_i, \cdot)$ with $\Uf(\cdot; \Theta^i)\in\RWNN^{\relu}_K$ based on reservoir $\Phi^{\Theta,i}_K$}
+\STATE{Approximate $\psi(t_i, \cdot)$ with $\Psi(\cdot; \Xi^i)\in\RWNN^{\relu}_K$ based on reservoir $\Phi^{\Xi,i}_K$}
+\STATE{Evaluate derivatives of $\left(\Uf(\cdot; \Theta^i), \Psi(\cdot;\Xi^i)\right)$ according to~\eqref{eq:RWNN1stderivative}}
+\STATE{Solve the regression problem (possibly using the Ridge estimator from Section~\ref{sec:randomizedLS}) 
+$$
+\Theta^{i,*} = \argmin_{\Theta^i} \ell(\Theta^i, \Xi^i) = \argmin_{\Theta^i} \EE^{\Phi,n}\left[\left\|\Y^i - \betam^i\X^i \right\|^2\right]
+$$
+with $\betam^i=\begin{bmatrix}\Xi^i,\Theta^i\end{bmatrix}$, 
+$\X^i= \begin{bmatrix}\X_1^i, \X_2^i\end{bmatrix}^{\top}$,
+where $\Y^i, \X_1^i, \X_2^i$ are given in~\eqref{eq:SystemNonMark},
+and $\EE^{\Phi,n}$ is computed with the empirical measure of $\left(\{X_{t_i}^{\pi,j}\}_{i=0}^{N}, \{V_{t_i}^{\pi,j}\}_{i=0}^{N}\right)_{j\in\{1,\dots,n\}}$;}
+\STATE{Update $\widehat\Uf_{i}(X_{t_{i}})=\Uf_{i}\left(X_{t_i}, \Theta^{i,*}\right)$}
+\ENDFOR
+\RETURN $\{\Uf_i(\cdot;\Theta^{i,*})\}_{i=0}^{N}$.
+\end{algorithmic}
+\end{algorithm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Convergence analysis}\label{sec:convergence_analysis}
+In this section, whenever there is any ambiguity, we use the notation~$X^\pi$ to denote the discretised version of the solution process of~\eqref{eq:logprocess} over the partition $\pi=\left\{0=t_{0}<t_{1}<\ldots<t_{N}=T\right\}$ of the interval $[0, T]$,
+with modulus~${|\pi|=\max_{i\in\{0,1,\dots, N-1\}} \Deli}$ with~$\Deli =t_{i+1}-t_{i}$. 
+As mentioned just before Assumption~\ref{ass:faffine},
+the linearity of~$f$ assumed before was only required to cast the optimisation in Algorithm~\ref{alg:nonmarkovian} into a regression problem.
+In the forthcoming convergence analysis, this does not play any role, and we, therefore, allow for a more general function~$f$.
+
+\begin{assumption}\label{ass:RWNNscheme}\
+\begin{enumerate}[(i)]
+    \item There exists a unique weak solution to the BSPDE system~\eqref{eq:BSPDEGeneral} with~${u, \psi \in \Ww^{3,2}}$;
+    \item There is an increasing continuous function $\omega:\RR^+ \rightarrow\RR^+$ with $\omega(0)=0$ such that
+    \[
+    \EE\left[\int_{t_1}^{t_2}V_s\D s\right] + \EE\left[\left|\int_{t_1}^{t_2}V_s\D s\right|^2\right]\leq \omega(|t_2-t_1|),
+    \quad \text{for any }0\leq t_1 \leq t_2 \leq T;
+    \]
+    \item There exists $L_f>0$ such that,
+    for all $(t,x,z^1,z^2)$ and $(\widetilde{t},\widetilde{x},\widetilde{z}^1,\widetilde{z}^2)$,
+    \begin{align}
+    & \left|f\left(t, \E^x, y, z^1, z^2\right)
+    -f\left(\widetilde{t}, \E^{\widetilde{x}},\widetilde{y},\widetilde{z}^1,\widetilde{z}^2\right)\right| \\
+    & \hspace*{2cm} \leq L_f\left\{\omega(|t-\widetilde{t}|)^{\half} + |x-\widetilde{x}| + |y-\widetilde y| + |z^1-\widetilde{z}^1| + |z^2-\widetilde{z}^2|\right\}.
+    \end{align}
+\end{enumerate}
+\end{assumption}
+\begin{assumption}\label{ass:discretisationbound}
+The first absolute moment of the discretisation scheme over the partition~$\pi$ for $\{V_s\}_{s\in[0, T]}$ is bounded, namely $ \EE\left[\left|V^\pi_{t_i}\right| \right] < \infty$ for all $i\in\{0,\dots, N-1\}.$
+\end{assumption}
+Under Assumptions~\ref{ass:volatilityProcess}-\ref{ass:RWNNscheme} Briand, Delyon, Hu, Pardoux, Stoica~\cite{Briand2003LpEquations} established that
+\begin{align}
+    \EE\left[\sup _{0 \leq t \leq T}\left|X_{t}\right|^{2}\right] &\leq C\left(1+\left|x_{0}\right|^{2}\right),\label{eq:solution_moment_bound} \\
+    \max_{i\in\{0,\dots,N-1\}} \EE\left[\left|X_{t_{i+1}}-X^\pi_{t_{i+1}}\right|^{2}+\sup _{t \in\left[t_{i}, t_{i+1}\right]}\left|X_{t}-X^\pi_{t_{i}}\right|^{2}\right] &\leq C \omega(|\pi|),\label{eq:fwd_process_estimation}
+\end{align}
+for some $C>0$ independent of $|\pi|$,
+and we furthermore have~\cite{Briand2003LpEquations}
+\begin{equation}\label{eq:L2int_f}
+\EE\left[\int_{0}^{T}\left|f\left(t, \E^{X_{t}}, Y_{t}, Z^1_{t}, Z^2_{t}\right)\right|^{2} \D t\right]<\infty,
+\end{equation}
+as well as the standard $L^{2}$-regularity result on $Y$:
+\begin{equation}\label{eq:L2regularity}
+\max _{i\in\{0, \dots, N-1\}} \EE\left[\sup _{t \in\left[t_{i}, t_{i+1}\right]}\left|Y_{t}-Y^\pi_{t_{i}}\right|^{2}\right] = \Oo(|\pi|).
+\end{equation}
+For $k\in\{1,2\}$, define the errors
+\begin{equation}\label{eq:Z_error}
+\eps^{Z^k}(\pi) \defEqual \EE\left[\sum_{i=0}^{N-1} \int_{t_{i}}^{t_{i+1}}\left|Z^k_{t}-\overline{Z}^k_{t_{i}}\right|^{2} \D t\right], \quad \text { with } \quad \overline{Z}^k_{t_{i}} \defEqual \frac{1}{\Deli} \EE_{i}\left[\int_{t_{i}}^{t_{i+1}} Z^k_{t} \D t\right],
+\end{equation}
+where $\EE_{i}$ denotes the conditional expectation given $\Ff_{t_{i}}$. 
+We furthermore define the auxiliary processes, for $i\in\{0, \ldots, {N-1}\}$,
+\begin{align}\label{eq:auxilaryProcesses}
+\begin{split}
+\widehat{\Vv}_{t_{i}} &\defEqual \EE_{i}\left[\widehat{\Uf}_{i+1}\left(X^\pi_{t_{i+1}}\right)\right]+f\left(t_i, \E^{X^\pi_{t_{i}}}, \widehat{\Vv}_{t_{i}}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \Deli,  \\
+\ZowO_{t_{i}} &\defEqual \widehat\Psi_i(X^\pi_{t_i}) + \frac{1}{\Deli} \EE_{i}\left[\widehat{\Uf}_{i+1}\left(X^\pi_{t_{i+1}}\right) \Delta^{W^1}_{i}\right], \\
+\ZowT_{t_{i}} &\defEqual \frac{1}{\Deli} \EE_{i}\left[\widehat{\Uf}_{i+1}\left(X^\pi_{t_{i+1}}\right) \Delta^{W^2}_{i}\right],
+\end{split}
+\end{align}
+with $\widehat\Uf_i(\xx)\defEqual\Uf_i(x;\Theta^{i,*})$ and $ \widehat\Psi_i(x)\defEqual\Psi(x;\Xi^{i,*})$ as before.
+Observe that~$\widehat{\Psi}_{i+1}$
+and~$\widehat{\Uf}_{i+1}$ do not depend on~$\Theta^i$ 
+because the parameters were fixed at $(i+1)$ time step and are held constant at step~$i$ 
+(see Algorithm~\ref{alg:nonmarkovian}). Next, notice that $\widehat{\Vv}$ is well defined by a fixed-point argument
+since~$f$ is Lipschitz. 
+By Assumption~\ref{ass:RWNNscheme}(i), 
+there exist $\widehat v_i, \zowk_{t_{i}}$ for which
+\begin{equation}\label{eq:existenceAuxilary}
+    \widehat\Vv_{t_i} = \widehat v_i(X^\pi_{t_i})\qquad \text{and} \qquad \Zowk_{t_{i}} = \zowk_{t_{i}}(X^\pi_{t_i}) \quad \text{for } i\in\{0,\dots,N-1\}, k\in\{1,2\}.
+\end{equation}
+Then by the martingale representation theorem~\cite[Theorem  14.5.1]{Cohen2015StochasticApplications}, there exist integrable processes~$\ZowO$ and~$\ZowT$ such that
+\begin{equation}\label{eq:martingaleRep}
+    \widehat{\Uf}_{i+1}\left(X^\pi_{t_{i+1}}\right)=\widehat{\Vv}_{t_{i}}-f\left(t_{i},\E^{X^\pi_{t_{i}}}, \widehat{\Vv}_{t_{i}}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \Deli +\int_{t_{i}}^{t_{i+1}}{\widehat{Z}}_{t}^1\D W^1_{t}+\int_{t_{i}}^{t_{i+1}} {\widehat{Z}}_{t}^2 \D W^2_{t},
+\end{equation}
+since $\Zowk_{t}$ are $\Ff_t^W$-adapted as asserted by the martingale representation theorem. 
+From here, It\^o's isometry yields
+\begin{align*}
+    \ZowO_{t_{i}} &= \widehat\Psi_i(X^\pi_{t_i}) +  \frac1{\Deli}\EE_i\left[\widehat\Uf_{i+1}(X^\pi_{t_{i+1}})\Delta^{W^k}_{i} \right] \\
+    &= \frac1{\Deli}\int_{t_i}^{t_{i+1}}\widehat\Psi_i(X^\pi_{t_i})\D t +  \frac1{\Deli}\EE_i\left[\left(\widehat\Vv_{t_i} +\int_{t_{i}}^{t_{i+1}} \widehat{Z}_{t}^1 \D W^1_{t}+\int_{t_{i}}^{t_{i+1}} \widehat{Z}_{t}^2 \D W^2_{t} \right)\int_{t_i}^{t_{i+1}} \D W^1_t \right]  \\
+    &= \frac1{\Deli}\EE_i\left[\int_{t_i}^{t_{i+1}}\left( \widehat\Psi_i(X^\pi_{t_i}) + \widehat{Z}_{t}^1 \right)\D t \right],
+\end{align*}
+and similarly, 
+$$
+\ZowT_{t_{i}} = \frac1{\Deli}\EE_i\left[\int_{t_i}^{t_{i+1}} \widehat{Z}_{t}^2 \D t \right].
+$$
+We consider convergence in terms of the following error:
+\[
+\begin{aligned}
+\mathscr{E}\left(\widehat{\Uf}, \widehat\Psi\right) \defEqual &\max _{i\in\{0, \dots, N-1\}} \EE^\Phi\left[\left|Y_{t_i}-\widehat{\Uf}_i\left(X^\pi_{t_i}\right)\right|^2\right]+\EE^\Phi\left[\sum_{i=0}^{N-1} \int_{t_i}^{t_{i+1}}\sum_{k=1}^2\left|Z_t^k-\widehat{\mathcal{Z}}^k_i\left(X^\pi_{t_i}\right)\right|^2 \D t\right],
+\end{aligned}
+\]
+with $\widehat{\Zz}^1_{i}, \widehat{\Zz}^2_{i}$
+introduced before Lemma~\ref{lem:approxError}. 
+We now state the main convergence result:
+\begin{theorem}\label{thm:convergence}
+Under Assumptions~\ref{ass:volatilityProcess}-\ref{ass:wellposednessBSPDE}-\ref{ass:RWNNscheme},
+there exists $C>0$ such that
+\[
+\mathscr{E}\left(\widehat{\Uf}, \widehat\Psi\right) \leq C\left\{\omega(|\pi|) + \EE\left[\left|g(X_T)-g(X^{\pi}_{T})\right|^2\right]+\sum_{k=1}^2\eps^{Z^k}(\pi)+\frac{C^{*}}{K}N+ M|\pi|^2\right\}  
+\]
+over a compact $\Qq\subset \RR$, with $C^*, M>0$ given in Lemma~\ref{lem:step_RWWN_bound}.
+\end{theorem}
+
+The following corollary is immediate from~\eqref{eq:convergence_part2_result}, established in Part~II of the proof of Theorem~\ref{thm:convergence}:
+
+\begin{corollary}\label{cor:convergence}
+    Under the Assumptions~\ref{ass:volatilityProcess}-\ref{ass:wellposednessBSPDE}-\ref{ass:RWNNscheme},
+    there exists~${C>0}$ such that
+    \begin{align*}
+    \max _{i\in\{0, \dots, N-1\}} & \EE^\Phi\left[\left|Y_{t_i}-\widehat{\Uf}_i\left(X^\pi_{t_i}\right)\right|^2\right] \\ & \leq C\left\{\omega(|\pi|) + \EE\left[\left|g(X_T)-g(X^{\pi}_{T})\right|^2\right]+\sum_{k=1}^2\eps^{Z^k}(\pi)+\frac{C^{*}}{K}N+ M|\pi|^2\right\}
+    \end{align*}
+    over a compact $\Qq\subset \RR$, with $C^*, M>0$ given in Lemma~\ref{lem:step_RWWN_bound}.
+\end{corollary}
+
+\begin{remark}
+The second error term is the strong $L^2$-Monte-Carlo error and is $\Oo(N^{-H})$ for processes driven by an fBm with Hurst parameter $H\in(0, 1)$. 
+We refer the reader to~\cite{Bonesini2023RoughConvergence, Gassiat2022WeakVolatility} for an exposition on strong versus weak error rates in rough volatility models.
+\end{remark}
+
+To prove Theorem~\ref{thm:convergence},
+the following bounds on the derivatives are key.
+\begin{lemma}\label{lem:derivativeBounds}
+Let $\Psi_K(\cdot; \Theta)\in\RWNN^{\relu}_K$ and $(X^\pi_{t_i}, V^\pi_{t_i})_{i}$ denote the discretised versions of~\eqref{eq:logprocess} over the partition~$\pi$, then there exist $L_1, L_2 > 0$ such that, 
+for all $i\in\{0,\dots,N-1\}$,
+$$
+\left\|\EE_i^\Phi\left[\Dx\Psi_K(X^\pi_{t_{i+1}}; \Theta)\right]\right\| \leq L_1 
+\qquad \text{and} \qquad \left\|\EE_i^\Phi\left[\Dx^2\Psi_K(X^\pi_{t_{i+1}}; \Theta)\right]\right\| \leq L_2.
+$$
+\end{lemma}
+\begin{proof}
+We start with the first derivative. 
+For all $x,y\in\RR^d$,
+\begin{align*}
+    \left\|\Psi_K(x; \Theta)-\Psi_K(y; \Theta)\right\| 
+    &= \left\| \Theta \left(\brelu(\Am x+b)-\brelu(Ay+b)\right) \right\| \\
+    &\leq \|\Theta\|_F\|\brelu(\Am x+b)-\brelu(Ay+b)\| \\
+    &\leq \|\Theta\|_F\|\Am x-Ay\| \leq \|\Theta\|_F\|A\|_F\|x-y\|
+    \leq L_1\|x-y\|,
+\end{align*}
+since $\relu$ is $1$-Lipschitz. 
+The estimator $\Theta$ has an explicit form~\eqref{eq:betaestimator} and its norm is finite, therefore $\Psi_K(\cdot; \Theta)$ is globally Lipschitz and its first derivative is bounded by $L_1>0$. 
+Next, without loss of generality, we can set $\Am=\Imat$ and $\bm=0$, since their support is bounded. 
+As in Section~\ref{sec:RWNNderivatives}, 
+for the component $j\in\{1,\dots,m\}$,
+\begin{align*}
+    \EE_i^\Phi\left[\Dx^2 \Psi_K(X^\pi_{t_{i+1}}; \Theta)\right]_j %&= \int\Theta\delta_0(AX^\pi_{t_{i+1}}+)\D \PP \\
+    &= \int \Theta\operatorname{diag}\left(e_{j}\right)\operatorname{diag}\left(\boldsymbol\delta_0\left(x-\frac12 V^\pi_{t_i}\Deli  + \sqrt{V_{t_i}}w\right)\right) \boldsymbol p_\Nn(w) \D w \\
+    &= \Theta \operatorname{diag}\left(e_{j}\right)\operatorname{diag}\left( \boldsymbol p_\Nn\left(0; x-\frac12 V^\pi_{t_i}\Deli, V^\pi_{t_i}\Deli \right)\right),
+\end{align*}
+since $\Delta^{B}_{i}\sim\Nn(0, \Deli)$ and $\boldsymbol p_\Nn$ is the Gaussian density applied component-wise. 
+Since the weights are sampled on a compact and  $\|\Theta\|$ is finite, then there exists $C>0$ such that
+$$
+\left\|\EE_i^\Phi\left[\Dx^2 \Psi_K(X^\pi_{t_{i+1}}; \Theta)\right]\right\| \leq C\|\Theta\|_F = L_2.
+$$
+\end{proof}
+From here the error bound of approximating $\widehat\Vv_{t_i}$, $\ZowO_{t_{i}}$ and $\ZowT_{t_{i}}$ with their RWNN approximators $\widehat\Uf_i$, $\widehat{\Zz}^1_{i}$ and $\widehat{\Zz}^2_{i}$ 
+(defined in the lemma below)
+can be obtained.
+For $i\in\{0,\dots,N-1\}$, $(\Uf_i, \Psi_i)\in\RWNN^{\relu}_K$, 
+introduce
+\begin{equation*}
+\begin{array}{rlrl}
+\Zz^1_{i}(x) &\defEqual \Psi_i(x)+\rho_1\sqrt{V_{t_i}}\,\Dx\Uf_i(x), & 
+\Zz^2_{i}(x) &\defEqual \rho_2\sqrt{V_{t_i}}\,\Dx\Uf_i(x),\\
+\widehat{\Zz}^1_{i}(x) &\defEqual \widehat\Psi_i(x)+\rho_1\sqrt{V_{t_i}}\,\Dx\widehat\Uf_i(x), & 
+\widehat{\Zz}^2_{i}(x) &\defEqual \rho_2\sqrt{V_{t_i}}\,\Dx\widehat\Uf_i(x).
+\end{array}
+\end{equation*}
+
+\begin{lemma}\label{lem:approxError}
+There exists $M>0$ such that,
+for any $i\in\{0,\dots,N-1\}$, $k=1,2$,
+$$
+\EE^\Phi\left[
+\left|\Zz_i^k(X^\pi_{t_i}) - \overline{\widehat{Z}}^{k}_{t_{i}}\right|^2\right] \leq\rho_k^2|\pi|^2 M.
+$$
+\end{lemma}
+
+\begin{proof}
+From~\eqref{eq:auxilaryProcesses} and~\eqref{eq:existenceAuxilary}, we have, for $i\in\{0,\dots,N-1\}$ and $k\in\{1,2\}$,
+    \begin{align*}
+    \widehat{v}_{i}(x) &= \EE^\Phi_{i}\left[\widehat{\Uf}_{i+1}\left(X^{x,\pi}_{t_{i+1}}\right)\right] + f\left(t_i, \E^{x}, \widehat{v}_{i}(x), \zowO_{i}(x), \zowT_{i}(x)\right) \Deli, \\
+    \zowk_{i}(x) &= \Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} + \frac{1}{\Deli} \EE^\Phi_{i}\left[\widehat{\Uf}_{i+1}\left(X^{x,\pi}_{t_{i+1}}\right) \Delta^{W^k}_{i}\right],
+    \end{align*}
+    where $X^{x,\pi}_{t_{i+1}} = x + \left(r- \frac12 V_{t_i}\right)\Deli  + \sqrt{V_{t_i}}\,\Delta^{B}_{i}$ is 
+    the Euler discretisation of $\{X_t\}_{t\in[0, T]}$ over~$\pi$ and $\{V^\pi_{t_i}\}_{i=0}^{N}$ is the appropriate discretisation of the volatility process over the same partition. 
+    For $\{\Rr^k\}\overset{{\mathrm{iid}}}{\sim}\Nn(0,1)$, the two auxiliary processes can be written as
+    \begin{align*}
+        \zowk_{i}(x) 
+        &= \Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} \\
+        &\qquad + \frac{1}{\Deli} \EE^\Phi_{i}\left[\widehat{\Uf}_{i+1}\left(x - \frac{1}{2}V^{x,\pi}_{t_i}\Deli + \sqrt{V^{x,\pi}_{t_i}}\sqrt{\Deli}\left(\rho_1 \Rr^1 + \rho_2 \Rr^2\right)\right) \sqrt{\Deli} \Rr^k\right].
+    \end{align*}
+    Notice that, while any sensible forward scheme for $\{V_t\}_{t\in[0,T]}$ does depend on a series of Brownian increments, $V^{x,\pi}_{t_i}$ only depends on $\left(\Delta^{W}_{i-1},\dots,\Delta^{W}_{0}\right)$, which are known at time~$t_i$. Thus, since usual derivative operations are available for approximately differentiable functions (Remark~\ref{rem:usualdiffrules}) multivariate integration by parts for Gaussian measures (a formulation of Isserlis' Theorem~\cite{Isserlis1918OnVariables}) yields
+    $$
+    \zowk_{i}(x) = \Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} + \rho_k\sqrt{V_{t_i}}\EE^\Phi\left[\Dx \widehat \Uf_{i+1}\left(X^{x, \pi}_{t_{i+1}}\right)\right],
+    $$
+    with corresponding derivatives
+    $$
+    \Dx\zowk_{i}(x) = \Dx\Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} + \rho_k\sqrt{V_{t_i}}\EE^\Phi\left[\Dx^2 \widehat\Uf_{i+1}\left(X^{x,\pi}_{t_{i+1}}\right)\right].
+    $$
+An application of the implicit function theorem then implies
+\begin{equation}\label{eq:derivativeVhat}
+        \Dx \widehat v_i(x) =  \EE^\Phi_{i}\left[\Dx\widehat{\Uf}_{i+1}\left(X^{x,\pi}_{t_{i+1}}\right)\right] + \Deli \left\{\Dx \widehat f_i(x) + \Dr_y \widehat f_i(x)\Dx \widehat v_i(x)
+        + \sum_{k=1}^{2}\Dr_{z^k} \widehat f_i(x) \Dx \zowk_{i}(x)\right\},
+    \end{equation}
+    where $\widehat f_i(x) \defEqual  f\left(t_i, \E^{x}, \widehat{v}_{i}(x), \zowO_{i}(x), \zowT_{i}(x)\right)$ and
+    \begin{align*}
+        & \Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} + \left(1-\Deli \Dr_y\widehat f_i(x)\right)\rho_k\sqrt{V^{\pi}_{t_i}}\Dx \widehat v_i(x) \\
+        & = \overline{\widehat{z}}^k_{i}(x)  + \rho_k\sqrt{V^{\pi}_{t_i}}\Deli \left(\Dx \widehat f_i(x) + \Dr_{z^1} \widehat f_i(x) \Dx \zowO_{i}(x) + \Dr_{z^2} \widehat f_i(x)\Dx \zowT_{i}(x)\right).
+    \end{align*}
+    Thus, for small enough $|\pi|$, since~$f$ is Lipschitz  (Assumption~\ref{ass:RWNNscheme}) and Lemma~\ref{lem:derivativeBounds}, 
+    \begin{align*}
+        \Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} + \rho_k\sqrt{V^{\pi}_{t_i}}\Dx \widehat v_i(x) &\leq \overline{\widehat{z}}^k_{i}(x) + \rho_k\Deli  \sqrt{V^{\pi}_{t_i}}\left(1+\Dx \zowO_{i}(x) + \Dx \zowT_{i}(x)\right) \\
+        &\leq \overline{\widehat{z}}^k_{i}(x) + \rho_k\Deli \sqrt{V^{\pi}_{t_i}}\left(1 + L_1 + \sqrt{2} L_2 \sqrt{V^{\pi}_{t_i}}\right).
+    \end{align*}
+Therefore
+\begin{align*}
+ & \EE^\Phi\left[\left| \Psi_i(X^\pi_{t_i}) + \rho_1\sqrt{V^\pi_{t_i}}\Dx\Uf_i(X^\pi_{t_i}) - \ZowO_{t_i}\right|^2 \right]  \\
+    &\qquad \leq 
+    \EE^\Phi\left[\left| \zowO_{i}(X^\pi_{t_i}) - \ZowO_{t_i} + \rho_1\Deli \sqrt{V^\pi_{t_i}}\left[1 + L_1 + \sqrt{2} L_2 \sqrt{V^\pi_{t_i}}\right]\right|^2 \right] \\
+    &\qquad \leq 
+    |\rho_1\Deli |^2 \EE\left[\left|  \sqrt{V^\pi_{t_i}}\left(1+L_1+\sqrt{2}L_2\sqrt{V^\pi_{t_i}}\right)\right|^2 \right] \\
+    &\qquad \leq 
+    \rho_1^2|\pi|^2 \left\{\EE\left[\left|V^\pi_{t_i}\right| \right]\left(1 + L_1 + \sqrt{2}L_2\EE\left[\left|V^\pi_{t_i}\right| \right]\right)\right\} \\
+    & \qquad \leq \rho_1^2|\pi|^2 M,
+\end{align*}
+using Corollary~\ref{coro:diffexpectationeq2} in the second inequality and the boundedness of~$\EE[|V^{\pi}|]$ from Assumption~\ref{ass:discretisationbound}
+in the last line.
+The proof of the other bound is analogous.
+\end{proof}
+
+\begin{lemma}\label{lem:step_RWWN_bound}
+Under Assumptions~\ref{ass:volatilityProcess}-\ref{ass:wellposednessBSPDE}-\ref{ass:RWNNscheme}, for sufficiently small~$|\pi|$ we have 
+\begin{equation}
+\EE^\Phi\left[\left|\widehat{\Vv}_{t_{i}}-\widehat{\Uf}_{i}\left(X^\pi_{t_{i}}\right)\right|^{2}\right]+\Deli  \EE^\Phi\left[\sum_{k=1}^2\left|\widehat{{Z}}^k_{t_{i}}-\widehat{\mathcal{Z}}^k_{i}\left(X^\pi_{t_{i}}\right)\right|^{2}\right] \leq C\left\{ \frac{C^{*}}{K} +  M|\pi|^3\right\}
+\end{equation}
+on a compact~$\Qq$, 
+for all $i\in\{0, \dots, N-1\}$ and~$K$ hidden units, for some $C>0$, where~$C^*$ is as in Proposition~\ref{prop:UATRWNN} and~$M$ in Lemma~\ref{lem:approxError}.
+\end{lemma}
+
+\begin{proof}[Proof of Lemma~\ref{lem:step_RWWN_bound}]
+Fix $i\in\{0,\dots,N-1\}$. Relying on the martingale representation in~\eqref{eq:martingaleRep} and Lemma~\ref{lem:sol_as_RWNN}, we can define the following loss function for the pair $(\Uf_i(\cdot; \Theta),\Psi_i(\cdot;\Xi))\in\RWNN^{\relu}_K$ and their corresponding parameters~$\Theta$ and~$\Xi$:
+    \begin{equation}\label{eq:LHat_LTilde}
+        \widehat{L}_i(\Theta,\Xi) \defEqual  \widetilde{L}_i(\Theta,\Xi) + \EE^\Phi\left[\int_{t_i}^{t_{i+1}}\sum_{k=1}^2\left|\widehat Z_t^k - \Zowk_{t_{i}}\right|^2\right],
+    \end{equation}
+    with
+    \begin{align*}
+        \widetilde{L}_i(\Theta,\Xi) \defEqual  \EE^\Phi\bigg[\Big\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta) + \Deli  \Big\{ f\left(t_i, \E^{X^\pi_{t_i}}, \Uf(X^\pi_{t_i}; \Theta), \Zz^1_i(X^\pi_{t_i}; \Theta, \Xi), \Zz^2_i(X^\pi_{t_i}; \Theta, \Xi)\right) \\ - f\left(t_i, \E^{X^\pi_{t_i}}, \Vv_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \Big\} \Big\rvert^2\bigg] + \Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right].
+    \end{align*}
+    Recall the following useful identity, valid for any
+    $a, b\in\RR$ and $\chi>0$:
+    \begin{equation}\label{eq:Young}
+    {(a+b)^2 \leq \left(1+\chi\right)a^2 + \left(1+\frac{1}{\chi}\right)b^2}.
+    \end{equation}
+    Applying~\eqref{eq:Young} with $\chi = \gamma\Deli$ yields
+    \begin{small}
+    \begin{align*}
+        & \widetilde{L}_i(\Theta, \Xi) \leq \Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right] + (1 + C\Deli ) \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] \\ 
+        & + \left(1+\frac1{C\Deli }\right)\EE^\Phi\left[\left\lvert  f\left(t_i, \E^{X^\pi_{t_i}}, \Uf(X^\pi_{t_i}; \Theta), \Zz^1_i(X^\pi_{t_i}; \Theta, \Xi), \Zz^2_i(X^\pi_{t_i}; \Theta, \Xi)\right) - f\left(t_i, \E^{X^\pi_{t_i}}, \Vv_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \right\rvert^2\right].
+    \end{align*}
+    \end{small}%
+    Now by the Lipschitz condition on~$f$ from Assumption~\ref{ass:RWNNscheme},
+    \begin{equation*}
+        \widetilde{L}_i(\Theta, \Xi) \leq (1 + C\Deli ) \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + C\Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right].
+    \end{equation*}
+    For any $a, b\in\RR$, $\chi<0$, Inequality~\eqref{eq:Young} holds with the reverse sign, hence, with $\chi = -\gamma\Deli$,
+    \begin{align*}
+        & \widetilde{L}_i(\Theta, \Xi) \geq \Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right] + (1 - \gamma\Deli ) \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] \\
+        & - \frac1{\gamma\Deli }\EE^\Phi\left[\left\lvert  f\Big(t_i, \E^{X^\pi_{t_i}}, \Uf(X^\pi_{t_i}; \Theta), \Zz^1_i(X^\pi_{t_i}; \Theta, \Xi), \Zz^2_i(X^\pi_{t_i}; \Theta, \Xi)\Big) - f\left(t_i, \E^{X^\pi_{t_i}}, \Vv_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \right\rvert^2\right].
+    \end{align*}
+    Again since~$f$ is Lipschitz, the arithmetic-geometric inequality implies
+    \begin{align*}
+        \widetilde{L}_i(\Theta, \Xi) 
+        &\geq (1 - \gamma\Deli ) \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right]\\
+        & \qquad - \frac{\Deli}\gamma\EE^\Phi\left[ L_f^2 \bigg\lvert \left\lvert \widehat\Vv_{t_i} - \Uf(X^\pi_{t_i}; \Theta)\right\rvert  + \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert\bigg\rvert^2\right] \\ 
+        &\geq (1 - \gamma\Deli ) \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right]\\
+        & \qquad - \frac{3\Deli  L_f^2}{\gamma}\left( \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right] \right).
+    \end{align*}
+    Taking $\gamma=6L_f^2$ gives
+    \[
+        \widetilde{L}_i(\Theta, \Xi) \geq (1-C\Deli )\EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + \frac{\Deli}2\sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right].
+    \]
+For a given $i\in\{0,\dots,N-1\}$ take $(\Theta^*, \Xi^*)\in\argmin_{\Theta, \Xi} \widehat{L}_i(\Theta, \Xi)$ so that $\widehat\Uf_i=\Uf_i(\cdot; \Theta^*)$ and $\widehat{\Zz}_i^k(\cdot) \defEqual  \Zz^k_i(\cdot; \Theta^*, \Xi^*)$. 
+    From~\eqref{eq:LHat_LTilde}, $\widehat{L}_i$ and~$\widetilde{L}_i$ have the same minimisers, thus combining both bounds gives for all $(\Theta,\Xi)\in\RR^{m\times K}\times\RR^{m\times K}$,
+    \begin{align*}
+            &\left(1-C \Deli \right) \EE^\Phi\left[\left|\widehat \Vv_{t_{i}}-\widehat\Uf_{i}\left(X^\pi_{t_{i}}\right)\right|^{2}\right]+\frac{\Deli}2\sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \widehat{\Zz}_i^k\right\rvert^2\right] \leq \widetilde{L}_i(\Theta^*,\Xi^*)\leq \widetilde{L}_{i}(\Theta, \Xi) \\
+            &\leq\left(1+C \Deli \right) \EE^\Phi\left[\left|\widehat \Vv_{t_{i}}-\Uf_{i}\left(X^\pi_{t_{i}} ; \Theta\right)\right|^{2}\right]+C \Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right].
+    \end{align*}
+    Letting $|\pi|$ be sufficiently small gives together with Lemma~\ref{lem:approxError}
+    \begin{align*}
+        \EE^\Phi\left[\left|\widehat \Vv_{t_{i}}-\widehat\Uf_{i}\left(X^\pi_{t_{i}}\right)\right|^{2}\right] &+ \Deli  \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right] \\ 
+        &\leq C \left\{\inf_\Theta\EE^\Phi\left[\left|\widehat v_i(X^\pi_{t_i})-\Uf_i(X^\pi_{t_i}; \Theta)\right|^2\right]
+         + |\pi|^3\left(\rho_1^2  + \rho_2^2\right)M\right\},
+    \end{align*}
+    therefore
+    \begin{align*}
+    &\EE^\Phi\left[\left|\widehat{\Vv}_{t_{i}}-\widehat{\Uf}_{i}\left(X^\pi_{t_{i}}\right)\right|^{2}\right] + \Deli  \EE^\Phi\left[\sum_{k=1}^2\left|\Zowk_{t_{i}}-\widehat{\Zz}^k_{i}\left(X^\pi_{t_{i}}\right)\right|^{2}\right] \\
+    & \qquad \leq C\left\{ \inf_\Theta\EE^\Phi\left[\left|\widehat v_i(X^\pi_{t_i})-\Uf_i(X^\pi_{t_i}; \Theta)\right|^2\right]
+    + M|\pi|^3 \right\}
+    \leq C\left\{ \frac{C^{*}}{K}  + M|\pi|^3 \right\},
+    \end{align*}
+    by Proposition~\ref{prop:UATRWNN} over any compact $\Qq = \{x\in\RR: |x|\leq Q\}$, $Q>0$.
+\end{proof}
+The rest of the proof is similar to the proofs of \cite[Theorem A.2]{Bayer2022PricingSPDEs} and \cite[Theorem~4.1]{Hure2020DeepPDEs}, but we include it in Appendix~\ref{apx:technical_proofs} for the sake of completeness. 
+
+\section{Numerical results}\label{sec:RWNN_numerical_results}
+We now showcase the performance of the RWNN scheme on a representative model from each--Markovian and non-Markovian--class. 
+We first test our scheme in the multidimensional Black-Scholes (BS) setting~\cite{Black1973TheLiabilities} and then move to the non-Markovian setup with the rough Bergomi (rBergomi) model~\cite{Bayer2015PricingVolatility}. 
+We develop numerical approximations to European option prices given in~\eqref{eq:markovianPDE} and~\eqref{eq:BSPDEPricing}, choosing
+\[
+f(t, x, y, z^1, z^2) = -r y
+\qquad \text {and} \qquad 
+g_{\textup{Call}}\left(x\right) = \left(\E^x-\mathscr{K}\right)^{+},
+\]
+and discretising over the partition $\pi=\{0=t_0, t_1, \dots t_N=T\}$ for some~$N\in\NN$. 
+The precise discretisation schemes of the individual processes are given in their corresponding sections below. 
+We remark, however, that the approximated option price for a given Monte-Carlo sample can become (slightly) negative by construction so we add an absorption feature for both models:
+\begin{equation}\label{eq:absorption_scheme}
+Y^\pi_{t_i} \defEqual  \max\left\{0,\widetilde Y^\pi_{t_i}\right\}, \qquad \text{for } i\in\{0, \dots, N-1\},
+\end{equation}
+where $\big\{\widetilde Y^\pi_{t_i}\big\}_{i=0}^N$ denotes the approximation obtained through the RWNN scheme.
+
+
+\begin{remark}\label{rem:abs_scheme}
+    This is a well-studied problem and is especially prevalent in the simulation of square-root diffusions. We acknowledge that the absorption scheme possibly creates additional bias (see~\cite{Lord2009AModels} for the case of the Heston model), however, a theoretical study in the case of the PDE-RWWN scheme is out of the scope of this work.
+\end{remark}
+
+The reservoir used as a random basis of RWNNs here is the classical linear reservoir from Definition~\ref{def:RWNN}. 
+For numerical purposes, we introduce a so-called \textit{connectivity} parameter, a measure of how interconnected the neurons in a network are:
+the higher the connectivity, the more inter-dependence between the neurons (see~\cite{Dale2021ReservoirTopology} for effects of connectivity in different reservoir topologies). 
+In practice, however, too high a connectivity can lead to overfitting and poor generalisation. 
+Recall that our reservoir is given by
+\[
+\Phi_K: \RR^d \rightarrow \RR^K, \qquad x\mapsto\Phi_K(x)\defEqual\varrhob(\Am x+\bm),
+\]
+where only $\Am\in\RR^{K\times d}$ is affected by the connectivity parameter $c\in(0,1]$. 
+A value $c=1$ means that~$\Am$ is dense and fully determined by sampled weights. 
+We find that the choice $c\approx 0.5$ results in superior performance.
+
+\sloppy All the experiments below were run on a standard laptop with an \texttt{AMD~Ryzen~9~5900HX} processor without any use of GPU, which would most certainly speed up the algorithms further. The code for both models is available on GitHub at~\href{https://github.com/ZuricZ/RWNN_PDE_solver}{\texttt{ZuricZ/RWNN\_PDE\_solver}}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Example: Black-Scholes}
+The Black-Scholes model~\cite{Black1973TheLiabilities} is ubiquitous in mathematical finance, allowing for closed-form pricing and hedging of many financial contracts.
+Despite its well-known limitations, it remains a reference and is the first model to check before exploring more sophisticated ones. 
+Since it offers an analytical pricing formula as a benchmark for numerical results, it will serve as a proof of concept for our numerical scheme.
+Under the pricing measure~$\QQ$, the underlying assets $\Sb = (S^1,\ldots, S^d)$ satisfy
+\begin{equation}
+    \D S^j_t = r S^j_t \D t + \sigma_j S^j_t \D W^j_t, \quad \text{for } t\in[0,T],\; j\in\{1,\dots,d\},
+\end{equation}
+where $\{W^j_t\}_{t\in[0,T]}$ are standard Brownian motions such that $\langle W^i, W^j \rangle = \rho_{i,j}\D t$, 
+with $\rho_{i,j}\in [-1,1]$, $r\geq 0$ is the risk-free rate and $\sigma_j>0$ is the volatility coefficient. 
+The corresponding $d$-dimensional option pricing PDE is then given by
+\begin{small}
+\begin{equation*}
+\frac{\partial u(t,\Sb)}{\partial t}+\sum_{j=1}^d r S^j \frac{\partial u(t,\Sb)}{\partial S^j} + \sum_{j=1}^d \frac{(\sigma_i S^j)^2}{2} \frac{\partial^2 u(t,\Sb)}{(\partial S^j)^2} + \sum_{j=1}^{d-1} \sum_{k=j+1}^d \rho_{j, k} \sigma_j \sigma_k S^j S^k \frac{\partial^2 u(t,\Sb)}{\partial S^j \partial S^k} = r u(t,\Sb),
+\end{equation*}
+\end{small}
+for $t\in[0,T)$ with terminal condition~$u(T,\Sb_T) = g(S^1_T,\dots, S^d_T)$.
+
+To use Algorithm~\ref{alg:markovian}, the process $S$ has to be discretised, for example using the standard log-Euler-Maruyama scheme, for each $j=1,\ldots, d$ and~${i\in\{0,1,\dots,N-1\}}$:
+\begin{equation*}
+\left\{
+\begin{array}{ll}
+    X^{\pi, j}_{t_{i+1}} &= X^{\pi, j}_{t_{i}}
+    + \left(r-\frac{\sigma_j^2}{2}\right)\Deli  + \sigma_j\Delta^{W^j}_{i}, \\
+    S^{\pi, j}_{t_{i+1}} &= \exp\left\{X^{\pi, j}_{t_{i+1}}\right\},
+\end{array}
+\right.
+\end{equation*}
+with initial value $X^{\pi, j}_0=\ln\big(S^{\pi, j}_0\big)$.
+If not stated otherwise, we let $\mathscr{K}=S_0=1$, $r=0.01$, $T=1$,
+and run the numerical scheme with $N=21$ discretisation steps and $n_{\mathrm{MC}}=50,000$ Monte-Carlo samples. 
+The reservoir has $K\in\{10, 100, 1000\}$ hidden nodes, in Sections~\ref{sec:results_basket_BS} and~\ref{sec:resutls_call_BS} the connectivity parameter is set to $c=0.5$.
+
+\subsubsection{Convergence rate}\label{sec:BS_convergence_rate}
+We empirically analyse the error rate in terms of the number of hidden nodes $K$ obtained in Corollary~\ref{cor:convergence}. To isolate the dependence on the number of nodes, we consider a single ATM vanilla Call, fix $c=1$, $n_{\mathrm{MC}}=50,000$, $\sigma=0.1$ and vary $K\in\{10, 100, 1000\}$. Due to our vectorised implementation of the algorithm, the reservoir basis tensor cannot fit into the random-access memory of a standard laptop for $K \geq 10000$. The results are compared to the theoretical price only computed using the Black-Scholes pricing formula. The absorption scheme~\eqref{eq:absorption_scheme} is applied. 
+
+\begin{figure}[hbt!]%
+    \centering
+    \includegraphics[width=0.75\textwidth]{content/reschap2/Figures/BS_convergence_K_1e3.pdf}
+    \caption{Empirical convergence of MSE under Black-Scholes in terms of  the number of hidden nodes. Error bars mark 0.1 and 0.9 quantiles of 20 separate runs of the algorithm. The slope coefficient of the dashed line is obtained through regression of the means of individual runs, while the solid line represents $1/K$ convergence and is shown as a reference.}
+    \label{fig:BSconvergence}
+\end{figure}
+
+\subsubsection{ATM Call option}\label{sec:resutls_call_BS}
+As a proof of concept we first test Algorithm~\ref{alg:markovian} with Call options written on $d\in\NN$ independent assets, i.e. with $\rho_{j,k}=0$ for $j\neq k$ and $V_T = \big(g_{\textup{Call}}(S^j_T)\big)_{j\in\{1,\dots,d\}}$. This is only done so that the results can be directly compared to the theoretical price computed using the Black-Scholes pricing formula and is, in effect, the same as pricing~$d$ options on~$d$  independent assets, each with their own volatility parameter~$\sigma$. All the listed results in this section are for $K=100$ hidden nodes.
+
+In Table~\ref{tab:BS_d5}, results and relative errors are shown for $d=5$ and $\boldsymbol\sigma\defEqual(\sigma_1,\dots,\sigma_d)$ uniformly spaced over~$[0.05, 0.4]$. Next, the effects of the absorption scheme~\eqref{eq:absorption_scheme} are investigated. Curiously, the absorption performs noticeably worse compared to the basic scheme, where one does not adjust for negative paths. This leads us to believe that absorption adds a substantial bias, similar to the Heston case (see Remark~\ref{rem:abs_scheme}). Therefore, such a scheme should only be used for purposes, when positivity of the option price paths is strictly necessary (e.g. when hedging). Finally, in Table~\ref{tab:BS_MSE_time}, total MSE and computational times are given for different dimensions. The computational times for different dimensions are then plotted in Figure~\ref{fig:BS_time}. It is important to note that our results do not allow us to make definitive claims about the computational times of the PDE-RWNN scheme across different dimensions. This was not the goal of our experiments, and further detailed theoretical study and experiments would be necessary to draw more definitive conclusions regarding the efficiency of the scheme in various dimensions.
+
+\begin{center}
+\begin{table}[hbt!]
+\centering
+\begin{tabular}{l|cccc}
+\multicolumn{5}{c}{Price} \\
+\hline
+$\boldsymbol\sigma$ & True & PDE (w/ abs) & PDE (w/o abs)  & MC    \\
+\hline
+0.05 & 0.02521640 & 0.02960256  &  0.02531131  &  0.02574731  \\
+0.1  & 0.04485236 &  0.05523114 &  0.04467687  &  0.04547565  \\
+0.15 & 0.06459483 &  0.07719949 &  0.06477605  &  0.06520783  \\
+0.2  & 0.08433319 &  0.10307868 &  0.08443957  &  0.08484961  \\
+0.25 & 0.10403539 &  0.12660871 &  0.10412393  &  0.10513928 
+\end{tabular}
+\begin{tabular}{l|ccc}
+\multicolumn{4}{c}{Rel. Error} \\
+\hline
+ $\boldsymbol\sigma$ & PDE(w/ abs) & PDE (w/o abs) & MC    \\
+\hline
+0.05 & 1.74e-01 & -3.76e-03 & -2.11e-02 \\
+0.1  & 2.31e-01 & ~3.91e-03 & -1.39e-02 \\
+0.15 & 1.95e-01 & -2.81e-03 &	-9.49e-03 \\
+0.2  & 2.22e-01 & -1.26e-03 &	-6.12e-03 \\
+0.25 & 2.17e-01 & -8.51e-04 &	-1.06e-02
+\end{tabular}
+\caption{A single run for $d=5$ independent underlyings, where European Calls are compared to the price obtained through PDE-RWNN (\textit{with} and \textit{without} absorption) and the Monte Carlo methods along each dimension. Below, the relative errors of both methods are given. The MC method was run using the same paths as in the PDE-RWNN.}\label{tab:BS_d5}
+\end{table}
+\end{center}
+
+
+\begin{center}
+\begin{table}[hbt!]
+\centering
+\begin{tabular}{l|cc}
+$d$  & Total MSE (with abs) & CPU Time (s) \\
+\hline
+5   & 3.4826e-08 & 10.5        \\
+10  & 5.4169e-08 & 16.0        \\
+25  & 4.9015e-08 & 34.5        \\
+50  & 1.6533e-07 & 65.0       \\
+100 & 2.5340e-07 & 135.0         
+\end{tabular}
+\caption{Total MSE calculated across all $d$ assets and CPU training times for varying dimension $d$, where~$\boldsymbol\sigma$ uniformly spaced over $[0.05, 0.4]$.}\label{tab:BS_MSE_time}
+\end{table}
+\end{center}
+
+\begin{figure}[hbt!]
+    \centering
+    \includegraphics[scale=0.6]{content/reschap2/Figures/BS_time_dimensions.pdf}
+    \caption{Computational time vs number of dimensions, as in Table~\ref{tab:BS_MSE_time}.}
+    \label{fig:BS_time}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Basket option}\label{sec:results_basket_BS}
+We consider an equally weighted basket Call option with a payoff
+\[
+g_{\textup{basket}}(\Sb_T)\defEqual \left(\frac1d\sum_{j=1}^d S^j_T - \mathscr K\right)^+,
+\]
+where $\mathscr K>0$ denotes the strike price. For simplicity, we consider an ATM option with $\mathscr K\defEqual \frac1d\sum_{j=1}^d S^j_0$ and set all $S_0^j=1$ for $j\in\{1,\dots,5\}$. The volatilities $\sigma_j$ are uniformly spaced between~$[0.05, 0.25]$ and the correlation matrix is randomly chosen as
+ \[
+ \boldsymbol \rho \defEqual
+\begin{bmatrix}
+    1  & 0.84  & -0.51 & -0.70 & 0.15  \\
+0.84  & 1  & -0.66 & -0.85 & 0.41  \\
+-0.51 & -0.66 & 1  & 0.55  & -0.82 \\
+-0.70 & -0.85 & 0.55  & 1  & -0.51 \\
+0.15  & 0.41  & -0.82 & -0.51 & 1
+\end{bmatrix},
+ \]
+so that $\Sigma\defEqual \operatorname{diag}(\boldsymbol \sigma)\boldsymbol \rho \operatorname{diag}(\boldsymbol \sigma)$. Since the distribution of a sum of Lognormal is not known explicitly, no closed-form expression is available for the option's price. Hence, the reference price is computed using Monte-Carlo with $100$ time steps and $400,000$ samples. In Table~\ref{tab:BS_basket_errors}, we compare our scheme with a classical MC estimator in terms of relative error for $K = 100$ hidden nodes. 
+
+\begin{table}[hbt!]
+    \centering
+    \begin{tabular}{l|cccc}
+        & Reference & PDE (w/ abs) & PDE (w/o abs) & MC \\
+        \hline
+        Price & 0.016240 & 0.018220 & 0.016131 & 0.016251 \\
+        \hline
+        Rel. error & - & -1.22e-01 & -6.71e-03 & -6.50e-04 \\
+        \hline
+        Time & 12.8 & 9.7s & 9.8s & 0.3s
+    \end{tabular}
+    \caption{Comparison of prices, relative errors and CPU time of the Monte-Carlo estimator, PDE-RWNN scheme \textit{with} and \textit{without} absorption (using same sampled MC paths and $K = 100$) and the reference price computed with 100 time steps and 400,000 samples.}
+    \label{tab:BS_basket_errors}
+\end{table}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Rough Bergomi}
+The rough Bergomi model belongs to the recently developed class of rough stochastic volatility models first proposed in~\cite{Bayer2015PricingVolatility, Gatheral2018VolatilityRough, Guennoun2018AsymptoticModel}. We consider here the price dynamics under~$\QQ$ with constant initial forward variance curve~$\xi_0(t)>0$ for all $t\in[0,T]$:
+\begin{equation*}
+\left\{
+\begin{array}{rl}
+\displaystyle\frac{\D S_t}{S_t} &= r \D t + \sqrt{V_t} \D \left(\rho_1\D W^1_t + \rho_2 W^2_t\right), \\
+V_t &= \displaystyle \xi_0(t)\Ee\left( \eta\sqrt{2H} \int_0^t (t-u)^{H-\frac{1}{2}} \D W_u^1 \right),
+\end{array}
+\right.
+\end{equation*}
+where $\eta>0$ and $H\in(0,1)$ is the Hurst parameter. 
+The corresponding BSPDE reads
+\begin{equation}\label{eq:roughBergomi}
+-\D u(t,x) = \left[\frac{V_{t}}{2} \partial_x^{2} u(t, x)+\rho \sqrt{V_{t}} \partial_x \psi(t,x)-\frac{V_{t}}{2} \partial_x u(t,x)-r u(t,x)\right] \D t-\psi(t,x) \D W^1_{t},
+\end{equation}
+with terminal condition $u(T, x) = g_{\textup{Call}}\left(\E^{x+r T}\right)$. 
+While the existence of the solution  was only proven in the distributional sense~\cite{Bayer2022PricingSPDEs}, we nevertheless apply our RWNN~scheme.
+To test Algorithm~\ref{alg:nonmarkovian}, both the price and the volatility processes are discretised according to the Hybrid scheme developed in~\cite{Bennedsen2017HybridProcesses, McCrickerd2018TurbochargingModel}. 
+We set the rBergomi parameters as follows: $H=0.3$, $\eta=1.9$, $\rho=-0.7$, $r=0.01$, $T=1$, $S_0=1$ and choose the forward variance curve to be flat with $\xi_0(t) = 0.235\times 0.235$. Again, we are pricing an ATM vanilla Call option with $\mathscr K=S_0=1$. The number of discretisation steps is again $N=21$, the number of Monte-Carlo samples $n_{\mathrm{MC}}=50,000$ and the reservoir has $K\in\{10, 100, 1000\}$ nodes with connectivity $c=0.5$ in Section~\ref{sec:resutls_call_rB}. 
+
+\subsubsection{Convergence rate}\label{sec:rB_convergence_rate}
+
+As in Section~\ref{sec:BS_convergence_rate}, we conduct an empirical analysis of the convergence error for the ATM Call. 
+To isolate the dependence on the number of nodes we fix $c=1$, $n_{\mathrm{MC}}=50,000$ and vary $K\in\{10, 100, 1000\}$. 
+The reference price is computed by Monte-Carlo with~$100$ time steps and $800,000$ samples. 
+The absorption scheme has been applied and the results are displayed in Figure~\ref{fig:rBconvergence}. 
+In this section, the same random seed was used as in Section~\ref{sec:BS_convergence_rate}, to ensure consistent results across different simulations.
+
+\begin{figure}[hbt!]
+    \centering
+    \includegraphics[width=0.75\textwidth]{content/reschap2/Figures/rBergomi_convergence_K_1e3.pdf}
+    \caption{Empirical convergence of MSE under rBergomi in terms of  the number of hidden nodes. Error bars mark 0.1 and 0.9 quantiles of 20 separate runs of the algorithm. The slope coefficient of the dashed line is obtained through regression of the means of individual runs, while the solid line represents $1/K$ convergence and is shown as a reference.}
+    \label{fig:rBconvergence}
+\end{figure}
+
+\subsubsection{ATM Call option}\label{sec:resutls_call_rB}
+
+We now evaluate the performance of our PDE-RWNN method for option pricing in the rough Bergomi model using the market parameters listed above and compare the results to those obtained with the MC method over the same sample paths. We also investigate the effect of the absorption scheme (Table~\ref{tab:rB_vanilla_errors}) and find that, interestingly, despite keeping the paths positive, the absorption scheme adds noticeable bias. 
+Nevertheless, the relative error of the proposed scheme with absorption 
+is comparable to the results using regular artificial networks found in the literature~\cite[Table~1]{Bayer2022PricingSPDEs}, yet, our scheme learns much faster with orders of magnitudes faster training times.
+
+\begin{table}[hbt!]
+    \centering
+    \begin{tabular}{l|c|c|c|c}
+        & Reference & PDE (w/ abs) & PDE (w/o abs) & MC \\
+        \hline
+        Price & 0.079932 & 0.0819236 & 0.079729 & 0.080310 \\
+        \hline
+        Rel. error & - & 24.9e-3 & 2.54e-03 & -4.73e-03 \\
+        \hline
+        Time & 10.1s & 7.4s & 7.5 & 0.4s
+    \end{tabular}
+    \caption{Comparison of prices, relative errors and CPU time of the Monte-Carlo estimator, PDE-RWNN scheme \textit{with} absorption, PDE-RWNN scheme \textit{without} absorption both with $K = 100$ (and both using same sampled MC paths) and the reference price computed with 100 time steps and 800,000 samples.}
+    \label{tab:rB_vanilla_errors}
+\end{table}
+
+
+

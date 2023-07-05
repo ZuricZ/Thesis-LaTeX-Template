@@ -1,171 +1,107 @@
 Introduce general option pricing ...
 \red{
-\subsection{TODOs}
+\section{TODOs}
 \begin{itemize}
     \item iid vs i.i.d.
     \item define ball $\Bb_R$
     \item all matrices with $[\;]$
     \item use $\Phi$ as payoff consistently?
+    \item relu consistency, function and name relu vs ReLu
+    % \item consistent payoff vs pay-off
+    % \item fix Call and Put
+    \item "other" in refs
+    \item use definition from the introduction throughout the paper (e.g. for NN/RWNNs)
+    \item randomLY weighted NNs
+    \item $\RWNN$ is a set, not a single NN
+    % \item paper $\to$ work/chapter/thesis
 \end{itemize}
 }
 
 
 \red{Use of NNs/ML In finance ...}
 
-\subsection{Rough Volatility}
-In recent years, a fundamental shift from classical modelling towards so-called rough stochastic volatility models has happened. These ``rough" models were first proposed by Gatheral et al. in the two seminal papers~\cite{Gatheral2018VolatilityRough, Bayer2015PricingVolatility} and sparked a great deal of subsequent research, because of their ability to capture stylized facts more accurately, while remaining parsimonious. In essence, they are a class of continuous-path stochastic volatility models, where the instantaneous volatility is driven by a stochastic process with paths rougher than those of Brownian Motion, typically modelled by a fractional Brownian Motion~\cite{Mandelbrot1968FractionalApplications} with Hurst parameter $H <\nobreak 1/2$. The reason for this drastic paradigm shift can be found not only under the historical measure, where the roughness of the time series of daily log-realised variance estimates suggests H{\"o}lder regularity of $H\approx 0.1$, but also under the pricing measure, where rough volatility models are able to reproduce the power-law behaviour of the ATM volatility skew. Since then, there have been many new contributions to the literature on rough volatility models, including closed-form expressions for the characteristic functions of rough Heston models~\cite{Euch2018TheModels}, calibration of rough volatility models by machine learning techniques~\cite{Horvath2020DeepModels}, microstructural foundations of rough volatility models~\cite{Euch2018TheVolatility}, option pricing partial differential equations (PDEs) solvers~\cite{Jacquier2019DeepVolatility, Bayer2022PricingSPDEs}.
+The complex and ever-evolving history of financial derivatives offers a captivating narrative that stretches back centuries and continues to shape the modern-day global financial landscape. The history of derivatives can be traced back to the origins of commerce in Mesopotamia in the fourth millennium BC, where futures contracts were used to hedge against price fluctuations~\cite{Weber2009AMarkets}. In Europe, the first derivatives market was established in Amsterdam in the early 1600s, with options contracts being traded on the shares of the Dutch East India Company~\cite{Petram2011The1602-1700}. Derivatives markets continued to evolve over the centuries, with the development of new financial instruments and the emergence of new trading technologies. Today, derivative markets are a vital component of the global financial system, facilitating risk management and providing investors with a wide range of investment opportunities. The history of these markets is a testament to human ingenuity and the power of financial innovation to drive economic growth and prosperity. 
 
+The development of options trading and derivatives markets eventually led to the need for mathematical models to price these instruments, and in 1973, the Black-Scholes~\cite{Black1973TheLiabilities} model provided a groundbreaking framework for option pricing.
+% The option pricing methods and models have evolved significantly over the last few decades. The foundations were laid with the Black-Scholes model~\cite{Black1973TheLiabilities}, introduced in 1973 by Fischer Black and Myron Scholes. 
+The model is based on the assumption that the stock price moves according to a geometric Brownian motion with constant volatility and was the first continuous model to price European and American options. The Black-Scholes model proved to be a great success and is in fact still considered the cornerstone of option pricing even today, however, it has a number of limitations. For instance, in the current market regime it cannot capture the dynamics of the volatility or the skewness of the implied volatility smile.
 
-\subsection{Neural Networks with Random Weights}
+In order to address these shortcomings, Local Volatility~(LV) models were introduced in the early 1990s. These were the first types of models which fully accounted for the volatility surface~\cite{Dupire1994PricingSmile, Derman1994RidingSmile} at any given date. While in the Black Scholes model, the volatility is a constant, in local volatility models it is a deterministic function of the underlying. The next important advancement was the Heston model~\cite{Heston1993AOptions}, proposed in 1993, which, at least to an extent, addressed the dynamics of the surface. This so-called Stochastic Volatility~(SV) model uses a square-root diffusion to model the dynamics of the volatility and thus allows for a more accurate representation of the option prices through time.
 
-\subsubsection{Feed Forward Neural Networks}
-The earliest neural network models date back to McCulloch and Pitts~\cite{McCulloch1943AActivity}, who proposed a model of a neuron and its functioning. This model laid the groundwork for the development of artificial neural networks and their subsequent use in machine learning. Later, the development of the backpropagation algorithm by Rumelhart et al.~\cite{Rumelhart1986LearningErrors} was a major breakthrough in the field, which enabled the training of neural networks using gradient descent, which is now a widely used and powerful approach in machine learning. This development opened the door to the use of neural networks for practical applications and laid the foundation for deep learning. 
+The stochastic volatility models, or at least their modern variants, are still heavily used in practice today. Their non-linear nature makes them difficult to solve analytically, which consequently means that numerical methods oftentimes need be employed in order to obtain accurate results. In such instances, Monte Carlo~(MC) simulation~\cite{Glasserman2013MonteEngineering}, a technique used to estimate the value of a contingent claim by randomly sampling the underlying asset's price, is utilized more than any other. One of the main challenges in using MC simulation is that the final estimate is often subject to high variance. This is especially true when considering extreme out-the-money strikes. To counter this issue, variance reduction techniques are often employed to reduce the high fluctuations in the simulated outcomes. Methods such as antithetic variates, control variates, stratification, and importance sampling are all employed to reduce the variance of the simulated outcomes. In the importance sampling approach, one usually has to make approximations corresponding to a regime he is interested in. The theory of Large Deviations, described in Section~\ref{sec:LargeDevIntro}, provides a framework for such approximations.
+% We expand on an importance sampling method based on Large Deviations for stochastic volatility models in Chapter~\ref{chap:reschap3}.
 
-The development of deep learning in the 2000s was a crucial milestone in the history of neural networks. Deep learning models~\cite{Goodfellow2016DeepLearning}, such as convolutional neural networks, have enabled unprecedented accuracy in image recognition and natural language processing~\cite{Gu2018RecentNetworks}, generative neural networks (GANs)~\cite{Goodfellow2020GenerativeNetworks} have been used to generate high-resolution images from text descriptions~\cite{Radford2015UnsupervisedNetworks}, generate diverse and realistic images~\cite{Karras2018ANetworks}, and generate music \cite{Engel2019GANSynth:Synthesis}. The development of modern deep learning frameworks, such as \texttt{TensorFlow} and \texttt{PyTorch}, has further facilitated the use of neural networks in practical applications. 
+The next important advancement in option valuation modelling, especially for the practitioners, was the Local Stochastic Volatility~(LSV) models, which extend the classical models by combining the attributes of both local and stochastic volatility models (see e.g.~\cite{Lipton2002TheProblem, Lipton2002UniversalBarriers}). These models provide a more accurate representation of the implied volatility surface than stochastic volatility models and produce better hedge dynamics than LV models. %, such as the Lipton model~\cite{Lipton2002TheProblem},
+Concurrently, models that incorporate both continuous diffusion and occasional large jumps in the underlying asset price, were gaining traction. The seminal work of Merton~\cite{Merton1974ONRATES} introduced the idea of jump processes in asset prices, which was later extended by Bates~\cite{Bates1996JumpsOptions} to include stochastic volatility. %Kou's~\cite{Kou2004OptionModel} double-exponential jump-diffusion model was developed as an improvement on Merton's original model and has since been widely used in option pricing and risk management. 
+Other variations of the jump models have also been proposed, including the Variance Gamma model by Madan and Seneta~\cite{Madan1990TheReturns} and the Normal Inverse Gaussian model by Barndorff-Nielsen and Shephard~\cite{Barndorff-Nielsen2001Non-GaussianEconomics}. These models have been applied in various fields and played an important role in attempts to achieve the joint calibration of SPX and VIX options~\cite{Cont2011ADERIVATIVES, Baldeaux2014ConsistentModel, Kokholm2015JointModels}; we give an exposition on the topic in Section~\ref{sec:SPXnVIXintro}. % including equity, commodity, and foreign exchange markets, and have proven to be useful in accurately modelling asset price movements and improving option pricing accuracy. The jump-diffusion models also
 
+The latest advance in the realm of parametric modelling for option valuation are stochastic volatility-type models where volatility paths are rougher than those of classic Brownian motion appropriately dubbed Rough Volatility~(RV) models. The models, featuring the instantaneous variance driven by a fractional Brownian motion (or more generally, a continuous Gaussian process) with Hurst parameter $H < \frac{1}{2}$, were first proposed in seminal works~\cite{Bayer2015PricingVolatility, Gatheral2018VolatilityRough, Guennoun2018AsymptoticModel}. As highlighted in many papers, they are able to capture many features of market data and clearly seem to outperform most classical models all while remaining parsimonious. Precise examples with real data can be found in~\cite{Bayer2015PricingVolatility} for SPX options, in~\cite{Bondi2022TheModel, Gatheral2020TheProblem, Jaber2022JointHints, Horvath2020VolatilityModels} for joint SPX-VIX options and in~\cite{Bennedsen2022DecouplingVolatility, Gatheral2018VolatilityRough} for estimation on historical time series, the latter  being the state-of-the-art statistical analysis under the historical measure. The rough volatility models deserve special attention being an integral part of the thesis, we, therefore, give a more detailed description in Section~\ref{sec:RoughVolIntro}.
 
-\begin{definition}[Neural Network]\label{def:neuralnet}
-Let $L, N_{0}, N_{1}, \ldots, N_{L} \in \NN, \varrho: \RR \rightarrow \RR$ and for any $l=$
-$1, \ldots, L$ let $w_{l}: \RR^{N_{l-1}} \rightarrow \RR^{N_{l}}$ an affine function. A function $\Psi: \RR^{N_{0}} \rightarrow \RR^{N_{L}}$
-defined as
+Moving beyond the scope of parametric modelling and delving into non-parametric techniques. In recent years, the breakthroughs in deep learning~\cite{Goodfellow2016DeepLearning} made it possible to apply similar techniques to finance (see e.g.~\cite{Buehler2019DeepHedging, Ruf2020NeuralReview, Heaton2017DeepPortfolios, Horvath2020DeepModels}). %Moving beyond the scope of parametric modelling and delving into non-parametric techniques In recent years, the breakthroughs in deep learning~\cite{Goodfellow2016DeepLearning} made it possible to apply similar techniques to finance 
+In the context of option pricing and hedging, for example, an idea pursued in  Chapter~\ref{chap:reschap1} (as well as in e.g.~\cite{Cuchiero2020AModels}) was to completely disregard the classical parametric SDE approach in place of neural networks. This alleviated the modeller of the burden of choosing functional forms of drift and diffusion coefficients to match the stylized of the market and outsourced this task to the neural network, making the modelling much more data-driven.
+
+Overall, the evolution of option pricing methods and models has been driven by the need to capture more accurately the fit and dynamics of implied volatility surface. Each new model has improved upon the one before it by allowing for a more accurate representation of the option prices. In the realm of quantitative finance, the cutting-edge models of option pricing and risk management incorporate evermore sophisticated mathematical and computational techniques. Let us, therefore, introduce the most recent advances which lay the foundation for our work in this thesis.
+
+\section{What is implied volatility and why do we care?}
+
+While options trading had been around for centuries, it was not until 1973 that the Chicago Board of Exchange~(CBOE) initiated the first options market with a guaranteed settlement. Prior to the 1987 stock market crash, options trading in the modern context was still relatively new, the market was not as liquid and sophisticated as it is today and the implied volatility smile was not a widely observed phenomenon in the market. However, following the crash, investors became acutely aware of the lurking dangers present in the markets in the form of large downside risks. This realization naturally led to the development of the so-called implied volatility smile or skew, which deviated significantly from the assumptions of the Black-Scholes model.
+% Before the 1987 stock market crash, the implied volatility smile was not a widely observed phenomenon in the options market. This was partly due to the fact that options trading in the modern context was still relatively new and the market was not as liquid and sophisticated as it is today. Furthermore, the Black-Scholes model had only been introduced a few years earlier and had not yet been widely adopted by market participants.
+% However, the 1987 crash and subsequent market events brought increased attention to the shortcomings of the Black-Scholes model and the need for more accurate pricing models that could better capture the dynamics of the market. It was in this context that market participants began to observe the implied volatility smile, as options at different strikes started to exhibit different implied volatilities.
+% The discovery of the implied volatility smile challenged the assumptions of the Black-Scholes model and
+This led to the development of alternative pricing models that could better explain the market dynamics and has in turn led to the creation of more sophisticated trading strategies and risk management techniques that take into account the nuances of the options market. Today, the implied volatility smile is an important feature of the options market that is closely monitored by traders and analysts alike.
+
+Let us consider a probability space $(\Omega,\Ff, \QQ)$ equipped with a filtration $\FF\defEqual\{\Ff_t\}_{t\in[0,T]}$ for a finite time horizon $T>0$. In order to streamline the presentation we for simplicity assume no interest rate, repo or dividends. Without delving into technicalities let us consider an asset modelled by a sufficiently integrable process~$A\defEqual \{A_t\}_{t\in[0, T]}$. We call the $\FF$-martingale conditional expectation process under the risk-neutral measure~$\QQ$, i.e.,
 \[
-\Psi=w_{L} \circ \Psi_{L-1} \circ \cdots \circ \Psi_{1} \text { with } \Psi_{l}=\varrho \circ w_{l} \quad \text { for } l=1, \ldots, L-1,
+\Ffr_{t,T}^A\defEqual\EE^\QQ\left[A_T\middle\vert\Ff_t\right], \quad \text { for all } t \in [0,T]\,,
 \]
-is called a \textit{neural network}. Here the activation function~$\varrho$ is
-applied component-wise. $L$ denotes the number of layers, $N_{1}, \ldots, N_{L-1}$ denote
-the dimensions of the hidden layers and $N_{0}, N_{L}$ of the input and output layers respectively. 
-For any $l\in\{1, \dots, L\}$ the affine function $w_{l}:\RR^{N_{l-1}}\to\RR^{N_{l}}$ is given as $w_{l}(x) = \Am^{(l)} \xx + \bm^{(l)}$,
-for $\xx\in \RR^{N_{l-1}}$, for some $\Am^{(l)} \in \RR^{N_{l}\times N_{l-1}} $ and $\bm^{(l)} \in \RR^{N_{l}}$.
-For any $i\in\{1, \dots N_{l}\}$ and $j\in\{1, \dots, N_{l-1}\}$ the number $A_{i j}^{(l)}$ is interpreted as the weight of the edge connecting node~$i$ of layer~$l-1$ to node~$j$ of layer~$l$.
-\end{definition}
-
-We denote by $\NNn_{\infty}^{\varrho}(d_0,d_1)$ the set of neural networks mappings from $\RR^{d_0} \rightarrow \RR^{d_1}$ with activation function $\varrho$, where we drop the explicit reference to input and output dimension in the notation when those are clear from the context. %$d_0,d_1=1$. 
-Moreover, for any $L, M \in \NN$ we denote by $\NNn_{L, M}^\varrho$ a neural network with a fixed number of hidden layers $L$ and fixed input and output dimensions $M$ for each hidden layer. %Then one has $\NNn_{L,M}^\varrho=\left\{\Psi^{\theta}: \theta \in \Theta_{L,M}\right\}$ with the parameter space of weights and biases $\Theta_{L,M} \subset \RR^{p}$ for some $p(L,M) \in \NN$. 
-Notice also that $\bigcup_{L,M\in\NN}\NNn_{L,M}^\varrho = \NNn_{\infty}^\varrho$.
-
-The neural networks possess the so-called Universal Approximation Property, which heuristically states that any continuous function can be approximated to arbitrary accuracy by a neural network, no matter how complex the input is. This means that a neural network can approximate any function with a finite number of parameters. This property makes neural networks a powerful tool for solving complex problems and is one of the reasons for the recent success of deep learning. The exact mathematical statement is due to Hornik~\cite{Hornik1991ApproximationNetworks} and is given below.
-
-\begin{theorem}[Universal approximation \cite{Hornik1991ApproximationNetworks}]\label{thm:UAT}
-Let $\varrho$ be bounded and
-non-constant activation function. Then it holds that:
-\begin{enumerate}
-\item For any finite measure $\mu$ on $\left(\RR, \Bb\left(\RR\right)\right)$ and $1 \leq p<\infty,$ the set
-$\NNn_{\infty}^{\varrho}$ is dense in $L^{p}\left(\RR, \mu\right)$
-\item If in addition $\varrho \in \Cc(\RR),$ then $\NNn_{\infty}^{\varrho}$ is dense in $\Cc\left(\RR\right)$ for the
-topology of uniform convergence on compact sets.
-\item If additionally $\varrho\in \Cc^m(\RR)$ and all its derivatives upto order $m\in\NN$ are bounded, then $\NNn_{\infty}^{\varrho}$ is dense in Sobolev $(m,p)$-space $\mathcal{W}^{m,p}_{\mu}(\RR)$ for any finite measure $\mu$ on $\RR$.
-\end{enumerate}
-\end{theorem}
-
-\subsubsection{Random Weighted Neural Networks}
-Random Weighted Neural Networks (RWNNs) have been a staple of artificial intelligence research for decades, although they have taken a back seat to deep learning for a good chunk of the past decade. Neural networks with random weights first appear in seminal papers of Barron \cite{Barron1992NeuralSystems, Barron1993UniversalFunction}, but a more modern version was proposed by Huang \cite{Huang2006UniversalNodes} under the name \textit{Extreme learning machine}. Today, these networks are known under different names: reservoir networks, random feature or random weighted networks; we choose to follow the latter convention. Starting from the work of Huang et al. \cite{Huang2006UniversalNodes}, RWNNs saw a surge in popularity in the early 2000s (see e.g. also~\cite{Rahimi2007RandomMachines, Rahimi2008WeightedLearning}), however, after the advent of automatic differentiation libraries experienced a sharp decline in application up until recently.
-
-ELM introduced the concept of randomly initializing the weights of a single-hidden layer feed-forward neural network. This idea was based on a universal approximation theorem by Barron et al.~\cite{Barron1993UniversalFunction}, stating that a single-hidden layer neural network with a randomly chosen activation function could approximate any continuous function with arbitrary precision. By randomly choosing the weights, the computational complexity and time required to train the neural network were drastically reduced.
-
-To put this statement into the context of Definition~\ref{def:neuralnet}, a \textit{random weighted neural network} (RWNN) is a neural network where the hidden layers are randomly sampled from a given distribution and then fixed; consequently, only the last layer is trained:
-out of all the parameters $(\Am^{(l)}, \bm^{(l)})_{l=0,\ldots,L}$ of the $L$-layered neural network, the parameters $(\Am^{(0)}, \bm^{(0)}, \ldots, A^{(L-1)}, \bm^{(L-1)})$ are randomly sampled and frozen and only $(\Am^{(L)}, \bm^{(L)})$ from the last layer are trained. 
-
-Similarly as above, we denote $\RWNN_{\infty}^{\varrho}(d_0,d_1)$ the set of random neural networks from $\RR^{d_0}$ to $\RR^{d_1}$, with activation function~$\varrho$. % $d_0,d_1=1$.
-Moreover, for any $L, K \in \NN$, $\RWNN_{L, K}^\varrho$ represents a set of random neural networks with a fixed number of hidden layers $L$ and fixed input and output dimension $K$ for each hidden layer. 
-We now give a precise definition of a single layer $\RWNN^\varrho_{K}\coloneqq\RWNN^\varrho_{1, K}$, which we use for our approximation in Chapter~\ref{chap:reschap2}.
-
-\begin{definition}[Single layer RWNN]\label{def:RWNN}
-Let $(\widetilde{\Omega}, \widetilde{\Ff}, \widetilde{\PP})$ be a probability space on which the iid random variables $\Am_{k}: \widetilde{\Omega} \rightarrow \RR^{d}$ and $b_{k}: \widetilde{\Omega} \rightarrow \RR$, respectively corresponding to weights and biases, are defined. Let $\phib=\left\{\phi_{k}\right\}_{k \geq 1}$ denote a sequence of random basis functions, where each $\phi_{k}: \RR^{d} \to\RR$ is of the form
-$$
-\phi_{k}(\xx):=\varrho\left(\Am_{k}^{\top} \xx + b_{k}\right), \qquad x\in\RR^d,
-$$
-with $\varrho:\RR\rightarrow\RR$ a Lipschitz continuous activation function. 
-For an output dimension $m\in\NN$ and $K \in \NN$ hidden units we define the \textit{reservoir} or \textit{random basis} as $\Phi_{K}\coloneqq\phi_{1:K}=(\phi_1,\dots,\phi_K)$ and the random network $\Psi_K(\xx;\Theta)\in\RWNN^\varrho_K$ with parameter $\Theta=\left(\theta_{1}, \ldots, \theta_{m}\right)^\top \in \RR^{m\times K}$ as the map % \RWNN^\varrho_K: 
+a time $t$-price of a Future contract on~$A$. Furthermore, at the time $t\in[0, T]$ the fair price of a European Call with maturity~$T>0$ and log-strike $k\in \RR$ written on an underlying with the price process~$A$ can be expressed as:
 \[
-\xx \mapsto \Psi_K(\xx;\Theta)\coloneqq\Theta\,\Phi_K(\xx).
+C_t(k) \defEqual \EE^\QQ\left[\left(\Ffr_{T,T}^A - \E^k\right)^+\middle\vert\Ff_t\right] = \EE^\QQ\left[\left(A_T - \E^k\right)^+\middle\vert\Ff_t\right]\,.
 \]
-Thus, for each output dimension $j\in\{1,\dots,m\}$, $\Psi_K(\xx;\Theta)\in\RWNN^\varrho_K$ produces a linear combination of the first $K$ random basis functions $\theta_j^\top\phi_{1:K}:=\sum_{k=1}^{K} \theta_{j,k} \phi_{k}$.
-\end{definition}
+Then, $\BS(t, x, k, \sigma)$ denotes the Black-Scholes price of a European Call option at time $t \in [0, T]$, with maturity $T$, log-price $x, \ln$-strike~$k$ and volatility~$\sigma$, so that
+$$
+\BS(t, x, k, \sigma)= \begin{cases}\E^x \Nn\left(d_{+}(x, k, \sigma)\right)-\E^k \Nn\left(d_{-}(x, k, \sigma)\right), & \text {if } \sigma \sqrt{T-t}>0, \\ \left(\E^x-\E^k\right)^{+}, & \text {if } \sigma \sqrt{T-t}=0,\end{cases}
+$$
+with $d_{\pm}(x, k, \sigma)\defEqual\frac{x-k}{\sigma \sqrt{T-t}} \pm \frac{\sigma \sqrt{T-t}}{2}$, and~$\Nn$ is the Gaussian cumulative distribution function. 
 
-\begin{remark}
-Throughout this work, we will make use of the more compact vector notation
-$$
-\Phi_K: \RR^d \ni \xx\mapsto \varrhob(\Am \xxbf+\bm) \in \RR^{K},
-$$
-where $\varrhob:\RR^K\rightarrow\RR^K$ acts component-wise $\varrhob(\yy)\coloneqq(\varrho(y_1), \dots \varrho(y_K))$ and $\Am: \widetilde{\Omega} \rightarrow \RR^{K\times d}$ and $\bm: \widetilde{\Omega} \rightarrow \RR^K$ are the random matrix and bias respectively.
-\end{remark}
-
-The training of such an RWNN can then be simplified into a convex optimisation problem. This makes the training easier to manage and understand both practically and theoretically. We expand on the training method in Chapter~\ref{chap:reschap2}. However, by only allowing certain parts of the parameters to be trained, the overall capacity and expressivity are possibly reduced. Although it is still unclear if random neural networks still maintain any of the powerful approximation properties of general deep neural networks, these questions have been addressed to some extent in e.g.~\cite{Gonon2020ApproximationSystems, Mei2022GeneralizationConcentration}, where learning error bounds for RWNNs have been proved.
-
-\begin{proposition}[Proposition 3 in~\cite{Gonon2020ApproximationSystems}]\label{prop:UATRWNN}
-Suppose $\psi^{*}: \RR^{q} \rightarrow \RR$, for $q\in\NN$, can be represented as
-$$
-\psi^{*}(z)=\int_{\RR^{q}} \E^{\I\theta^\top z} g(\theta) \D \theta,
-$$
-for some complex-valued function~$g$ on $\RR^{q}$ and all $z \in \RR^{q}$ with $\|z\| \leq M$ for some $M>0$. Assume that
-$$
-\int_{\RR^{q}} \max \left(1,\|\theta \|^{2 q+6}\right)|g(\theta)|^{2} \D \theta <\infty .
-$$
-Let $R>0$ and $K\in\NN$, suppose the rows of the $K\times K$-valued random matrix~$\Am$ are iid Uniform on $\Bb_{R} \subset \RR^{q}$, that the entries of $\bm\in\RR^{K}$ are iid Uniform on $[-\max (M R, 1), \max (M R, 1)]$, 
-that~$\Am$ and~$\bm$ are independent and let $\relu(x):=\max (x, 0)$ on~$\RR$. 
-Let the pair $(A,b)$ characterise a random basis (reservoir)~$\Phi$ and its corresponding network $\Psi\in\RWNN^{\relu}_K$ in the sense of Definition~\ref{def:RWNN}. 
-Then, there exists an $\RR^K$-valued random variable~$\Theta$ and $C^{*}>0$ 
-(given explicitly in~\cite[Equation~(33)]{Gonon2020ApproximationSystems}) such that
-$$
-\EE^\Phi\left[\left\|\Psi(Z;\, \Theta)-\psi^{*}(Z)\right\|^{2}\right] \leq \frac{C^{*}}{K},
-$$
-and for any $\delta \in(0,1)$, with probability $1-\delta$ the random neural network $\Psi(\,\cdot\,;\,\Theta)$ satisfies
-$$
-\left(\int_{\RR^{q}}\left\|\Psi(z;\, \Theta)-\psi^{*}(z)\right\|^{2} \mu_{Z}(\D z)\right)^{1 / 2} \leq \frac{\sqrt{C^{*}}}{\delta \sqrt{K}}\,.
-$$
-\end{proposition}
-
-\subsection{Large and moderate deviations}
-\begin{definition}\label{def:LDP_approximation_types}
-Let~$X$ be a unique strong solution to~\eqref{eq:SDE}.
-The process~$X^\eps$ is called
-\begin{enumerate}[i)]
-\item Small-noise approximation if 
-\begin{equation}\label{eq:small_noise}
-\D X_t^\eps = b(X_t^\eps) \D t + \sqrt{\eps} \sigma(X_t^\eps)\D W_t, \quad X_0^\eps = x_0.
-\end{equation}
-\item Small-time approximation if 
-\begin{equation}\label{eq:small_time}
-\D X_t^\eps = \eps b(X_t^\eps) \D t + \sqrt{\eps} \sigma(X_t^\eps) \D W_t, \quad X_0^\eps = x_0
-\end{equation}
-\item Large-time approximation if 
-\begin{equation}\label{eq:large_time}
-\D X_t^\eps = \frac{1}{\eps} b(X_t^\eps) \D t + \frac{1}{\sqrt{\eps}} \sigma(X_t^\eps) \D W_t, \quad X_0^\eps = x_0.
-\end{equation}
+The implied volatility~(IV) can be thought of as the level of volatility that would have to be plugged into a pricing model, usually the Black-Scholes model~\cite{Black1973TheLiabilities}, to obtain the observed market price of an option. Implied volatility is widely used in mathematical finance and the financial industry because it provides a standardized measure of options prices that allows for comparisons across different options, strikes, and expirations.
+\begin{definition}\
+\begin{enumerate}[i.]
+    \item For any $k \in \RR$, the implied volatility $\Ii_T(k)$ is the unique non-negative solution to $C_0(k)=$ $\mathrm{BS}\left(0, \ln\Ffr_0^T, k, \Ii_T(k)\right)$; we drop the explicit reference to $k$ when considering an at-the-money option, i.e., $k=\ln\Ffr_0^T$.
+    \item The at-the-money implied skew $\Ss$ and curvature $\Cc$ at time zero are defined as
+    $$
+    \Ss_T\defEqual\left|\partial_k \Ii_T(k)\right|_{k=\ln\Ffr_0^T} \quad \text { and } \quad \Cc_T\defEqual\left|\partial_k^2 \Ii_T(k)\right|_{k=\ln\Ffr_0^T}
+    $$
 \end{enumerate}
 \end{definition}
-The terminology here is straightforward since~\eqref{eq:small_time} follows from~\eqref{eq:SDE} via the mapping $t \mapsto \eps t$
-and~\eqref{eq:large_time} follows from~\eqref{eq:SDE} via the mapping
-$t\mapsto t/\eps$.
-The small-noise~\eqref{eq:small_noise}
-comes from the early works 
-on random perturbations of deterministic systems by Varadhan~\cite{Varadhan1967DiffusionInterval} and Freidlin-Wentzell~\cite{Freidlin2012RandomSystems}.
 
+Heuristically speaking, implied volatility is a parameter that measures the market's expectation of the future volatility of an underlying asset based on the prices of its options. Because of its importance, it is a key input in many quantitative models used for risk management, hedging, and trading of options and other derivatives.
 
-\subsection{Joint VIX and SPX calibration}
-\subsubsection{Long History of Joint Calibration}\
-In 1993 the Chicago Board Options Exchange (CBOE) started real-time reporting of the CBOE Market Volatility Index or VIX. It was constructed in a way that reflects the expectations of market participants on the volatility of the S\&P500 index (SPX) over the next 30 days. But it was not until the early 2000s that VIX modelling began gaining traction and interest of academics, starting with the re-definition of VIX in 2003 to what it is today. After the introduction of VIX futures the year after and VIX options in 2006, many researchers have tried to construct a model that would jointly calibrate to instruments on both SPX and VIX. Such a model is extremely important when pricing options whose payoff depends on both the underlying and its volatility. Not only that, one may even face arbitrage when pricing other simpler exotics, if his model does not consolidate liquid derivatives on both indices. The joint calibration, however, proved to be a fairly difficult problem. In particular, a very large negative skew of short-term SPX options should imply a large volatility-of-volatility, but this seems irreconcilable with what we observe in the markets i.e. low volatilities implied from VIX. Described inconsistencies between the vol-of-vol inferred from SPX and VIX were investigated in e.g. \cite{Song2012APrices, Jacquier2021RoughOptions}.
+\section{Joint VIX and SPX calibration}\label{sec:SPXnVIXintro}
+
+\subsection{Long history of joint calibration}
+
+In early 90s, the CBOE started real-time reporting of the CBOE Market Volatility Index or VIX. It was constructed to reflect the expectations of market participants on the volatility of the S\&P500 index (SPX) over the next 30 days. But it was not until the early 2000s that VIX modelling began gaining traction and interest of academics, starting with the re-definition of VIX in 2003 to what it is today. After the introduction of VIX futures the year after and VIX options in 2006, many researchers have tried to construct a model that would jointly calibrate to instruments on both SPX and VIX. Such a model is extremely important when pricing options whose payoff depends on both the underlying and its volatility. Not only that, one may even face arbitrage when pricing other simpler exotics, if his model does not consolidate liquid derivatives on both indices. The joint calibration, however, proved to be a fairly difficult problem. In particular, for stochastic volatility models, a very large negative skew of short-term SPX options should imply a large volatility-of-volatility, but this seems irreconcilable with what we observe in the markets i.e. low volatilities implied from VIX. Described inconsistencies between the vol-of-vol inferred from SPX and VIX were investigated in e.g. \cite{Song2012APrices, Jacquier2021RoughOptions}.
 
 The first attempt at joint calibration dates back to 2008, when J. Gatheral introduced the double CEV model \cite{Gatheral2008ConsistentOptions}, which was flexible enough to capture both smiles at long maturities, but nevertheless failed to simultaneously fit the ATM skew of SPX and the implied volatility of short maturity VIX options. Different approaches followed suit, modifying classical models with continuous SPX paths making them more flexible. %so that they are able to capture both smiles. 
 Fouque and Saporito \cite{Fouque2018HestonOptions} for example used the Heston model with stochastic volatility-of-volatility, Goutte et al. \cite{Goutte2017Regime-switchingOptions} employed a regime-switching stochastic volatility model and J. Guyon \cite{Guyon2017OnOptions, Guyon2020TheSkew} explored a two-factor Bergomi model and its expansions. However, all of the above models had problems reconciling the vol-of-vol inconsistencies to a varying extent.
 
 Whether there exists a continuous model, which can achieve a satisfactory joint fit, is still an ongoing debate \cite{Acciaio2020ShortFutures, Guyon2019InversionMarket}, nevertheless, it seems to be very difficult to jointly calibrate the SPX and VIX with a continuous model in practice. Understandably, there had been many different attempts incorporating jumps in the dynamics of the SPX \cite{Cont2011ADERIVATIVES, Baldeaux2014ConsistentModel, Bardgett2013InferringMarkets, Papanicolaou2014AVolatilities, Kokholm2015JointModels, Pacati2018SmilingModel}. Jumps, in effect, offer an extra degree of freedom, which allows these models to decouple the SPX skew and VIX implied volatility at-the-money. Be that as it may, jump-diffusion models are, in general, undesirable from a hedging perspective, since they render a heavily incomplete market. So far these approaches produced good, but still imperfect concurrent fits of both smiles.
 
-More recently, models with volatility paths rougher than those of classical Brownian motion, accordingly dubbed \textit{Rough volatility models}, re-emerged with the seminal paper of Gatheral et al. \cite{Gatheral2018VolatilityRough}. The models quickly gained popularity, because of their ability to fit the SPX ATM skew with very few parameters. In essence, they incorporate `jump-like behaviour' into continuous models and are thus showing promise in addressing the problem \cite{Jacquier2021RoughOptions, Horvath2020VolatilityModels, DeMarco2018VolatilityModels}. Most notably quadratic Rough Heston \cite{Gatheral2020TheProblem} achieved a commendable fit, although a question of calibration beyond just a simple parameter search still persists.
+More recently, rough volatility models are thus showing promise in addressing the problem \cite{Jacquier2021RoughOptions, Horvath2020VolatilityModels, DeMarco2018VolatilityModels}. Most notably quadratic Rough Heston \cite{Gatheral2020TheProblem} achieved a commendable fit, although a question of calibration beyond just a simple parameter search still persists.
 
-Finally, a fundamentally different approach was taken recently with the use of optimal transport \cite{Guyon2019TheSolved, Guo2020JointTransport}. Both methods account for model uncertainty and are therefore robust. Guyon \cite{Guyon2019TheSolved} was for example able to \textit{perfectly} fit to both smiles, although only for a chosen maturity and the corresponding VIX maturity. Although model-free approaches have their merits, practitioners still much rather work with concrete models, because of risk management and regulatory concerns. 
+Another fundamentally different approach was taken recently with the use of optimal transport \cite{Guyon2019TheSolved, Guo2020JointTransport}. Both methods account for model uncertainty and are therefore robust. Guyon \cite{Guyon2019TheSolved} was for example able to \textit{perfectly} fit to both smiles, although only for a chosen maturity and the corresponding VIX maturity. Although model-free approaches have their merits, practitioners still much rather work with concrete models, because of risk management and regulatory concerns. 
 
-\red{Add new papers by Guyon}
+Guyon and Lekeufack~\cite{Guyon2022VolatilityPath-Dependent} investigate the path-dependency of volatility by analyzing the relationship between past index returns and implied/realized volatility of equity indexes. They propose a simple continuous-time path-dependent volatility (PDV) model, incorporating a linear combination of weighted sums of past daily returns and squared returns with different time-shifted power-law weights.
 
-\blue{This is where our approach comes into the picture. As will be shown in Section \dots ?, Neural SDEs provide a framework for model selection, while simultaneously producing a robust pricing model one can use for hedging.
-}
+Finally, one of the methodologies pursued in Chapter~\ref{chap:reschap1}, are the so-called Neural SDEs, which provide a framework for model selection, while simultaneously producing a robust pricing model one can use for hedging. This is done by modelling the drifts and volatilities by neural networks. Similar approaches are taken in e.g.~\cite{Guyon2022NeuralCalibration, Cuchiero2020AModels}.
 
-\subsubsection{The joint calibration problem}\
-Let us consider a probability space $(\Omega,\Ff, \QQ)$ equipped with a filtration $\FF:=\{\Ff_t\}_{t\in[0,T]}$ for a finite time horizon $T>0$. In order to streamline the presentation we for simplicity assume no interest rate, repo or dividends throughout this work. We denote the dynamics of SPX by $S:=\{S_t\}_{t\geq 0}$ and consider a risk-neutral dynamic of the form
+\subsection{The joint calibration problem}\
+Let us denote the dynamics of SPX by $S\defEqual\{S_t\}_{t\geq 0}$ and consider a risk-neutral dynamic of the form
 \[
 \D S_t = S_t \sigma_t \D W\,,
 \]
-where $W=\{W_t\}_{t\in[0,T]}$ is a standard Brownian motion adapted to filtration $\FF$ and $\sigma:=\{\sigma_t\}_{t\in[0,T]}$ is a sufficiently integrable progressively measurable process with respect to $\FF$. 
+where $W=\{W_t\}_{t\in[0,T]}$ is a standard Brownian motion adapted to filtration $\FF$ and $\sigma\defEqual\{\sigma_t\}_{t\in[0,T]}$ is a sufficiently integrable progressively measurable process with respect to $\FF$. 
 
 Proceeding as e.g. in~\cite[Chapter~11]{Gatheral2006TheGuide}, for any sufficiently well-behaved function $g$, we have, by integration by parts,
 $$
@@ -177,28 +113,28 @@ $$
 $$
 where $P_{T_1}\left(K, T_2\right)$ and $C_{T_1}\left(K, T_2\right)$ represent the prices of Vanilla European Put and Call options with strike $K$ and maturity $T_2$, evaluated at $T_1$. Consider for example $g(s)=\ln (s / \Ffr)$, so that
 $$
-\EE\left[\log \left(\frac{S_{T_2}}{S_{T_1}}\right)\right]=-\int_0^{S_{T_1}} \frac{P_{T_1}\left(K, T_2\right)}{K^2} \D K-\int_{S_{T_1}}^{\infty} \frac{C_{T_1}\left(K, T_2\right)}{K^2} \D K .
+\EE\left[\ln \left(\frac{S_{T_2}}{S_{T_1}}\right)\right]=-\int_0^{S_{T_1}} \frac{P_{T_1}\left(K, T_2\right)}{K^2} \D K-\int_{S_{T_1}}^{\infty} \frac{C_{T_1}\left(K, T_2\right)}{K^2} \D K .
 $$
 Then
 $$
-\log \left(\frac{S_{T_2}}{S_{T_1}}\right)=\int_{T_1}^{T_2} \sigma_t \D W_t-\frac{1}{2} \int_{T_1}^{T_2} \sigma_t^2 \D t=\int_{T_1}^{T_2} \frac{\D S_t}{S_t}-\frac{1}{2} \int_{T_1}^{T_2} \sigma_t^2 \D
+\ln \left(\frac{S_{T_2}}{S_{T_1}}\right)=\int_{T_1}^{T_2} \sigma_t \D W_t-\frac{1}{2} \int_{T_1}^{T_2} \sigma_t^2 \D t=\int_{T_1}^{T_2} \frac{\D S_t}{S_t}-\frac{1}{2} \int_{T_1}^{T_2} \sigma_t^2 \D t
 $$
 Taking expectations, we finally obtain
 \[
-\EE\left[\int_{T_1}^{T_2} \sigma_t^2 \D t\right]=-2 \EE\left[\log \left(\frac{S_{T_2}}{S_{T_1}}\right)\right]=2\left(\int_0^{S_{T_1}} \frac{P_{T_1}\left(K, T_2\right)}{K^2} \D K+\int_{S_{T_1}}^{\infty} \frac{C_{T_1}\left(K, T_2\right)}{K^2} \D K\right)
+\EE\left[\int_{T_1}^{T_2} \sigma_t^2 \D t\right]=-2 \EE\left[\ln \left(\frac{S_{T_2}}{S_{T_1}}\right)\right]=2\left(\int_0^{S_{T_1}} \frac{P_{T_1}\left(K, T_2\right)}{K^2} \D K+\int_{S_{T_1}}^{\infty} \frac{C_{T_1}\left(K, T_2\right)}{K^2} \D K\right)
 \]
 The VIX is defined as the one-month variance swap on the SPX, therefore the VIX dynamics at time $t\in[0, T]$ can then be expressed either in terms of the volatility process or through the price of the log-contract, in what is called the continuous-time monitoring formula
-\begin{align}
-\VIX_{t}^{2}:&=\frac{1}{\Delta} \EE\left[\int_{t}^{t+\Delta} \sigma^2_{s} \D s\middle\vert\Ff_t \right] = -\frac{2}{\Delta}\EE \left[\ln\left(\frac{S_{t+\Delta}}{S_t} \right) \middle\vert\Ff_t \right] \label{eq:VIXdef}
-\end{align}
-with $\Delta=\frac{1}{12}$. Note that the expression for $\VIX$ is usually multiplied by $100$ to get the value of the actual index. 
+\begin{equation*}
+\VIX_{t}^{2} \defEqual \frac{1}{\Delta} \EE\left[\int_{t}^{t+\Delta} \sigma^2_{s} \D s\middle\vert\Ff_t \right] = -\frac{2}{\Delta}\EE \left[\ln\left(\frac{S_{t+\Delta}}{S_t} \right) \middle\vert\Ff_t \right] \label{eq:VIXdef}
+\end{equation*}
+with $\Delta\defEqual\frac{1}{12}$. Note that the expression for $\VIX$ is usually multiplied by $100$ to get the value of the actual index. 
 
-We now introduce some instruments on volatility/VIX, which are in fact completely analogous to their SPX counterparts, and define exactly what we mean by the model being \textit{jointly calibrated}. Different attempts of calibration consider a different number of volatility instruments, in our analysis, we include the following:
-~\\~\\
-\indent Let $\phi_\cdot\in L^1(\RR)$, for now, denote a payoff function and the corresponding payoff random variable $\Phi_{\cdot}\coloneqq \phi_{\cdot}(\mathrm{X}_T)\,$ for $\mathrm{X}\in\{\text{SPX}, \text{VIX}\}$. 
+We now introduce some instruments on volatility/VIX, which are in fact completely analogous to their SPX counterparts, and define exactly what we mean by the model being \textit{jointly calibrated}. Different attempts of calibration consider a different number of volatility instruments, in our analysis, we include the following. 
+
+Let $\phi_\cdot\in L^1(\RR)$, for now, denote a payoff function and the corresponding payoff random variable $\Phi_{\cdot}^{\mathrm{X}}\defEqual \phi_{\cdot}(\mathrm{X}_T)\,$ for $\mathrm{X}\in\{\text{SPX}, \text{VIX}\}$. 
 
 \begin{itemize}
-\item The \textit{SPX/VIX future} at time $t\in[0,T]$ with maturity $T$ is given by
+\item The \textit{SPX or VIX future} at time $t\in[0,T]$ with maturity $T$ is given by
 %\begin{equation*}
 %F_{t, T}^{\VIX}\defEqual\EE\left[\VIX_{T} \middle\vert \mathcal{F}_{t}\right] 
 %\end{equation*}
@@ -206,7 +142,7 @@ We now introduce some instruments on volatility/VIX, which are in fact completel
 \Ffr_{t, T}^{\mathrm{X}}\defEqual\EE\left[\phi_{\Ffr}(\mathrm{X}_{T}) \middle\vert \Ff_{t}\right],
 \end{equation*}
 where $\phi_{\Ffr}$ is the identity function
-\item \textit{SPX/VIX options} are formally defined as options on the corresponding future at time $T>0$ maturing at the same time. Therefore calls and puts on $\mathrm{X}$ respectively are simply
+\item \textit{SPX or VIX options} are formally defined as options on the corresponding future at time $T>0$ maturing at the same time. Therefore Calls and Puts on $\mathrm{X}$ respectively are simply
 %\begin{align*}
 %C_{t,\pm}^{\VIX}(T,K) &\defEqual \EE\left[\left\{\pm\left(F^\VIX_{T,T} - K\right)\right\}^+ \middle\vert \mathcal{F}_{t}\right] \\
 %&\;= \EE\left[\left\{\pm\left(\VIX_{T} - K\right)\right\}^+ \middle\vert \mathcal{F}_{t}\right]
@@ -235,4 +171,294 @@ for all $i\in\{1,\dots,\#\Phi\}$. We say the model is perfectly jointly calibrat
 Most of the work in the literature is focused on short maturities (i.e. up to 6 months), mostly because these maturities are the most liquid for SPX and generally seem to cause the most problems in concurrent calibration to VIX implied volatility smiles.
 
 
-\subsection{Outline and appearances}
+\section{Rough volatility}\label{sec:RoughVolIntro}
+
+In the intervening years since the middle of the past decade, a fundamental shift from classical modelling towards so-called rough stochastic volatility models has happened. These ``rough" models were first proposed by Gatheral, Jaisson, Rosenbaum~\cite{Gatheral2018VolatilityRough} and Bayer, Fritz, Gatheral~\cite{Bayer2015PricingVolatility} in the two seminal papers and sparked a great deal of subsequent research, because of their ability to capture stylized facts more accurately, while remaining parsimonious. In essence, they are a class of continuous-path stochastic volatility models, where the instantaneous volatility is driven by a stochastic process with paths rougher than those of Brownian Motion, typically modelled by a fractional Brownian Motion~\cite{Mandelbrot1968FractionalApplications} with Hurst parameter $H <\nobreak 1/2$.
+
+\begin{definition}[Fractional Brownian Motion~(fBm)]\label{def:fBm}
+We call a process $\left\{B_t^H\right\}_{t \geq 0}$ a fractional Brownian motion  with a Hurst index $H \in(0,1)$ if it is a continuous Gaussian process with $B_0^H=0$ and has the following covariance structure
+\[
+\EE\left[B_t^H B_s^H\right]=\frac{1}{2}\left(t^{2 H}+s^{2 H}-|t-s|^{2 H}\right)\,.
+\]
+\end{definition}
+As it is clear from the covariance structure, the Hurst exponent quantifies the degree of roughness or smoothness of the process: with $H = \half$ indicating a Brownian, or Wiener, process, $H > \half$ suggesting positively correlated increments, and $H < \half$ implying negatively correlated increments. 
+
+The reason for this drastic paradigm shift can be found under the historical measure, where the roughness of the time series of daily log-realised variance estimates suggests H{\"o}lder regularity of $H\approx 0.1$. To be more precise, the empirical evidence presented in~\cite{Gatheral2018VolatilityRough} demonstrates that, in practical scenarios, the empirical moment of order $q>0$ for log-volatility increments
+\[
+\EE\left[\left\lvert \ln \left(V_{t+\Delta}\right)-\ln \left(V_t\right)\right\rvert^q\right]
+\]
+exhibits a proportional relationship with $\Delta^{q H}$, where $H$ is of the order $0.1$. This relationship holds across a wide range of scales for $\Delta$, ranging from one day to several hundred days. In addition to moment analysis,~\cite{Gatheral2018VolatilityRough} establishes that the empirical correlation structure of volatility is effectively captured by rough fractional volatility models. These findings have been corroborated by subsequent studies, as evidenced by \cite{Bennedsen2022DecouplingVolatility} and~\cite{Livieri2018RoughPrices}. 
+
+Remarkably, the utilization of a fractional Brownian motion with a small Hurst parameter yields impressive fits for the entire volatility surface. Notably, unlike most stochastic volatility models, rough volatility models are able to reproduce the power-law behaviour of the ATM volatility skew as maturity approaches zero, i.e.~$\Ss_T \propto T^{-\alpha}$ for some~$\alpha>0$, a widely observed phenomenon in the markets~\cite{Bayer2015PricingVolatility, Gatheral2018VolatilityRough}.
+
+The fBm admits an integral representation, which is oftentimes used since it offers a more convenient way to deal with the process mathematically.
+
+\begin{definition}[Mandelbrot-Van Ness representation]
+Let $B^H\defEqual\left\{B_t^H\right\}_{t \geq 0}$ denote the fractional Brownian motion with Hurst index $H \in(0,1)$, then $B^H$ admits the following integral representation:
+\begin{align*}
+B_t^H &= C_H\left\{\int_{-\infty}^0\left((t-s)^{H-\frac{1}{2}}-(-s)^{H-\frac{1}{2}}\right) \D W_s+\int_0^t(t-s)^{H-\frac{1}{2}} \D W_s\right\} \\
+&= C_H \int_{\RR}\left((t-s)_{+}^{H-\frac{1}{2}}-(-s)_{+}^{H-\frac{1}{2}}\right) \D W_s\,,
+\end{align*}
+where $\Gamma(\cdot)$ is the standard gamma function,
+\[
+C_H\defEqual\left(\int_0^{\infty}\left\lvert(1+s)^{H-\frac{1}{2}}-s^{H-\frac{1}{2}}\right\rvert^2 \D s+\frac{1}{2 H}\right)^{-\half}=\sqrt{\frac{2 H \Gamma(3 / 2-H)}{\Gamma(H+1 / 2) \Gamma(2-2 H)}}
+\]
+and $\left\{W_t\right\}_{t \in \RR}$ a standard two-sided Brownian motion.
+\end{definition}
+% \blue{
+% \begin{definition}[Riemann-Liouville]
+%     \dots
+% \end{definition}
+% }
+Since their inception, there have been many new contributions to the literature on rough volatility models, including closed-form expressions for the characteristic functions of rough Heston models~\cite{Euch2018TheModels}, calibration of rough volatility models by machine learning techniques~\cite{Horvath2020DeepModels}, microstructural foundations of rough volatility models~\cite{Euch2018TheVolatility}, option pricing partial differential equations (PDEs) solvers~\cite{Jacquier2019DeepVolatility, Bayer2022PricingSPDEs}.
+
+% More recently, models with volatility paths rougher than those of classical Brownian motion, accordingly dubbed \textit{Rough volatility models}, re-emerged with the seminal paper of Gatheral et al. \cite{Gatheral2018VolatilityRough}. The models quickly gained popularity, because of their ability to fit the SPX ATM skew with very few parameters. In essence, they incorporate `jump-like behaviour' into continuous models and are thus showing promise in addressing the problem \cite{Jacquier2021RoughOptions, Horvath2020VolatilityModels, DeMarco2018VolatilityModels}. Most notably quadratic Rough Heston \cite{Gatheral2020TheProblem} achieved a commendable fit, although a question of calibration beyond just a simple parameter search still persists.
+
+% The models are able to capture the roughness and irregularity of financial markets, which has been observed in empirical studies~\cite{}. This makes them well-suited for modelling high-frequency financial data, where traditional stochastic volatility models may be less effective. Additionally, rough volatility models turned out to be more flexible and are able to provide a commendable fit of the ATM skew observed in the equity markets while remaining parsimonious.
+
+% The models are able to capture the roughness and irregularity of financial markets, which has been observed in empirical studies~\cite{}. This makes them well-suited for modelling high-frequency financial data, where traditional stochastic volatility models may be less effective. Additionally, rough volatility models turned out to be more flexible and are able to provide a commendable fit of the ATM skew observed in the equity markets while remaining parsimonious.
+% These models, such as the Rough Bergomi model~\cite{Bayer2015PricingVolatility} and the Rough Heston model~\cite{Euch2018TheModels}, are based on some empirical evidence \blue{assumption that the volatility ...}. This allows for a more accurate representation of the option prices than the traditional models. \blue{As one of the overarching themes of this thesis we describe rough volatility models in detail in the following section.}
+
+\section{Neural networks with random weights}
+
+\subsection{Feed forward neural networks}\label{sec:NN}
+The earliest neural network models date back to McCulloch and Pitts~\cite{McCulloch1943AActivity}, who proposed a model of a neuron and its functioning. The model laid the groundwork for the development of artificial neural networks and their subsequent use in machine learning. Later, the development of the backpropagation algorithm by Rumelhart et al.~\cite{Rumelhart1986LearningErrors} was a major breakthrough in the field, which enabled the training of neural networks using gradient descent, which is now a widely used and powerful approach in machine learning. This development opened the door to the use of neural networks for practical applications and laid the foundation for deep learning. 
+
+The development of deep learning in the beginning of the millennium was a crucial milestone in the history of neural networks. Deep learning models~\cite{Goodfellow2016DeepLearning}, such as convolutional neural networks, have enabled unprecedented accuracy in image recognition and natural language processing~\cite{Gu2018RecentNetworks}, generative neural networks (GANs)~\cite{Goodfellow2020GenerativeNetworks} have been used to generate high-resolution images from text descriptions~\cite{Radford2015UnsupervisedNetworks}, generate diverse and realistic images~\cite{Karras2018ANetworks}, and even generate music \cite{Engel2019GANSynth:Synthesis}. The development of modern deep learning frameworks, such as \texttt{TensorFlow} and \texttt{PyTorch}, has further facilitated the use of neural networks in practical applications. 
+
+Let us now mathematically define a feed-forward neural network.
+
+\begin{definition}[Neural Network]\label{def:neuralnet}
+Let $L, N_{0}, N_{1}, \ldots, N_{L} \in \NN, \varrho: \RR \rightarrow \RR$ and for any $l=$
+$1, \ldots, L$ let $w_{l}: \RR^{N_{l-1}} \rightarrow \RR^{N_{l}}$ an affine function. A function $\Psi: \RR^{N_{0}} \rightarrow \RR^{N_{L}}$
+defined as
+\[
+\Psi=w_{L} \circ \Psi_{L-1} \circ \cdots \circ \Psi_{1} \text { with } \Psi_{l}=\varrho \circ w_{l} \quad \text { for } l=1, \ldots, L-1,
+\]
+is called a \textit{neural network}. Here the activation function~$\varrho$ is
+applied component-wise. $L$ denotes the number of layers, $N_{1}, \ldots, N_{L-1}$ denote
+the dimensions of the hidden layers and $N_{0}, N_{L}$ of the input and output layers respectively. 
+For any $l\in\{1, \dots, L\}$ the affine function $w_{l}:\RR^{N_{l-1}}\to\RR^{N_{l}}$ is given as $w_{l}(x) = \Am^{(l)} \xx + \bm^{(l)}$,
+for $\xx\in \RR^{N_{l-1}}$, for some $\Am^{(l)} \in \RR^{N_{l}\times N_{l-1}} $ and $\bm^{(l)} \in \RR^{N_{l}}$.
+For any $i\in\{1, \dots N_{l}\}$ and $j\in\{1, \dots, N_{l-1}\}$ the number $A_{i j}^{(l)}$ is interpreted as the weight of the edge connecting node~$i$ of layer~$l-1$ to node~$j$ of layer~$l$.
+\end{definition}
+
+We denote by $\NNn_{\infty}^{\varrho}(d_0,d_1)$ the set of neural networks mappings from $\RR^{d_0} \rightarrow \RR^{d_1}$ with activation function $\varrho$, where we drop the explicit reference to input and output dimension in the notation when those are clear from the context. %$d_0,d_1=1$. 
+Moreover, for any $L, M \in \NN$ we denote by $\NNn_{L, M}^\varrho$ a neural network with a fixed number of hidden layers $L$ and fixed input and output dimensions $M$ for each hidden layer. %Then one has $\NNn_{L,M}^\varrho=\left\{\Psi^{\theta}: \theta \in \Theta_{L,M}\right\}$ with the parameter space of weights and biases $\Theta_{L,M} \subset \RR^{p}$ for some $p(L,M) \in \NN$. 
+Notice also that $\bigcup_{L,M\in\NN}\NNn_{L,M}^\varrho = \NNn_{\infty}^\varrho$.
+
+The neural networks possess the so-called Universal Approximation Property, which heuristically states that any continuous function can be approximated to arbitrary accuracy by a neural network, no matter how complex the input is. This means a neural network can approximate any function with a finite number of parameters. This property makes neural networks a powerful tool for solving complex problems and is one of the reasons for the recent success of deep learning. The exact mathematical statement is due to Hornik~\cite{Hornik1991ApproximationNetworks} and is given below.
+
+\begin{theorem}[Universal approximation \cite{Hornik1991ApproximationNetworks}]\label{thm:UAT}
+Let $\varrho$ be bounded and
+non-constant activation function. Then it holds that:
+\begin{enumerate}
+\item For any finite measure $\mu$ on $\left(\RR, \Bb\left(\RR\right)\right)$ and $1 \leq p<\infty,$ the set
+$\NNn_{\infty}^{\varrho}$ is dense in $L^{p}\left(\RR, \mu\right)$
+\item If in addition $\varrho \in \Cc(\RR),$ then $\NNn_{\infty}^{\varrho}$ is dense in $\Cc\left(\RR\right)$ for the
+topology of uniform convergence on compact sets.
+\item If additionally $\varrho\in \Cc^m(\RR)$ and all its derivatives upto order $m\in\NN$ are bounded, then $\NNn_{\infty}^{\varrho}$ is dense in Sobolev $(m,p)$-space $\mathcal{W}^{m,p}_{\mu}(\RR)$ for any finite measure~$\mu$ on~$\RR$.
+\end{enumerate}
+\end{theorem}
+
+\subsection{Randomly weighted neural networks}\label{sec:RWNN}
+Randomly Weighted Neural Networks (RWNNs) have been a staple of artificial intelligence research for decades, although they have taken a back seat to deep learning for a good chunk of the past decade. Neural networks with random weights first appear in seminal papers of Barron \cite{Barron1992NeuralSystems, Barron1993UniversalFunction}, but a more modern version was proposed by Huang \cite{Huang2006UniversalNodes} under the name Extreme learning machines~(ELMs). Today, these networks are known under different names: reservoir networks, random feature, randomly weighted or simply random networks; we choose to follow the two latter conventions. Starting from the work of Huang et al.~\cite{Huang2006UniversalNodes}, RWNNs saw a surge in popularity in the early~2000s (see e.g. also~\cite{Rahimi2007RandomMachines, Rahimi2008WeightedLearning}), however, after the advent of automatic differentiation libraries experienced a sharp decline in application up until recently.
+
+ELM introduced the concept of randomly initializing the weights of a single-hidden layer feed-forward neural network. This idea was based on a universal approximation theorem by Barron et al.~\cite{Barron1993UniversalFunction}, stating that a single-hidden layer neural network with a randomly chosen activation function could approximate any continuous function with arbitrary precision. By randomly choosing the weights, the computational complexity and time required to train the neural network were drastically reduced.
+
+To put this statement into the context of Definition~\ref{def:neuralnet}, a \textit{randomly weighted neural network} (RWNN) is a neural network where the hidden layers are randomly sampled from a given distribution and then fixed; consequently, only the last layer is trained:
+out of all the parameters $(\Am^{(l)}, \bm^{(l)})_{l=0,\ldots,L}$ of the $L$-layered neural network, the parameters $(\Am^{(0)}, \bm^{(0)}, \ldots, A^{(L-1)}, \bm^{(L-1)})$ are randomly sampled and frozen and only $(\Am^{(L)}, \bm^{(L)})$ from the last layer are trained. 
+
+Similarly as above, we denote $\RWNN_{\infty}^{\varrho}(d_0,d_1)$ the set of random neural networks from $\RR^{d_0}$ to $\RR^{d_1}$, with activation function~$\varrho$. % $d_0,d_1=1$.
+Moreover, for any $L, K \in \NN$, $\RWNN_{L, K}^\varrho$ represents a set of random neural networks with a fixed number of hidden layers $L$ and fixed input and output dimension $K$ for each hidden layer. 
+We now give a precise definition of a single layer $\RWNN^\varrho_{K}\defEqual\RWNN^\varrho_{1, K}$, which we use for our approximation in Chapter~\ref{chap:reschap2}.
+
+\begin{definition}[Single layer RWNN]\label{def:RWNN}
+Let $\big(\widetilde{\Omega}, \widetilde{\Ff}, \widetilde{\PP}\big)$ be a probability space on which the iid random variables $\Am_{k}: \widetilde{\Omega} \rightarrow \RR^{d}$ and $b_{k}: \widetilde{\Omega} \rightarrow \RR$, respectively corresponding to weights and biases, are defined. Let $\phib=\left\{\phi_{k}\right\}_{k \geq 1}$ denote a sequence of random basis functions, where each $\phi_{k}: \RR^{d} \to\RR$ is of the form
+$$
+\phi_{k}(\xx)\defEqual\varrho\left(\Am_{k}^{\top} \xx + b_{k}\right), \qquad x\in\RR^d,
+$$
+with $\varrho:\RR\rightarrow\RR$ a Lipschitz continuous activation function. 
+For an output dimension $m\in\NN$ and $K \in \NN$ hidden units we define the \textit{reservoir} or \textit{random basis} as~$\Phi_{K}\defEqual\nobreak\phi_{1:K}=(\phi_1,\dots,\phi_K)$ and the random network $\Psi_K(\xx;\Theta)\in\RWNN^\varrho_K$ with parameter $\Theta=\left(\theta_{1}, \ldots, \theta_{m}\right)^\top \in \RR^{m\times K}$ as the map % \RWNN^\varrho_K: 
+\[
+\xx \mapsto \Psi_K(\xx;\Theta)\defEqual\Theta\,\Phi_K(\xx).
+\]
+Thus, for each output dimension $j\in\{1,\dots,m\}$, $\Psi_K(\xx;\Theta)\in\RWNN^\varrho_K$ produces a linear combination of the first $K$ random basis functions $\theta_j^\top\phi_{1:K}\defEqual\sum_{k=1}^{K} \theta_{j,k} \phi_{k}$.
+\end{definition}
+
+\begin{remark}
+Throughout this work, we will make use of the more compact vector notation
+$$
+\Phi_K: \RR^d \ni \xx\mapsto \varrhob(\Am \xxbf+\bm) \in \RR^{K},
+$$
+where $\varrhob:\RR^K\rightarrow\RR^K$ acts component-wise $\varrhob(\yy)\defEqual(\varrho(y_1), \dots \varrho(y_K))$ and~${\Am: \widetilde{\Omega} \rightarrow \RR^{K\times d}}$ and~${\bm: \widetilde{\Omega} \rightarrow \RR^K}$ are the random matrix and bias respectively.
+\end{remark}
+
+The training of such an RWNN can then be simplified into a convex optimisation problem. This makes the training easier to manage and understand both practically and theoretically. We expand on the training method in Chapter~\ref{chap:reschap2}. However, by only allowing certain parts of the parameters to be trained, the overall capacity and expressivity are possibly reduced. Although it is still unclear if random neural networks still maintain any of the powerful approximation properties of general deep neural networks, these questions have been addressed to some extent in e.g.~\cite{Gonon2020ApproximationSystems, Mei2022GeneralizationConcentration}, where learning error bounds for RWNNs have been proved.
+
+\begin{proposition}[Proposition 3 in~\cite{Gonon2020ApproximationSystems}]\label{prop:UATRWNN}
+Suppose $\psi^{*}: \RR^{q} \rightarrow \RR$, for $q\in\NN$, can be represented as
+$$
+\psi^{*}(z)=\int_{\RR^{q}} \E^{\I\theta^\top z} g(\theta) \D \theta,
+$$
+for some complex-valued function~$g$ on $\RR^{q}$ and all $z \in \RR^{q}$ with $\|z\| \leq M$ for some $M>0$. Assume that
+$$
+\int_{\RR^{q}} \max \left(1,\|\theta \|^{2 q+6}\right)|g(\theta)|^{2} \D \theta <\infty .
+$$
+Let $R>0$ and $K\in\NN$, suppose the rows of the $K\times K$-valued random matrix~$\Am$ are iid Uniform on $\Bb_{R} \subset \RR^{q}$, that the entries of $\bm\in\RR^{K}$ are iid Uniform on~$[-\max (M R, 1), \max (M R, 1)]$, 
+that~$\Am$ and~$\bm$ are independent and let~${\relu(x)\defEqual\max (x, 0)}$ on~$\RR$. 
+Let the pair $(A,b)$ characterise a random basis (reservoir)~$\Phi$ and its corresponding network $\Psi\in\RWNN^{\relu}_K$ in the sense of Definition~\ref{def:RWNN}. 
+Then, there exists an $\RR^K$-valued random variable~$\Theta$ and $C^{*}>0$ 
+(given explicitly in~\cite[Equation~(33)]{Gonon2020ApproximationSystems}) such that
+$$
+\EE^\Phi\left[\left\|\Psi(Z;\, \Theta)-\psi^{*}(Z)\right\|^{2}\right] \leq \frac{C^{*}}{K},
+$$
+and for any $\delta \in(0,1)$, with probability $1-\delta$ the random neural network $\Psi(\,\cdot\,;\,\Theta)$ satisfies
+$$
+\left(\int_{\RR^{q}}\left\|\Psi(z;\, \Theta)-\psi^{*}(z)\right\|^{2} \mu_{Z}(\D z)\right)^{1 / 2} \leq \frac{\sqrt{C^{*}}}{\delta \sqrt{K}}\,.
+$$
+\end{proposition}
+
+\section{Large and moderate deviations}\label{sec:LargeDevIntro}
+
+% Large deviations theory is a powerful tool in mathematical finance, primarily used to study the behaviour of rare events. It provides invaluable insight into the behaviour of financial models, allowing us to quantify the probability of extreme events, such as stock market crashes. With the recent increased focus on risk management and quantitative finance, the large deviations theory has become a fundamental tool in the theoretical and practical analysis of financial markets.
+
+
+The theory of large deviations was developed as a way to describe the behaviour of random variables in the limit of ``large deviations" from their expected values. It is a powerful tool for studying rare events and has been used in a diverse range of fields, including physics~\cite{Ellis2006EntropyMechanics}, finance~\cite{Friz2015LargeFinance}, engineering and even DNA sequencing~\cite{Dembo2010LargeApplications}.
+
+% \blue{The theory of large deviations has been applied to a wide variety of problems, including the study of equilibrium fluctuations in statistical mechanics, rare events in financial markets, stochastic optimization, and uncertainty quantification. It has also found applications in machine learning, where it has been used to analyze the performance of deep neural networks.}
+
+The origins of the theory of large deviations can be traced all the way back to the works of Laplace and Poisson in the 19th century, where they studied the probability of rare events using the central limit theorem. However, it was not until the 1950s and 1960s that the theory in its modern form was developed by mathematicians and statisticians such as Cramér~\cite{Cramer1938SurProbabilites}, Kiefer~\cite{Kiefer1961OnLogarithm}, and Varadhan~\cite{Varadhan1967DiffusionInterval}.
+
+The development of the theory of large deviations was driven by two main ideas. The first was the idea of a rate function, which describes the rate of decay of the probability of rare events. The rate function is defined as the Legendre transform of the logarithm of the probability distribution, which we now define mathematically on some Polish space $\Xx$.
+\begin{definition}[Rate function]\ 
+\begin{enumerate}[i)]
+    \item A function $\II: \Xx \to \RR^+ \cup \{\infty\}$ defined on $\Xx$ is called a \emph{rate function} if it is lower semi-continuous, i.e., if the set $\{ x \in \RR: \II (x) \leq \alpha \}$ is closed for all $\alpha \in \RR^+$.
+    \item A \emph{good} rate function is a rate function for which all sets $\{ x \in \RR : \II (x) \leq \alpha \}$ are compacts.
+    \item The effective domain of $\II$ is $\Dd(\II) \defEqual \{x \in \Xx : \II(x) < \infty \}$. 
+\end{enumerate}
+\end{definition}
+\begin{remark}
+If $\Xx$ is equipped with an appropriate metric, it becomes a complete separable metric space, in that case $\II$ is lower semi-continuous if and only if $\liminf\limits_{x_n \rightarrow x} \II(x_n) \geq \II(x)$ for all $x \in \Xx$. Furthermore, note that a good rate function achieves its infimum over closed sets.
+\end{remark}
+The second was the notion of a large deviation principle (LDP), which states that the probability of rare events can be described by exponential decay laws.
+\begin{definition}[Large Deviations Principle~(LDP)]
+Let $\left\{X^{\eps}\right\}_{\eps>0}$ be a sequence of random variables in $\Xx$, converging in probability to a deterministic limit $\overline{X}$ as~$\eps$ goes to zero. This sequence is said to satisfy an LDP with speed $\eps^{-1}$ and a good rate function $\II: \Xx \to \RR^+ \cup \{\infty\}$ if for all Borel subsets $B \subset \Xx$
+$$
+-\inf _{x \in B^{\circ}} \II(x) \leq \liminf _{\eps \downarrow 0} \eps \ln \PP\left[X^{\eps} \in B\right] \leq \limsup _{\eps \downarrow 0} \eps \ln \PP\left[X^{\eps} \in B\right] \leq-\inf _{x \in \bar{B}} \II(x)
+$$
+\end{definition}
+
+In general LDP rate functions can be hard to obtain in closed form. Conversely, moderate deviations provide rate functions that are easier to compute, at the cost of acting on a cruder scale.
+
+\begin{definition}[Moderate Deviations Principle~(MDP)]
+Let us suppose that the sequence~$\{X^{\eps}\}_{\eps>0}$ converges in probability to~$\overline{X}$ as $\eps$ goes to zero. MDP for~$\{X^{\eps}\}_{\eps>0}$ is defined as an LDP for the rescaled sequence 
+$$
+\left\{\frac{X^{\eps} - \overline{X}}{\sqrt{\eps}h(\eps)}
+\right\}_{\eps>0},
+$$
+where~$h(\eps)$ tends to infinity and~$\sqrt{\eps}h(\eps)$ to zero as~$\eps$ tends to zero. 
+\end{definition}
+\begin{remark}
+   A typical choice is~$h(\eps) = \eps^{-\gamma}$ for~$\gamma \in (0,\frac{1}{2})$, or equivalently
+   $$\frac{1}{\sqrt{\eps}h(\eps)} = \eps^{-\alpha} \quad \text{ for } \quad \alpha\in\left(0,\tfrac{1}{2}\right)\,.$$
+   We shall stick to this choice of~$h$ in this work in order to highlight rates of convergence. 
+\end{remark}
+
+In this spirit, we introduce the approximation
+\begin{equation}\label{eq:MDPSmallNoiseGeneral}
+\widetilde{X}^{\eps} \defEqual \overline{X} + 
+\eps^{-\alpha}\left(X^{\eps} - \overline{X}\right)\,.
+\end{equation}
+Clearly, this process is centred around~$\overline{X}$ and is thus a simple candidate to act as the rescaled process to which the LDP is applied. 
+
+
+\subsection{Varadhan's Lemma and Exponential equivalence}\label{sec:varadhan}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Varadhan's integral lemma is a generalisation of Laplace's method. It gives the asymptotic behaviour of $\EE\big[\exp\big\{\frac{\varphi(Z_{\eps})}{\eps}\big\}\big]$ on a log scale for a family of random variables $Z_{\eps}$ and a continuous function $\varphi$. Laplace's method states that under some conditions the following relation holds
+$$\lim_{n\rightarrow\infty}\frac{1}{n}\ln \int_a^b \E^{n f(x)} \D x = \sup\limits_{x\in[a,b]}f(x).$$
+One notable application of Varadhan's integral lemma is finding a good change of measure in importance sampling, as we will see in the following sections. For these applications, we need a slightly more general formulation of the lemma than the one found in~\cite[Theorem~4.3.1]{Dembo2010LargeApplications}. Nevertheless, the proof in~\cite[Theorem~4.3.1]{Dembo2010LargeApplications} can be easily adapted as done in~\cite[Lemma~4.4.]{Robertson2010SampleModels}.
+
+Let the two Polish spaces $\Xx$ and $\Yy$ be metricized by some complete metric $\D$.
+\begin{theorem} (Varadhan's Integral Lemma)\label{thm:varadhan} % $(\Xx,d)$ be a metric space, 
+Let~$Z^{\eps}$ a family of $\Xx$-valued random variables satisfying an LDP with good rate function $\II:\Xx\to [0,+\infty]$ and $\varphi: \Xx \to \RR$ a continuous function. 
+Assume further either the tail condition
+$$
+\lim\limits_{M\uparrow \infty} \limsup_{\eps \downarrow 0}
+\eps\ln \EE\left[\exp\left\{\frac{\varphi(Z^{\eps})}{\eps}\right\}\ind_{ \{ \varphi(Z^{\eps}) \geq M\}}\right]  = - \infty,
+$$
+or the moment condition for some $\gamma > 1$ (because it implies the previous tail condition)
+$$
+\limsup\limits_{\eps \downarrow 0}
+\eps\ln \EE\left[\exp\left\{\gamma \frac{\varphi(Z^{\eps})}{\eps}\right\}\right]
+< \infty .
+$$
+Then
+$$
+\lim_{\eps \downarrow 0}
+\eps\ln \EE\left[\exp\left\{\frac{\varphi(Z^{\eps})}{\eps}\right\}\right]
+= \sup\limits_{x \in X} \{\varphi(x) - \II(x) \}.
+$$
+\end{theorem}
+
+The below-modified Varadhan's lemma was proven in~\cite{Robertson2010SampleModels} and allows the above function~$\varphi$ to reach negative infinity and accounts for cases where the problem is written in terms of a family of functions~$\{\varphi_{\eps}\}_{\eps>0}$. Before stating the theorem, we introduce the concept of \emph{exponential equivalence}, which is a notion of likeness of two sequences of random variables from the point of view of large deviations theory.
+\begin{definition} (Exponential equivalence)\label{def:exponential_equivalence}  %  $(\Xx,d)$ be a metric space,
+Let~$Z^{\eps}$~and~$Y^\eps$ be two families of~$\Xx$\nobreakdash-valued random variables defined on some probability spaces $\{ (\Omega,\Bb_{\eps},\PP_\eps)\}_{\eps>0}$. $Z^{\eps}$ and~$Y^\eps$ are called exponentially equivalent if for every $\delta > 0$,
+$\{\omega\in\Omega: \D(Z^{\eps}(\omega),Y^\eps(\omega)) > \delta\}$ is $\Bb_\eps$-measurable
+and 
+$$\limsup\limits_{\eps \downarrow 0} \eps\ln\PP_\eps[\D(Z^{\eps},Y^\eps) > \delta] = - \infty\,.$$
+\end{definition}
+
+\begin{theorem}(Modified Varadhan's Integral Lemma)\label{thm:varadhan_modified} % $\Xx$ and $\Yy$ be two metric spaces,
+\sloppy Let~$Z^{\eps}$ be a family of $\Xx$\nobreakdash-valued random variables that satisfies an LDP with good rate function ${\II:\Xx\rightarrow \RR^+ \cup \{\infty\}}$ and let~${\varphi: \Yy \to \{-\infty\} \cup \RR}$ and~${\psi: \Xx \rightarrow \RR}$  be two continuous functions. Let~${\Lambda: \Xx \rightarrow \Yy}$ be a continuous map and $\{\Lambda_{\eps} : \Xx \to \Yy\}$ be a family of measurable functions such that $\Lambda_{\eps}(Z^{\eps})$ is exponentially equivalent to $\Lambda(Z^{\eps})$. Suppose that there exists $\gamma > 1$ such that
+$$
+\limsup\limits_{\eps \downarrow 0}
+\eps\ln \EE\left[\exp\left\{\gamma \frac{\varphi(\Lambda_{\eps}(Z^{\eps})) + \psi(Z^{\eps})}{\eps}\right\}\right]< \infty.
+$$
+Then
+$$
+\lim_{\eps \downarrow 0}
+\eps\ln \EE\left[\exp\left\{\frac{\varphi(\Lambda_{\eps}(Z^{\eps})) + \psi(Z^{\eps})}{\eps}\right\}\right]
+= \sup\limits_{x \in \Xx} \Big\{\varphi(\Lambda(x)) + \psi(x) - \II(x) \Big\}.
+$$
+\end{theorem}
+
+
+\subsection{Types of large deviations}
+Let us now consider the case where $\Xx = \RR^d\,$ for $d\in\NN$ and define a filtered probability space $(\Omega, \Ff, \PP, \FF)$ with a finite time horizon $T>0$, where $\Omega = \Cc([0,T]\to \RR^d)$ is the space of all continuous functions, $\Ff$ is the Borel-$\sigma$-algebra on $\Omega$ and $\FF\defEqual\{\Ff_t\}_{t\in[0,T]}$ is the natural filtration of a given $d$-dimensional standard Brownian motion~$W$. Then let~$X$ be a unique strong solution to the stochastic differential equation
+\begin{equation}\label{eq:genericSDE}
+\D X_t = b(X_t) \D t + \sigma(X_t) \D W_t, \qquad X_0 = x_0,
+\end{equation}
+where~$b:\RR^d\to \RR^d$ and $\sigma:\RR^d \to \RR^{d\times d}$ are sufficiently well-behaved
+deterministic functions and~$W$ is a standard $\FF$-adapted Brownian motion. In this setting, we consider the following approximations:
+
+\begin{definition}\label{def:LDP_approximation_types}
+Let~$X$ be a unique strong solution to~\eqref{eq:genericSDE} the process~$X^\eps$ is called
+\begin{enumerate}[i)]
+\item Small-noise approximation if 
+\begin{equation}\label{eq:small_noise}
+\D X_t^\eps = b(X_t^\eps) \D t + \sqrt{\eps} \sigma(X_t^\eps)\D W_t, \quad X_0^\eps = x_0.
+\end{equation}
+\item Small-time approximation if 
+\begin{equation}\label{eq:small_time}
+\D X_t^\eps = \eps b(X_t^\eps) \D t + \sqrt{\eps} \sigma(X_t^\eps) \D W_t, \quad X_0^\eps = x_0
+\end{equation}
+\item Large-time approximation if 
+\begin{equation}\label{eq:large_time}
+\D X_t^\eps = \frac{1}{\eps} b(X_t^\eps) \D t + \frac{1}{\sqrt{\eps}} \sigma(X_t^\eps) \D W_t, \quad X_0^\eps = x_0.
+\end{equation}
+\end{enumerate}
+\end{definition}
+The terminology here is straightforward since~\eqref{eq:small_time} follows from~\eqref{eq:genericSDE} via the mapping $t \mapsto \eps t$
+and~\eqref{eq:large_time} follows from~\eqref{eq:genericSDE} via the mapping
+$t\mapsto t/\eps$.
+The small-noise~\eqref{eq:small_noise}
+comes from the early works 
+on random perturbations of deterministic systems by Varadhan~\cite{Varadhan1967DiffusionInterval} and Freidlin-Wentzell~\cite{Freidlin2012RandomSystems}.
+
+
+\section{Outline and appearances}
+
+The thesis consists of several chapters and supplementary material. Chapter~\ref{chap:reschap1}, titled ``Robust pricing and hedging via neural stochastic differential equations", has been successfully published in the Journal of Computational Finance~\cite{Gierjatowicz2023RobustEquations}, showcasing the application of neural networks in pricing and hedging. In Chapter~\ref{chap:reschap2}, titled ``A random neural network approach to pricing BSPDEs for rough volatility", the thesis explores the use of random neural networks for pricing backward stochastic partial differential equations in the context of rough volatility. This chapter has been submitted for publication. % to the SIAM Journal on Financial Mathematics 
+Additionally, Chapter~\ref{chap:reschap3}, titled ``Large and moderate deviations for importance sampling in the Heston model", presents a comprehensive analysis of importance sampling techniques in the Heston model, discussing both large and moderate deviations. This chapter has been published in the Annals of Operations Research~\cite{Geha2023LargeModel}. Furthermore, Chapter~\ref{chap:reschap4} is currently being developed and focuses on ``The grey Bergomi model" investigating its properties and implications to the joint SPX and VIX calibration. Lastly, the thesis concludes with an Appendix which provides supplementary material and technical proofs to support the findings and analyses presented in the main chapters.

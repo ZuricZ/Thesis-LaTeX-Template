@@ -1,9 +1,7 @@
 % header/mycommands.tex
 \usepackage{xspace}
 
-
 \numberwithin{equation}{section}
-
 \newtheorem{theorem}{Theorem}%[section]
 \numberwithin{theorem}{subsection}
 \newtheorem{proposition}{Proposition}
@@ -24,15 +22,17 @@
 
 % defining some commands:
 
+% MATHCAL
 \newcommand{\Xx}{\mathcal{X}}
 \newcommand{\Yy}{\mathcal{Y}}
 \newcommand{\Aa}{\mathcal{A}}
 \newcommand{\Bb}{\mathcal{B}}
 \newcommand{\Cc}{\mathcal{C}}
 \newcommand{\Dd}{\mathcal{D}}
+\newcommand{\Ee}{\mathcal{E}}
 \newcommand{\Ff}{\mathcal{F}}
 \newcommand{\Gg}{\mathcal{G}}
-\newcommand{\Ss}{\mathcal{Ss}}
+\newcommand{\Ss}{\mathcal{S}}
 \newcommand{\Ii}{\mathcal{I}}
 \newcommand{\Ll}{\mathcal{L}}
 \newcommand{\Mm}{\mathcal{M}}
@@ -41,8 +41,13 @@
 \newcommand{\Pp}{\mathcal{P}}
 \newcommand{\Uu}{\mathcal{U}}
 \newcommand{\Rr}{\mathcal{R}}
+\newcommand{\Qq}{\mathcal{Q}}
+\newcommand{\Vv}{\mathcal{V}}
+\newcommand{\Ww}{\mathcal{W}}
+\newcommand{\Zz}{\mathcal{Z}}
 \newcommand{\BV}{\mathcal{BV}}
 
+% MATHBB
 \newcommand{\CC}{\mathbb{C}}
 \newcommand{\LL}{\mathbb{L}}
 \newcommand{\HH}{\mathbb{H}}
@@ -56,38 +61,50 @@
 \newcommand{\VV}{\mathbb{V}}
 \newcommand{\UU}{\mathbb{U}}
 
+% MATHFRAK
 \newcommand{\Df}{\mathfrak{D}}
 \newcommand{\Ef}{\mathfrak{E}}
+\newcommand{\If}{\mathfrak{I}}
 \newcommand{\Ifr}{\mathfrak{I}}
 \newcommand{\Lf}{\mathfrak{L}}
-\newcommand{\Zf}{\mathfrak{Z}}
-\newcommand{\Uf}{\mathfrak{U}}
 \newcommand{\Hf}{\mathfrak{H}}
 \newcommand{\Ffr}{\mathfrak{F}}
 
-\newcommand{\phib}{\boldsymbol{\phi}}
-\newcommand{\Sb}{\boldsymbol{S}}
+\newcommand{\Uf}{\mathfrak{U}}
+\newcommand{\Zf}{\mathfrak{Z}}
+\newcommand{\pf}{\mathfrak{p}}
+\newcommand{\qfe}{\qf_{\eps}}
+\newcommand{\qf}{\mathfrak{q}}
+\newcommand{\df}{\mathfrak{d}}
+\newcommand{\ff}{\mathfrak{f}}
+\newcommand{\gf}{\ff^{\leftarrow}}
+\newcommand{\hf}{\mathfrak{h}}
+\newcommand{\Vf}{\mathfrak{V}}
+
+% MATHBF
+
+\newcommand{\XX}{\mathbf{X}}
+% \newcommand{\xx}{\mathbf{x}}
+% \newcommand{\yy}{\mathbf{y}}
+% \newcommand{\zz}{\mathbf{z}}
+
+\newcommand{\xxbf}{\mathbf{x}}
+\newcommand{\yybf}{\mathbf{y}}
+\newcommand{\zzbf}{\mathbf{z}}
+
+% MATHRM
 \newcommand{\Am}{\mathrm{A}}
 \newcommand{\Imat}{\mathrm{I}}
 \newcommand{\bm}{\mathrm{b}}
 \newcommand{\betam}{\boldsymbol{\beta}}
 
-\newcommand{\xxbf}{\mathbf{x}}
-\newcommand{\yybf}{\mathbf{y}}
-\newcommand{\zzbf}{\mathbf{z}}
-\newcommand{\varrhob}{\boldsymbol\varrho}
+\newcommand{\X}{\mathrm{X}}
+\newcommand{\Y}{\mathrm{Y}}
 
-
-\newcommand{\defEqual}{\coloneqq}
-\newcommand{\ct}{\circ_{t}}
-\newcommand{\cT}{\circ_{T}}
 \newcommand{\Wf}{\boldsymbol{\mathrm{W}}}
 \newcommand{\Xf}{\boldsymbol{\mathrm{X}}}
 \newcommand{\Yf}{\boldsymbol{\mathrm{Y}}}
-\newcommand{\vrho}{\boldsymbol{\mathrm{\varrho}}}
-\newcommand{\rrho}{\overline{\rho}}
-\newcommand{\Wp}{W^{\perp}}
-\newcommand{\brho}{\overline{\rho}}
+
 \newcommand{\D}{\mathrm{d}}
 \newcommand{\E}{\mathrm{e}}
 \newcommand{\II}{\mathrm{I}}
@@ -96,10 +113,6 @@
 \newcommand{\IIX}{\mathrm{I}^{X}}
 \newcommand{\IIXV}{\mathrm{I}^{V,X}}
 
-\newcommand{\LDP}{\mathrm{LDP}}
-\newcommand{\eps}{\varepsilon}
-\newcommand{\seps}{\sqrt{\eps}}
-\newcommand{\trans}{{}^t \!}
 \newcommand{\abold}{\boldsymbol{\mathrm{a}}}
 \newcommand{\qbold}{\boldsymbol{q}}
 \newcommand{\uu}{\boldsymbol{\mathrm{u}}}
@@ -111,27 +124,95 @@
 \newcommand{\hm}{\mathrm{h}}
 \newcommand{\xm}{\mathrm{x}}
 \newcommand{\mm}{\mathrm{m}}
-\newcommand{\ind}{1\hspace{-2.1mm}{1}} %Indicator Function
-\newcommand{\row}[2]{\begin{pmatrix} #1 & #2\\ \end{pmatrix}}
-\newcommand{\col}[2]{\begin{pmatrix} #1 \\ #2 \end{pmatrix}}
-\newcommand{\half}{\frac{1}{2}}
-
-\newcommand{\I}{{\mathrm{i}\mkern1mu}}
 
 \newcommand{\Abold}{\boldsymbol{\mathrm{A}}}
 \newcommand{\Bbold}{\boldsymbol{\mathrm{B}}}
 \newcommand{\Qbold}{\boldsymbol{\mathrm{Q}}}
 
+%% MATHSCR
+\newcommand{\Sscr}{\mathscr{S}}
+
+% SYMBOLS
+\newcommand{\varrhob}{\boldsymbol\varrho}
+\newcommand{\vrho}{\boldsymbol{\mathrm{\varrho}}}
+\newcommand{\rrho}{\overline{\rho}}
+\newcommand{\Wp}{W^{\perp}}
+\newcommand{\brho}{\overline{\rho}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\seps}{\sqrt{\eps}}
+\newcommand{\trans}{{}^t \!}
+\newcommand{\defEqual}{\coloneqq}
+\newcommand{\ct}{\circ_{t}}
+\newcommand{\cT}{\circ_{T}}
+\newcommand{\ind}{1\hspace{-2.5mm}{1}} %Indicator Function
+\newcommand{\row}[2]{\begin{pmatrix} #1 & #2\\ \end{pmatrix}}
+\newcommand{\col}[2]{\begin{pmatrix} #1 \\ #2 \end{pmatrix}}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\TT}{[0,T]}
+
+
+\newcommand{\phib}{\boldsymbol{\phi}}
+\newcommand{\Sb}{\boldsymbol{S}}
+
+\newcommand{\Dx}{\mathrm{D}_{x}}
+\newcommand{\Dxx}{\mathrm{D}_{\xx}}
+\newcommand{\Dr}{\mathrm{D}}
+
+\newcommand{\relu}{\varsigma}
+\DeclareMathOperator{\brelu}{\boldsymbol\varsigma}
+\newcommand{\I}{{\mathrm{i}\mkern1mu}}
+
+\newcommand{\SBar}{\overline{S}}
+\newcommand{\ts}{S}
+\newcommand{\tX}{\widetilde{X}}
+\newcommand{\dfs}{\df(x,\sigma)}
+\newcommand{\Cbs}{\mathtt{C}_{\BS}}
+\newcommand{\Pbs}{\mathtt{P}_{\BS}}
+\newcommand{\Cf}{\mathtt{C}}
+\newcommand{\Pf}{\mathtt{P}}
+\newcommand{\Pft}{\Pf}
+\newcommand{\Iv}{\mathrm{I}}
+\newcommand{\Hb}{\boldsymbol{H}}
+
+\newcommand{\ErrYVhat}{\Ef\left[Y_{t}, \widehat{\Vv}_{t_i}\right]}
+\newcommand{\ErrYiVhat}{\Ef\left[Y_{t_i}, \widehat{\Vv}_{t_i}\right]}
+\newcommand{\ErrVhatiUfi}{\Ef\left[\widehat{\Vv}_{t_i}, \widehat{\Uf}_{t_i}\right]}
+\newcommand{\ErrIntYtVihat}{\If_i\left[Y_t, \widehat{\Vv}_{t_i}\right]}
+\newcommand{\ErrIntZkihat}{\If_i\left[Z^k, \Zowk_{t_i}\right]}
+\newcommand{\ErrIntZkibar}{\If_i\left[Z^k, \overline{Z}^{k}_{t_i}\right]}
+\newcommand{\ErrZkibarhat}{\Ef\left[\overline{Z}^k_{t_i}, \Zowk_{t_i}\right]}
+\newcommand{\ErrYiUfi}{\Ef\left[Y_{t_i}, \widehat{\Uf}_{i}\right]}
+\newcommand{\ErriYiUfip}{\Df_i\left[Y_{t_{i+1}}, \widehat{\Uf}_{i+1}\right]}
+\newcommand{\ErrYiUfip}{\Ef\left[Y_{t_{i+1}}, \widehat{\Uf}_{i+1}\right]}
+\newcommand{\ErrYNUf}{\Ef\left[Y_{t_{N}}, \widehat{\Uf}_{N}\right]}
+
+\newcommand{\ZowO}{\overline{\widehat{Z}}\kern0.1em^{1}}
+\newcommand{\ZowT}{\overline{\widehat{Z}}\kern0.1em^{2}}
+\newcommand{\Zowk}{\overline{\widehat{Z}}\kern0.1em^{k}}
+\newcommand{\Zow}{\overline{\widehat{Z}}}
+
+\newcommand{\zowO}{\overline{\widehat{z}}\,^{1}}
+\newcommand{\zowT}{\overline{\widehat{z}}\,^{2}}
+\newcommand{\zowk}{\overline{\widehat{z}}\,^{k}}
+
+\newcommand{\Deli}{\delta_{i}}
+\newcommand{\DelWi}{\Delta^{W}_{i}}
+
+% ACRONYMS
+\newcommand{\LDP}{\mathrm{LDP}}
 \newcommand{\SPX}{\mathrm{SPX}}
 \newcommand{\VIX}{\mathrm{VIX}}
 \newcommand{\RWNN}{\mathcal{RWNN}}
 \newcommand{\NNn}{\mathcal{NN}}
-\newcommand{\relu}{\varsigma}
+\newcommand{\BS}{\mathrm{BS}}
+
 
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\arginf}{arg\,inf}
 \DeclareMathOperator*{\argsup}{arg\,sup}
+\newcommand{\aplim}{\mathrm{ap}\lim}
+\def\equalDistrib{\,{\buildrel \Delta \over =}\,}
 
 % Comments
 \newcommand\red[1]{\textcolor{red}{#1}}

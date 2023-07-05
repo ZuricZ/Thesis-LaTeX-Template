@@ -38,17 +38,19 @@
 \usepackage[babel]{csquotes} % correct quotation marks, e.g. \enquote{some text}; alternatively \glqq und \grqq
 
 % Math packages
-\usepackage{amsmath} % setting placements of limits [intlimits,sumlimits]
+\usepackage{amsmath} % setting placements of limits [intlimits,sumlimits]             
 \usepackage{amssymb}
 \usepackage{amstext}	
 \usepackage{amsfonts}
-\usepackage{mathtools} % dynamic behaviour of amsmath
 \usepackage{mathrsfs} % provides rsfs fonts (i.e. for Laplace fcn)
 \usepackage{amsthm}
+\usepackage{mathtools} % dynamic behaviour of amsmath
+% \mathtoolsset{showonlyrefs=true, showmanualtags=true}
 % \usepackage{siunitx} % e.g. \num{1e10} for scientific notation
 \usepackage{units} % package for unit, e.g. $\unit[\frac{1}{8}]{m}$
 
 % TikZ:
+\usepackage{standalone}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows, intersections, through}
 \usetikzlibrary{decorations.text, decorations.shapes, backgrounds}
@@ -122,13 +124,17 @@
 \usepackage{dcolumn}	% Decimal column alignments
 \newcolumntype{d}[1]{D{.}{.}{#1}}
 
+\usepackage[shortlabels]{enumitem}
+\setlist[enumerate]{topsep=0pt,itemsep=0ex,partopsep=1ex,parsep=1ex}
+
 % Pseudocode
+\usepackage{algorithmic}
 \usepackage[ruled,chapter]{algorithm} % plain, boxed, ruled
-\usepackage{algpseudocode}
-\newcommand{\Commentinline}[1]{\hfill// \textit{#1}}
-\renewcommand{\algorithmiccomment}[1]{// \textit{#1}}
-\algnewcommand\algorithmicoutput{\textbf{Output:}}
-\algnewcommand\Output{\item[\algorithmicoutput]}
+% \usepackage{algpseudocode}
+% \newcommand{\Commentinline}[1]{\hfill// \textit{#1}}
+% \renewcommand{\algorithmiccomment}[1]{// \textit{#1}}
+% \algnewcommand\algorithmicoutput{\textbf{Output:}}
+% \algnewcommand\Output{\item[\algorithmicoutput]}
 
 % Change orientation of single pages (useful for page filling figures/tables):
 \usepackage{pdflscape} % problem when printing, so only use it for online versions of the document
