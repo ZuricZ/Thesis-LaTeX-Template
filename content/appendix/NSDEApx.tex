@@ -53,7 +53,7 @@ Hence
  & \leq \left( \EE\left[ \left(\partial_x \ell\left(\EE^{\QQ^N}[\phi^{\textup{cv}}(X^{\theta})],\Pp(\Phi) \right)- \partial_x \ell\left(\EE^{\QQ}[\phi^{\textup{cv}}(X^{\theta})],\Pp(\Phi) \right) \right)^2 \right] \right)^{1/2} \left( \EE \left[\EE^{\QQ^N}[\partial_\theta \phi(X^{\theta})]\right]^2 \right)^{1/2}\,.
  \end{split}
 \end{equation*}
-\end{small}
+\end{small}%
 This concludes the proof of \eqref{eq bias 1}. To prove \eqref{eq bias 2}, we view~$\partial_{\theta}h^{N}(\theta)$ as function of~$\big(\EE^{\QQ^N}[\phi^{\textup{cv}}(X^{\theta})], \allowbreak \EE^{\QQ^N}[\partial_\theta \phi(X^{\theta})]\big)$ and expand into its Taylor series around~$\big(\EE^{\QQ}[\phi^{\textup{cv}}(X^{\theta})], \EE^{\QQ}[\partial_\theta \phi(X^{\theta})]\big)$, i.e.,
 \begin{small}
 \begin{equation*}
@@ -65,7 +65,7 @@ This concludes the proof of \eqref{eq bias 1}. To prove \eqref{eq bias 2}, we vi
         & \qquad + 2 \partial_x^2 \ell\left(\xi_1^{\alpha},\Pp(\Phi) \right) \left(\EE^{\QQ^N}[\partial_{\theta}\phi(X^{\theta})]  - \EE^{\QQ}[\partial_{\theta}\phi(X^{\theta})]  \right) \left(\EE^{\QQ^N}[\phi^{\textup{cv}}(X^{\theta})]  - \EE^{\QQ}[\phi^{\textup{cv}}(X^{\theta})]  \right)\Big\} \D\alpha\,,
 \end{split}
 \end{equation*}
-\end{small}
+\end{small}%
 where for~$\alpha\in(0,1)$
  \[
  \begin{split}
@@ -74,7 +74,7 @@ where for~$\alpha\in(0,1)$
   \xi_2^{\alpha} = &  \EE^{\QQ}[\partial_\theta \phi(X^{\theta})] + \alpha \left( \EE^{\QQ^N}[\partial_\theta \phi(X^{\theta})] - \EE^{\QQ}[\partial_\theta \phi(X^{\theta})] \right)\,.
  \end{split}
  \]
- Hence, using Cauchy-Schwarz inequality 
+ Hence, using the Cauchy-Schwarz inequality 
  \[
  \begin{split}
  	&\left| \EE^{\QQ}\left[\partial_{\theta} h^{N}(\theta)\right] -  \partial_{\theta}h(\theta) \right|\\ 

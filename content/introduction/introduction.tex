@@ -24,7 +24,7 @@ The complex and ever-evolving history of financial derivatives offers a captivat
 
 The development of options trading and derivatives markets eventually led to the need for mathematical models to price these instruments, and in 1973, the Black-Scholes~\cite{Black1973TheLiabilities} model provided a groundbreaking framework for option pricing.
 % The option pricing methods and models have evolved significantly over the last few decades. The foundations were laid with the Black-Scholes model~\cite{Black1973TheLiabilities}, introduced in 1973 by Fischer Black and Myron Scholes. 
-The model is based on the assumption that the stock price moves according to a geometric Brownian motion with constant volatility and was the first continuous model to price European and American options. The Black-Scholes model proved to be a great success and is in fact still considered the cornerstone of option pricing even today, however, it has a number of limitations. For instance, in the current market regime it cannot capture the dynamics of the volatility or the skewness of the implied volatility smile.
+The model is based on the assumption that the stock price moves according to a geometric Brownian motion with constant volatility and was the first continuous model to price European and American options. The Black-Scholes model proved to be a great success and is in fact still considered the cornerstone of option pricing even today, however, it has a number of limitations. For instance, in the current market regime, it cannot capture the dynamics of the volatility or the skewness of the implied volatility smile.
 
 In order to address these shortcomings, Local Volatility~(LV) models were introduced in the early 1990s. These were the first types of models which fully accounted for the volatility surface~\cite{Dupire1994PricingSmile, Derman1994RidingSmile} at any given date. While in the Black Scholes model, the volatility is a constant, in local volatility models it is a deterministic function of the underlying. The next important advancement was the Heston model~\cite{Heston1993AOptions}, proposed in 1993, which, at least to an extent, addressed the dynamics of the surface. This so-called Stochastic Volatility~(SV) model uses a square-root diffusion to model the dynamics of the volatility and thus allows for a more accurate representation of the option prices through time.
 
@@ -35,7 +35,7 @@ The next important advancement in option valuation modelling, especially for the
 Concurrently, models that incorporate both continuous diffusion and occasional large jumps in the underlying asset price, were gaining traction. The seminal work of Merton~\cite{Merton1974ONRATES} introduced the idea of jump processes in asset prices, which was later extended by Bates~\cite{Bates1996JumpsOptions} to include stochastic volatility. %Kou's~\cite{Kou2004OptionModel} double-exponential jump-diffusion model was developed as an improvement on Merton's original model and has since been widely used in option pricing and risk management. 
 Other variations of the jump models have also been proposed, including the Variance Gamma model by Madan and Seneta~\cite{Madan1990TheReturns} and the Normal Inverse Gaussian model by Barndorff-Nielsen and Shephard~\cite{Barndorff-Nielsen2001Non-GaussianEconomics}. These models have been applied in various fields and played an important role in attempts to achieve the joint calibration of SPX and VIX options~\cite{Cont2011ADERIVATIVES, Baldeaux2014ConsistentModel, Kokholm2015JointModels}; we give an exposition on the topic in Section~\ref{sec:SPXnVIXintro}. % including equity, commodity, and foreign exchange markets, and have proven to be useful in accurately modelling asset price movements and improving option pricing accuracy. The jump-diffusion models also
 
-The latest advance in the realm of parametric modelling for option valuation are stochastic volatility-type models where volatility paths are rougher than those of classic Brownian motion appropriately dubbed Rough Volatility~(RV) models. The models, featuring the instantaneous variance driven by a fractional Brownian motion (or more generally, a continuous Gaussian process) with Hurst parameter $H < \frac{1}{2}$, were first proposed in seminal works~\cite{Bayer2015PricingVolatility, Gatheral2018VolatilityRough, Guennoun2018AsymptoticModel}. As highlighted in many papers, they are able to capture many features of market data and clearly seem to outperform most classical models all while remaining parsimonious. Precise examples with real data can be found in~\cite{Bayer2015PricingVolatility} for SPX options, in~\cite{Bondi2022TheModel, Gatheral2020TheProblem, Jaber2022JointHints, Horvath2020VolatilityModels} for joint SPX-VIX options and in~\cite{Bennedsen2022DecouplingVolatility, Gatheral2018VolatilityRough} for estimation on historical time series, the latter  being the state-of-the-art statistical analysis under the historical measure. The rough volatility models deserve special attention being an integral part of the thesis, we, therefore, give a more detailed description in Section~\ref{sec:RoughVolIntro}.
+The latest advance in the realm of parametric modelling for option valuation are stochastic volatility-type models where volatility paths are rougher than those of classic Brownian motion appropriately dubbed Rough Volatility~(RV) models. The models, featuring the instantaneous variance driven by a fractional Brownian motion (or more generally, a continuous Gaussian process) with Hurst parameter $H < \frac{1}{2}$, were first proposed in seminal works~\cite{Bayer2015PricingVolatility, Gatheral2018VolatilityRough, Guennoun2018AsymptoticModel}. As highlighted in many papers, they are able to capture many features of market data and clearly seem to outperform most classical models all while remaining parsimonious. Precise examples with real data can be found in~\cite{Bayer2015PricingVolatility} for SPX options, in~\cite{Bondi2022TheModel, Gatheral2020TheProblem, Jaber2022JointHints, Horvath2020VolatilityModels} for joint SPX-VIX options and in~\cite{Bennedsen2022DecouplingVolatility, Gatheral2018VolatilityRough} for estimation on historical time series, the latter being the state-of-the-art statistical analysis under the historical measure. The rough volatility models deserve special attention being an integral part of the thesis, we, therefore, give a more detailed description in Section~\ref{sec:RoughVolIntro}.
 
 Moving beyond the scope of parametric modelling and delving into non-parametric techniques. In recent years, the breakthroughs in deep learning~\cite{Goodfellow2016DeepLearning} made it possible to apply similar techniques to finance (see e.g.~\cite{Buehler2019DeepHedging, Ruf2020NeuralReview, Heaton2017DeepPortfolios, Horvath2020DeepModels}). %Moving beyond the scope of parametric modelling and delving into non-parametric techniques In recent years, the breakthroughs in deep learning~\cite{Goodfellow2016DeepLearning} made it possible to apply similar techniques to finance 
 In the context of option pricing and hedging, for example, an idea pursued in  Chapter~\ref{chap:reschap1} (as well as in e.g.~\cite{Cuchiero2020AModels}) was to completely disregard the classical parametric SDE approach in place of neural networks. This alleviated the modeller of the burden of choosing functional forms of drift and diffusion coefficients to match the stylized of the market and outsourced this task to the neural network, making the modelling much more data-driven.
@@ -60,14 +60,14 @@ C_t(k) \defEqual \EE^\QQ\left[\left(\Ffr_{T,T}^A - \E^k\right)^+\middle\vert\Ff_
 \]
 Then, $\BS(t, x, k, \sigma)$ denotes the Black-Scholes price of a European Call option at time $t \in [0, T]$, with maturity $T$, log-price $x, \ln$-strike~$k$ and volatility~$\sigma$, so that
 $$
-\BS(t, x, k, \sigma)= \begin{cases}\E^x \Nn\left(d_{+}(x, k, \sigma)\right)-\E^k \Nn\left(d_{-}(x, k, \sigma)\right), & \text {if } \sigma \sqrt{T-t}>0, \\ \left(\E^x-\E^k\right)^{+}, & \text {if } \sigma \sqrt{T-t}=0,\end{cases}
+\BS(t, x, k, \sigma)= \begin{cases}\E^x \Nn\left(d_{+}(x, k, \sigma)\right)-\E^k \Nn\left(d_{-}(x, k, \sigma)\right), & \text {if } \sigma \sqrt{T-t}>0\,, \\ \left(\E^x-\E^k\right)^{+}, & \text {if } \sigma \sqrt{T-t}=0\,,\end{cases}
 $$
 with $d_{\pm}(x, k, \sigma)\defEqual\frac{x-k}{\sigma \sqrt{T-t}} \pm \frac{\sigma \sqrt{T-t}}{2}$, and~$\Nn$ is the Gaussian cumulative distribution function. 
 
-The implied volatility~(IV) can be thought of as the level of volatility that would have to be plugged into a pricing model, usually the Black-Scholes model~\cite{Black1973TheLiabilities}, to obtain the observed market price of an option. Implied volatility is widely used in mathematical finance and the financial industry because it provides a standardized measure of options prices that allows for comparisons across different options, strikes, and expirations.
-\begin{definition}\
+The implied volatility~(IV) can be thought of as the level of volatility that would have to be plugged into a pricing model, usually, the Black-Scholes model~\cite{Black1973TheLiabilities}, to obtain the observed market price of an option. Implied volatility is widely used in mathematical finance and the financial industry because it provides a standardized measure of options prices that allows for comparisons across different options, strikes, and expirations.
+\begin{definition}\label{def:impliedvol}\
 \begin{enumerate}[i.]
-    \item For any $k \in \RR$, the implied volatility $\Ii_T(k)$ is the unique non-negative solution to $C_0(k)=$ $\mathrm{BS}\left(0, \ln\Ffr_0^T, k, \Ii_T(k)\right)$; we drop the explicit reference to $k$ when considering an at-the-money option, i.e., $k=\ln\Ffr_0^T$.
+    \item For any $k \in \RR$, the implied volatility $\Ii_T(k)$ is the unique non-negative solution to $C_0(k)=$ $\BS\left(0, \ln\Ffr_0^T, k, \Ii_T(k)\right)$; we drop the explicit reference to $k$ when considering an at-the-money option, i.e., $k=\ln\Ffr_0^T$.
     \item The at-the-money implied skew $\Ss$ and curvature $\Cc$ at time zero are defined as
     $$
     \Ss_T\defEqual\left|\partial_k \Ii_T(k)\right|_{k=\ln\Ffr_0^T} \quad \text { and } \quad \Cc_T\defEqual\left|\partial_k^2 \Ii_T(k)\right|_{k=\ln\Ffr_0^T}
@@ -81,12 +81,12 @@ Heuristically speaking, implied volatility is a parameter that measures the mark
 
 \subsection{Long history of joint calibration}
 
-In early 90s, the CBOE started real-time reporting of the CBOE Market Volatility Index or VIX. It was constructed to reflect the expectations of market participants on the volatility of the S\&P500 index (SPX) over the next 30 days. But it was not until the early 2000s that VIX modelling began gaining traction and interest of academics, starting with the re-definition of VIX in 2003 to what it is today. After the introduction of VIX futures the year after and VIX options in 2006, many researchers have tried to construct a model that would jointly calibrate to instruments on both SPX and VIX. Such a model is extremely important when pricing options whose payoff depends on both the underlying and its volatility. Not only that, one may even face arbitrage when pricing other simpler exotics, if his model does not consolidate liquid derivatives on both indices. The joint calibration, however, proved to be a fairly difficult problem. In particular, for stochastic volatility models, a very large negative skew of short-term SPX options should imply a large volatility-of-volatility, but this seems irreconcilable with what we observe in the markets i.e. low volatilities implied from VIX. Described inconsistencies between the vol-of-vol inferred from SPX and VIX were investigated in e.g. \cite{Song2012APrices, Jacquier2021RoughOptions}.
+In the early 90s, the CBOE started real-time reporting of the CBOE Market Volatility Index or VIX. It was constructed to reflect the expectations of market participants on the volatility of the S\&P500 index (SPX) over the next 30 days. But it was not until the early 2000s that VIX modelling began gaining traction and interest of academics, starting with the re-definition of VIX in 2003 to what it is today. After the introduction of VIX futures the year after and VIX options in 2006, many researchers have tried to construct a model that would jointly calibrate to instruments on both SPX and VIX. Such a model is extremely important when pricing options whose payoff depends on both the underlying and its volatility. Not only that, one may even face arbitrage when pricing other simpler exotics, if his model does not consolidate liquid derivatives on both indices. The joint calibration, however, proved to be a fairly difficult problem. In particular, for stochastic volatility models, a very large negative skew of short-term SPX options should imply a large volatility-of-volatility, but this seems irreconcilable with what we observe in the markets i.e. low volatilities implied from VIX. Described inconsistencies between the vol-of-vol inferred from SPX and VIX were investigated in e.g. \cite{Song2012APrices, Jacquier2021RoughOptions}.
 
-The first attempt at joint calibration dates back to 2008, when J. Gatheral introduced the double CEV model \cite{Gatheral2008ConsistentOptions}, which was flexible enough to capture both smiles at long maturities, but nevertheless failed to simultaneously fit the ATM skew of SPX and the implied volatility of short maturity VIX options. Different approaches followed suit, modifying classical models with continuous SPX paths making them more flexible. %so that they are able to capture both smiles. 
+The first attempt at joint calibration dates back to 2008, when Gatheral introduced the double CEV model \cite{Gatheral2008ConsistentOptions}, which was flexible enough to capture both smiles at long maturities, but nevertheless failed to simultaneously fit the ATM skew of SPX and the implied volatility of short maturity VIX options. Different approaches followed suit, modifying classical models with continuous SPX paths making them more flexible. %so that they are able to capture both smiles. 
 Fouque and Saporito \cite{Fouque2018HestonOptions} for example used the Heston model with stochastic volatility-of-volatility, Goutte et al. \cite{Goutte2017Regime-switchingOptions} employed a regime-switching stochastic volatility model and J. Guyon \cite{Guyon2017OnOptions, Guyon2020TheSkew} explored a two-factor Bergomi model and its expansions. However, all of the above models had problems reconciling the vol-of-vol inconsistencies to a varying extent.
 
-Whether there exists a continuous model, which can achieve a satisfactory joint fit, is still an ongoing debate \cite{Acciaio2020ShortFutures, Guyon2019InversionMarket}, nevertheless, it seems to be very difficult to jointly calibrate the SPX and VIX with a continuous model in practice. Understandably, there had been many different attempts incorporating jumps in the dynamics of the SPX \cite{Cont2011ADERIVATIVES, Baldeaux2014ConsistentModel, Bardgett2013InferringMarkets, Papanicolaou2014AVolatilities, Kokholm2015JointModels, Pacati2018SmilingModel}. Jumps, in effect, offer an extra degree of freedom, which allows these models to decouple the SPX skew and VIX implied volatility at-the-money. Be that as it may, jump-diffusion models are, in general, undesirable from a hedging perspective, since they render a heavily incomplete market. So far these approaches produced good, but still imperfect concurrent fits of both smiles.
+Whether there exists a continuous model, which can achieve a satisfactory joint fit, is still an ongoing debate \cite{Acciaio2020ShortFutures, Guyon2019InversionMarket}, nevertheless, it seems to be very difficult to jointly calibrate the SPX and VIX with a continuous model in practice. Understandably, there had been many different attempts incorporating jumps in the dynamics of the SPX \cite{Cont2011ADERIVATIVES, Baldeaux2014ConsistentModel, Bardgett2013InferringMarkets, Papanicolaou2014AVolatilities, Kokholm2015JointModels, Pacati2018SmilingModel}. Jumps, in effect, offer an extra degree of freedom, which allows these models to decouple the SPX skew and VIX implied volatility at-the-money~(ATM). Be that as it may, jump-diffusion models are, in general, undesirable from a hedging perspective, since they render a heavily incomplete market. So far these approaches produced good, but still imperfect concurrent fits of both smiles.
 
 More recently, rough volatility models are thus showing promise in addressing the problem \cite{Jacquier2021RoughOptions, Horvath2020VolatilityModels, DeMarco2018VolatilityModels}. Most notably quadratic Rough Heston \cite{Gatheral2020TheProblem} achieved a commendable fit, although a question of calibration beyond just a simple parameter search still persists.
 
@@ -94,7 +94,7 @@ Another fundamentally different approach was taken recently with the use of opti
 
 Guyon and Lekeufack~\cite{Guyon2022VolatilityPath-Dependent} investigate the path-dependency of volatility by analyzing the relationship between past index returns and implied/realized volatility of equity indexes. They propose a simple continuous-time path-dependent volatility (PDV) model, incorporating a linear combination of weighted sums of past daily returns and squared returns with different time-shifted power-law weights.
 
-Finally, one of the methodologies pursued in Chapter~\ref{chap:reschap1}, are the so-called Neural SDEs, which provide a framework for model selection, while simultaneously producing a robust pricing model one can use for hedging. This is done by modelling the drifts and volatilities by neural networks. Similar approaches are taken in e.g.~\cite{Guyon2022NeuralCalibration, Cuchiero2020AModels}.
+Finally, one of the methodologies pursued in Chapter~\ref{chap:reschap1}, is the so-called Neural SDE, which provide a framework for model selection, while simultaneously producing a robust pricing model one can use for hedging. This is done by modelling the drifts and volatilities by neural networks. Similar approaches are taken in e.g.~\cite{Guyon2022NeuralCalibration, Cuchiero2020AModels}.
 
 \subsection{The joint calibration problem}\
 Let us denote the dynamics of SPX by $S\defEqual\{S_t\}_{t\geq 0}$ and consider a risk-neutral dynamic of the form
@@ -105,23 +105,23 @@ where $W=\{W_t\}_{t\in[0,T]}$ is a standard Brownian motion adapted to filtratio
 
 Proceeding as e.g. in~\cite[Chapter~11]{Gatheral2006TheGuide}, for any sufficiently well-behaved function $g$, we have, by integration by parts,
 $$
-g(S)=g(\Ffr)+g'(\Ffr)(S-F)+\int_0^\Ffr g''(K)(K-S)_{+} \D K+\int_\Ffr^{\infty} g''(K)(S-K)_{+} \D K,
+g(S)=g(\Ffr)+g'(\Ffr)(S-F)+\int_0^\Ffr g''(K)(K-S)_{+} \D K+\int_\Ffr^{\infty} g''(K)(S-K)_{+} \D K\,,
 $$
 for any $S, \Ffr \geq 0$. For any $0 \leq T_1 \leq T_2$, taking $S=S_{T_2}$ and $\Ffr = \EE\left[S_{T_2}\right]=S_{T_1}$, we obtain
 $$
-\EE\left[g\left(S_{T_2}\right)\right]=g\left(S_{T_1}\right)+\int_0^{S_{T_1}} g''(K) P_{T_1}\left(K, T_2\right) \D K+\int_{S_{T_1}}^{\infty} g''(K) C_{T_1}\left(K, T_2\right) \D K,
+\EE\left[g\left(S_{T_2}\right)\right]=g\left(S_{T_1}\right)+\int_0^{S_{T_1}} g''(K) P_{T_1}\left(K, T_2\right) \D K+\int_{S_{T_1}}^{\infty} g''(K) C_{T_1}\left(K, T_2\right) \D K\,,
 $$
 where $P_{T_1}\left(K, T_2\right)$ and $C_{T_1}\left(K, T_2\right)$ represent the prices of Vanilla European Put and Call options with strike $K$ and maturity $T_2$, evaluated at $T_1$. Consider for example $g(s)=\ln (s / \Ffr)$, so that
 $$
-\EE\left[\ln \left(\frac{S_{T_2}}{S_{T_1}}\right)\right]=-\int_0^{S_{T_1}} \frac{P_{T_1}\left(K, T_2\right)}{K^2} \D K-\int_{S_{T_1}}^{\infty} \frac{C_{T_1}\left(K, T_2\right)}{K^2} \D K .
+\EE\left[\ln \left(\frac{S_{T_2}}{S_{T_1}}\right)\right]=-\int_0^{S_{T_1}} \frac{P_{T_1}\left(K, T_2\right)}{K^2} \D K-\int_{S_{T_1}}^{\infty} \frac{C_{T_1}\left(K, T_2\right)}{K^2} \D K\,.
 $$
 Then
 $$
-\ln \left(\frac{S_{T_2}}{S_{T_1}}\right)=\int_{T_1}^{T_2} \sigma_t \D W_t-\frac{1}{2} \int_{T_1}^{T_2} \sigma_t^2 \D t=\int_{T_1}^{T_2} \frac{\D S_t}{S_t}-\frac{1}{2} \int_{T_1}^{T_2} \sigma_t^2 \D t
+\ln \left(\frac{S_{T_2}}{S_{T_1}}\right)=\int_{T_1}^{T_2} \sigma_t \D W_t-\frac{1}{2} \int_{T_1}^{T_2} \sigma_t^2 \D t=\int_{T_1}^{T_2} \frac{\D S_t}{S_t}-\frac{1}{2} \int_{T_1}^{T_2} \sigma_t^2 \D t\,.
 $$
 Taking expectations, we finally obtain
 \[
-\EE\left[\int_{T_1}^{T_2} \sigma_t^2 \D t\right]=-2 \EE\left[\ln \left(\frac{S_{T_2}}{S_{T_1}}\right)\right]=2\left(\int_0^{S_{T_1}} \frac{P_{T_1}\left(K, T_2\right)}{K^2} \D K+\int_{S_{T_1}}^{\infty} \frac{C_{T_1}\left(K, T_2\right)}{K^2} \D K\right)
+\EE\left[\int_{T_1}^{T_2} \sigma_t^2 \D t\right]=-2 \EE\left[\ln \left(\frac{S_{T_2}}{S_{T_1}}\right)\right]=2\left(\int_0^{S_{T_1}} \frac{P_{T_1}\left(K, T_2\right)}{K^2} \D K+\int_{S_{T_1}}^{\infty} \frac{C_{T_1}\left(K, T_2\right)}{K^2} \D K\right)\,.
 \]
 The VIX is defined as the one-month variance swap on the SPX, therefore the VIX dynamics at time $t\in[0, T]$ can then be expressed either in terms of the volatility process or through the price of the log-contract, in what is called the continuous-time monitoring formula
 \begin{equation*}
@@ -148,12 +148,12 @@ where $\phi_{\Ffr}$ is the identity function
 %&\;= \EE\left[\left\{\pm\left(\VIX_{T} - K\right)\right\}^+ \middle\vert \mathcal{F}_{t}\right]
 %\end{align*}
 \begin{align*}
-C_{t,\pm}^{\mathrm{X}}(T,K) &\defEqual \EE\left[\phi_{\pm, K}\left(\Ffr^{\mathrm{X}}_{T,T}\right) \middle\vert \Ff_{t}\right] = \EE\left[\phi_{\pm, K}\left(\mathrm{X}_{T}\right)\middle\vert \Ff_{t}\right],
+C_{t,\pm}^{\mathrm{X}}(T,K) &\defEqual \EE\left[\phi_{\pm, K}\left(\Ffr^{\mathrm{X}}_{T,T}\right) \middle\vert \Ff_{t}\right] = \EE\left[\phi_{\pm, K}\left(\mathrm{X}_{T}\right)\middle\vert \Ff_{t}\right]\,,
 \end{align*}
 with $\phi_{\pm, K}(x) \defEqual \max \left\{ \pm \left(x - K\right), 0 \right\}$.
 \item The \textit{forward variance} is another volatility instrument we will consider and is defined as
 \begin{equation*}
-\xi_{t}^{T} \defEqual\EE\left[\phi_\textup{FV}\left(\sigma^2_T\right) \middle\vert \Ff_{t}\right],
+\xi_{t}^{T} \defEqual\EE\left[\phi_\textup{FV}\left(\sigma^2_T\right) \middle\vert \Ff_{t}\right]\,,
 \end{equation*}
 where $\phi_\textup{FV}$ is the identity function.
 \end{itemize}
@@ -233,7 +233,7 @@ Let $L, N_{0}, N_{1}, \ldots, N_{L} \in \NN, \varrho: \RR \rightarrow \RR$ and f
 $1, \ldots, L$ let $w_{l}: \RR^{N_{l-1}} \rightarrow \RR^{N_{l}}$ an affine function. A function $\Psi: \RR^{N_{0}} \rightarrow \RR^{N_{L}}$
 defined as
 \[
-\Psi=w_{L} \circ \Psi_{L-1} \circ \cdots \circ \Psi_{1} \text { with } \Psi_{l}=\varrho \circ w_{l} \quad \text { for } l=1, \ldots, L-1,
+\Psi=w_{L} \circ \Psi_{L-1} \circ \cdots \circ \Psi_{1} \text { with } \Psi_{l}=\varrho \circ w_{l} \quad \text { for } l=1, \ldots, L-1\,,
 \]
 is called a \textit{neural network}. Here the activation function~$\varrho$ is
 applied component-wise. $L$ denotes the number of layers, $N_{1}, \ldots, N_{L-1}$ denote
@@ -262,9 +262,9 @@ topology of uniform convergence on compact sets.
 \end{theorem}
 
 \subsection{Randomly weighted neural networks}\label{sec:RWNN}
-Randomly Weighted Neural Networks (RWNNs) have been a staple of artificial intelligence research for decades, although they have taken a back seat to deep learning for a good chunk of the past decade. Neural networks with random weights first appear in seminal papers of Barron \cite{Barron1992NeuralSystems, Barron1993UniversalFunction}, but a more modern version was proposed by Huang \cite{Huang2006UniversalNodes} under the name Extreme learning machines~(ELMs). Today, these networks are known under different names: reservoir networks, random feature, randomly weighted or simply random networks; we choose to follow the two latter conventions. Starting from the work of Huang et al.~\cite{Huang2006UniversalNodes}, RWNNs saw a surge in popularity in the early~2000s (see e.g. also~\cite{Rahimi2007RandomMachines, Rahimi2008WeightedLearning}), however, after the advent of automatic differentiation libraries experienced a sharp decline in application up until recently.
+Randomly Weighted Neural Networks (RWNNs) have been a staple of artificial intelligence research for decades, although they have taken a back seat to deep learning for a good chunk of the past decade. Neural networks with random weights first appear in seminal papers of Barron \cite{Barron1992NeuralSystems, Barron1993UniversalFunction}, but a more modern version was proposed by Huang \cite{Huang2006UniversalNodes} under the name Extreme learning machines~(ELMs). Today, these networks are known under different names: reservoir networks, random feature, randomly weighted or simply random networks; we choose to follow the two latter conventions. Starting from the work of Huang, Zhu and Siew~\cite{Huang2006UniversalNodes}, RWNNs saw a surge in popularity in the early~2000s (see e.g. also~\cite{Rahimi2007RandomMachines, Rahimi2008WeightedLearning}), however, after the advent of automatic differentiation libraries experienced a sharp decline in application up until recently.
 
-ELM introduced the concept of randomly initializing the weights of a single-hidden layer feed-forward neural network. This idea was based on a universal approximation theorem by Barron et al.~\cite{Barron1993UniversalFunction}, stating that a single-hidden layer neural network with a randomly chosen activation function could approximate any continuous function with arbitrary precision. By randomly choosing the weights, the computational complexity and time required to train the neural network were drastically reduced.
+ELM introduced the concept of randomly initializing the weights of a single-hidden layer feed-forward neural network. This idea was based on a universal approximation theorem by Barron~\cite{Barron1993UniversalFunction}, stating that a single-hidden layer neural network with a randomly chosen activation function could approximate any continuous function with arbitrary precision. By randomly choosing the weights, the computational complexity and time required to train the neural network were drastically reduced.
 
 To put this statement into the context of Definition~\ref{def:neuralnet}, a \textit{randomly weighted neural network} (RWNN) is a neural network where the hidden layers are randomly sampled from a given distribution and then fixed; consequently, only the last layer is trained:
 out of all the parameters $(\Am^{(l)}, \bm^{(l)})_{l=0,\ldots,L}$ of the $L$-layered neural network, the parameters $(\Am^{(0)}, \bm^{(0)}, \ldots, A^{(L-1)}, \bm^{(L-1)})$ are randomly sampled and frozen and only $(\Am^{(L)}, \bm^{(L)})$ from the last layer are trained. 
@@ -276,7 +276,7 @@ We now give a precise definition of a single layer $\RWNN^\varrho_{K}\defEqual\R
 \begin{definition}[Single layer RWNN]\label{def:RWNN}
 Let $\big(\widetilde{\Omega}, \widetilde{\Ff}, \widetilde{\PP}\big)$ be a probability space on which the iid random variables $\Am_{k}: \widetilde{\Omega} \rightarrow \RR^{d}$ and $b_{k}: \widetilde{\Omega} \rightarrow \RR$, respectively corresponding to weights and biases, are defined. Let $\phib=\left\{\phi_{k}\right\}_{k \geq 1}$ denote a sequence of random basis functions, where each $\phi_{k}: \RR^{d} \to\RR$ is of the form
 $$
-\phi_{k}(\xx)\defEqual\varrho\left(\Am_{k}^{\top} \xx + b_{k}\right), \qquad x\in\RR^d,
+\phi_{k}(\xx)\defEqual\varrho\left(\Am_{k}^{\top} \xx + b_{k}\right), \qquad x\in\RR^d\,,
 $$
 with $\varrho:\RR\rightarrow\RR$ a Lipschitz continuous activation function. 
 For an output dimension $m\in\NN$ and $K \in \NN$ hidden units we define the \textit{reservoir} or \textit{random basis} as~$\Phi_{K}\defEqual\nobreak\phi_{1:K}=(\phi_1,\dots,\phi_K)$ and the random network $\Psi_K(\xx;\Theta)\in\RWNN^\varrho_K$ with parameter $\Theta=\left(\theta_{1}, \ldots, \theta_{m}\right)^\top \in \RR^{m\times K}$ as the map % \RWNN^\varrho_K: 
@@ -289,7 +289,7 @@ Thus, for each output dimension $j\in\{1,\dots,m\}$, $\Psi_K(\xx;\Theta)\in\RWNN
 \begin{remark}
 Throughout this work, we will make use of the more compact vector notation
 $$
-\Phi_K: \RR^d \ni \xx\mapsto \varrhob(\Am \xxbf+\bm) \in \RR^{K},
+\Phi_K: \RR^d \ni \xx\mapsto \varrhob(\Am \xxbf+\bm) \in \RR^{K}\,,
 $$
 where $\varrhob:\RR^K\rightarrow\RR^K$ acts component-wise $\varrhob(\yy)\defEqual(\varrho(y_1), \dots \varrho(y_K))$ and~${\Am: \widetilde{\Omega} \rightarrow \RR^{K\times d}}$ and~${\bm: \widetilde{\Omega} \rightarrow \RR^K}$ are the random matrix and bias respectively.
 \end{remark}
@@ -299,11 +299,11 @@ The training of such an RWNN can then be simplified into a convex optimisation p
 \begin{proposition}[Proposition 3 in~\cite{Gonon2020ApproximationSystems}]\label{prop:UATRWNN}
 Suppose $\psi^{*}: \RR^{q} \rightarrow \RR$, for $q\in\NN$, can be represented as
 $$
-\psi^{*}(z)=\int_{\RR^{q}} \E^{\I\theta^\top z} g(\theta) \D \theta,
+\psi^{*}(z)=\int_{\RR^{q}} \E^{\I\theta^\top z} g(\theta) \D \theta\,,
 $$
 for some complex-valued function~$g$ on $\RR^{q}$ and all $z \in \RR^{q}$ with $\|z\| \leq M$ for some $M>0$. Assume that
 $$
-\int_{\RR^{q}} \max \left(1,\|\theta \|^{2 q+6}\right)|g(\theta)|^{2} \D \theta <\infty .
+\int_{\RR^{q}} \max \left(1,\|\theta \|^{2 q+6}\right)|g(\theta)|^{2} \D \theta <\infty\,.
 $$
 Let $R>0$ and $K\in\NN$, suppose the rows of the $K\times K$-valued random matrix~$\Am$ are iid Uniform on $\Bb_{R} \subset \RR^{q}$, that the entries of $\bm\in\RR^{K}$ are iid Uniform on~$[-\max (M R, 1), \max (M R, 1)]$, 
 that~$\Am$ and~$\bm$ are independent and let~${\relu(x)\defEqual\max (x, 0)}$ on~$\RR$. 
@@ -311,7 +311,7 @@ Let the pair $(A,b)$ characterise a random basis (reservoir)~$\Phi$ and its corr
 Then, there exists an $\RR^K$-valued random variable~$\Theta$ and $C^{*}>0$ 
 (given explicitly in~\cite[Equation~(33)]{Gonon2020ApproximationSystems}) such that
 $$
-\EE^\Phi\left[\left\|\Psi(Z;\, \Theta)-\psi^{*}(Z)\right\|^{2}\right] \leq \frac{C^{*}}{K},
+\EE^\Phi\left[\left\|\Psi(Z;\, \Theta)-\psi^{*}(Z)\right\|^{2}\right] \leq \frac{C^{*}}{K}\,,
 $$
 and for any $\delta \in(0,1)$, with probability $1-\delta$ the random neural network $\Psi(\,\cdot\,;\,\Theta)$ satisfies
 $$
@@ -339,13 +339,13 @@ The development of the theory of large deviations was driven by two main ideas. 
 \end{enumerate}
 \end{definition}
 \begin{remark}
-If $\Xx$ is equipped with an appropriate metric, it becomes a complete separable metric space, in that case $\II$ is lower semi-continuous if and only if $\liminf\limits_{x_n \rightarrow x} \II(x_n) \geq \II(x)$ for all $x \in \Xx$. Furthermore, note that a good rate function achieves its infimum over closed sets.
+If $\Xx$ is equipped with an appropriate metric, it becomes a complete separable metric space, in that case, $\II$ is lower semi-continuous if and only if $\liminf\limits_{x_n \rightarrow x} \II(x_n) \geq \II(x)$ for all $x \in \Xx$. Furthermore, note that a good rate function achieves its infimum over closed sets.
 \end{remark}
 The second was the notion of a large deviation principle (LDP), which states that the probability of rare events can be described by exponential decay laws.
 \begin{definition}[Large Deviations Principle~(LDP)]
 Let $\left\{X^{\eps}\right\}_{\eps>0}$ be a sequence of random variables in $\Xx$, converging in probability to a deterministic limit $\overline{X}$ as~$\eps$ goes to zero. This sequence is said to satisfy an LDP with speed $\eps^{-1}$ and a good rate function $\II: \Xx \to \RR^+ \cup \{\infty\}$ if for all Borel subsets $B \subset \Xx$
 $$
--\inf _{x \in B^{\circ}} \II(x) \leq \liminf _{\eps \downarrow 0} \eps \ln \PP\left[X^{\eps} \in B\right] \leq \limsup _{\eps \downarrow 0} \eps \ln \PP\left[X^{\eps} \in B\right] \leq-\inf _{x \in \bar{B}} \II(x)
+-\inf _{x \in B^{\circ}} \II(x) \leq \liminf _{\eps \downarrow 0} \eps \ln \PP\left[X^{\eps} \in B\right] \leq \limsup _{\eps \downarrow 0} \eps \ln \PP\left[X^{\eps} \in B\right] \leq-\inf _{x \in \bar{B}} \II(x)\,.
 $$
 \end{definition}
 
@@ -355,7 +355,7 @@ In general LDP rate functions can be hard to obtain in closed form. Conversely, 
 Let us suppose that the sequence~$\{X^{\eps}\}_{\eps>0}$ converges in probability to~$\overline{X}$ as $\eps$ goes to zero. MDP for~$\{X^{\eps}\}_{\eps>0}$ is defined as an LDP for the rescaled sequence 
 $$
 \left\{\frac{X^{\eps} - \overline{X}}{\sqrt{\eps}h(\eps)}
-\right\}_{\eps>0},
+\right\}_{\eps>0}\,,
 $$
 where~$h(\eps)$ tends to infinity and~$\sqrt{\eps}h(\eps)$ to zero as~$\eps$ tends to zero. 
 \end{definition}
@@ -386,19 +386,19 @@ Let~$Z^{\eps}$ a family of $\Xx$-valued random variables satisfying an LDP with 
 Assume further either the tail condition
 $$
 \lim\limits_{M\uparrow \infty} \limsup_{\eps \downarrow 0}
-\eps\ln \EE\left[\exp\left\{\frac{\varphi(Z^{\eps})}{\eps}\right\}\ind_{ \{ \varphi(Z^{\eps}) \geq M\}}\right]  = - \infty,
+\eps\ln \EE\left[\exp\left\{\frac{\varphi(Z^{\eps})}{\eps}\right\}\ind_{ \{ \varphi(Z^{\eps}) \geq M\}}\right]  = -\infty\,,
 $$
 or the moment condition for some $\gamma > 1$ (because it implies the previous tail condition)
 $$
 \limsup\limits_{\eps \downarrow 0}
 \eps\ln \EE\left[\exp\left\{\gamma \frac{\varphi(Z^{\eps})}{\eps}\right\}\right]
-< \infty .
+< \infty\,.
 $$
 Then
 $$
 \lim_{\eps \downarrow 0}
 \eps\ln \EE\left[\exp\left\{\frac{\varphi(Z^{\eps})}{\eps}\right\}\right]
-= \sup\limits_{x \in X} \{\varphi(x) - \II(x) \}.
+= \sup\limits_{x \in X} \{\varphi(x) - \II(x) \}\,.
 $$
 \end{theorem}
 
@@ -407,20 +407,22 @@ The below-modified Varadhan's lemma was proven in~\cite{Robertson2010SampleModel
 Let~$Z^{\eps}$~and~$Y^\eps$ be two families of~$\Xx$\nobreakdash-valued random variables defined on some probability spaces $\{ (\Omega,\Bb_{\eps},\PP_\eps)\}_{\eps>0}$. $Z^{\eps}$ and~$Y^\eps$ are called exponentially equivalent if for every $\delta > 0$,
 $\{\omega\in\Omega: \D(Z^{\eps}(\omega),Y^\eps(\omega)) > \delta\}$ is $\Bb_\eps$-measurable
 and 
-$$\limsup\limits_{\eps \downarrow 0} \eps\ln\PP_\eps[\D(Z^{\eps},Y^\eps) > \delta] = - \infty\,.$$
+$$
+\limsup\limits_{\eps \downarrow 0} \eps\ln\PP_\eps[\D(Z^{\eps},Y^\eps) > \delta] = - \infty\,.
+$$
 \end{definition}
 
 \begin{theorem}(Modified Varadhan's Integral Lemma)\label{thm:varadhan_modified} % $\Xx$ and $\Yy$ be two metric spaces,
 \sloppy Let~$Z^{\eps}$ be a family of $\Xx$\nobreakdash-valued random variables that satisfies an LDP with good rate function ${\II:\Xx\rightarrow \RR^+ \cup \{\infty\}}$ and let~${\varphi: \Yy \to \{-\infty\} \cup \RR}$ and~${\psi: \Xx \rightarrow \RR}$  be two continuous functions. Let~${\Lambda: \Xx \rightarrow \Yy}$ be a continuous map and $\{\Lambda_{\eps} : \Xx \to \Yy\}$ be a family of measurable functions such that $\Lambda_{\eps}(Z^{\eps})$ is exponentially equivalent to $\Lambda(Z^{\eps})$. Suppose that there exists $\gamma > 1$ such that
 $$
 \limsup\limits_{\eps \downarrow 0}
-\eps\ln \EE\left[\exp\left\{\gamma \frac{\varphi(\Lambda_{\eps}(Z^{\eps})) + \psi(Z^{\eps})}{\eps}\right\}\right]< \infty.
+\eps\ln \EE\left[\exp\left\{\gamma \frac{\varphi(\Lambda_{\eps}(Z^{\eps})) + \psi(Z^{\eps})}{\eps}\right\}\right]< \infty\,.
 $$
 Then
 $$
 \lim_{\eps \downarrow 0}
 \eps\ln \EE\left[\exp\left\{\frac{\varphi(\Lambda_{\eps}(Z^{\eps})) + \psi(Z^{\eps})}{\eps}\right\}\right]
-= \sup\limits_{x \in \Xx} \Big\{\varphi(\Lambda(x)) + \psi(x) - \II(x) \Big\}.
+= \sup\limits_{x \in \Xx} \Big\{\varphi(\Lambda(x)) + \psi(x) - \II(x) \Big\}\,.
 $$
 \end{theorem}
 
@@ -428,7 +430,7 @@ $$
 \subsection{Types of large deviations}
 Let us now consider the case where $\Xx = \RR^d\,$ for $d\in\NN$ and define a filtered probability space $(\Omega, \Ff, \PP, \FF)$ with a finite time horizon $T>0$, where $\Omega = \Cc([0,T]\to \RR^d)$ is the space of all continuous functions, $\Ff$ is the Borel-$\sigma$-algebra on $\Omega$ and $\FF\defEqual\{\Ff_t\}_{t\in[0,T]}$ is the natural filtration of a given $d$-dimensional standard Brownian motion~$W$. Then let~$X$ be a unique strong solution to the stochastic differential equation
 \begin{equation}\label{eq:genericSDE}
-\D X_t = b(X_t) \D t + \sigma(X_t) \D W_t, \qquad X_0 = x_0,
+\D X_t = b(X_t) \D t + \sigma(X_t) \D W_t\,, \qquad X_0 = x_0\,,
 \end{equation}
 where~$b:\RR^d\to \RR^d$ and $\sigma:\RR^d \to \RR^{d\times d}$ are sufficiently well-behaved
 deterministic functions and~$W$ is a standard $\FF$-adapted Brownian motion. In this setting, we consider the following approximations:
@@ -446,7 +448,7 @@ Let~$X$ be a unique strong solution to~\eqref{eq:genericSDE} the process~$X^\eps
 \end{equation}
 \item Large-time approximation if 
 \begin{equation}\label{eq:large_time}
-\D X_t^\eps = \frac{1}{\eps} b(X_t^\eps) \D t + \frac{1}{\sqrt{\eps}} \sigma(X_t^\eps) \D W_t, \quad X_0^\eps = x_0.
+\D X_t^\eps = \frac{1}{\eps} b(X_t^\eps) \D t + \frac{1}{\sqrt{\eps}} \sigma(X_t^\eps) \D W_t, \quad X_0^\eps = x_0\,.
 \end{equation}
 \end{enumerate}
 \end{definition}

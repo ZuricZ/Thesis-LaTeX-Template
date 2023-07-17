@@ -41,7 +41,7 @@ $1\leq p \leq \infty$ and $s \in \NN$
 we define the Sobolev space
 $$
 \Ww^{s, p}(E, \RR^m)
-\defEqual  \Big\{f \in L^p(E, \RR^m): \; \partial_{\xxbf}^{\boldsymbol{\alpha}} f \in L^p(E, \RR^m), \text{for all } |\boldsymbol{\alpha}| \leq s\Big\},
+\defEqual  \Big\{f \in L^p(E, \RR^m): \; \partial_{\xxbf}^{\boldsymbol{\alpha}} f \in L^p(E, \RR^m), \text{for all } |\boldsymbol{\alpha}| \leq s\Big\}\,,
 $$
 where $\boldsymbol{\alpha} = \left(\alpha_1, \ldots, \alpha_d\right)$, $|\boldsymbol{\alpha}|=\alpha_1+\ldots+\alpha_d$, and the derivatives $\partial_{\xxbf}^{\boldsymbol{\alpha}} f = \partial_{x_1}^{\alpha_1} \dots \partial_{x_d}^{\alpha_d} f$ are taken in a weak sense.
 
@@ -59,8 +59,8 @@ To that end we let $\brelu(\yybf)\defEqual(\relu(y_1),\dots,\relu(y_K))$ and $\H
 \begin{lemma}\label{lem:RWNNderivative}
 For any linear function $\ell(\xxbf)=\Am \xxbf + \bm$, with $\Am\in\RR^{K\times d}$ and $\bm\in\RR^K$, then
 \[
-\nabla_x(\brelu\circ \ell)(\xxbf) = \operatorname{diag}(\Hb(\Am \xxbf+\bm))\Am,
-\qquad \text{for a.e. } \xxbf\in\RR^d.
+\nabla_x(\brelu\circ \ell)(\xxbf) = \operatorname{diag}(\Hb(\Am \xxbf+\bm))\Am\,,
+\qquad \text{for a.e. } \xxbf\in\RR^d\,.
 \]
 \end{lemma}
 \begin{proof}
@@ -83,7 +83,7 @@ Thus by Lemma~\ref{lem:RWNNderivative}, the first derivative of $\Psi(\cdot;\The
 \begin{equation}\label{eq:RWNN1stderivative}
     \nabla_{\xxbf}\Psi_K(\xxbf; \Theta)
     = \Theta\operatorname{diag}(\Hb(\Am \xxbf+\bm))\Am
-    \qquad \text{for a.e. } \xxbf\in\RR^d.
+    \qquad \text{for a.e. } \xxbf\in\RR^d\,.
 \end{equation}
 The above statements hold almost everywhere, it is thus appropriate we introduce a notion of \textit{approximate differentiability}.
 \begin{definition}[{Approximate~limit,~\cite[Section~1.7.2]{Evans1992MeasureFunctions}}]
@@ -91,7 +91,7 @@ Consider a Lebesgue-measurable set $E \subset \RR^d$, a measurable function $f: 
 $\aplim_{\xxbf \rightarrow x_0} f(\xxbf)=l$,
 if for each $\eps>0$,
 \[
-\lim _{r \downarrow 0} \frac{\lambda\left(\Bb_r(\xx_0) \cap\left\{\xxbf\in E:\;|f(\xxbf)-l| \geq \eps\right\}\right)}{\lambda(\Bb_r(\xx_0))}=0,
+\lim _{r \downarrow 0} \frac{\lambda\left(\Bb_r(\xx_0) \cap\left\{\xxbf\in E:\;|f(\xxbf)-l| \geq \eps\right\}\right)}{\lambda(\Bb_r(\xx_0))}=0\,,
 \]
 with~$\lambda$ the Lebesgue measure and $\Bb_r(\xx_0)$ the closed ball with radius $r>0$ and center~$\xx_0$.
 \end{definition}
@@ -99,7 +99,7 @@ with~$\lambda$ the Lebesgue measure and $\Bb_r(\xx_0)$ the closed ball with radi
 Consider a measurable set $E\subset \RR^d$, a measurable map $f:E\rightarrow \RR^m$ and a point $\xx_0\in E$. 
 The map~$f$ is approximately differentiable at~$\xx_0$ if there exists a linear map $\Dxx:\RR^d\rightarrow\RR^m$ such that
 \[
-\aplim_{\xxbf \rightarrow x_{0}} \frac{f(\xxbf)-f(\xx_{0})-\Dxx(\xxbf-\xx_{0})}{|\xxbf-\xx_{0}|}=0.
+\aplim_{\xxbf \rightarrow x_{0}} \frac{f(\xxbf)-f(\xx_{0})-\Dxx(\xxbf-\xx_{0})}{|\xxbf-\xx_{0}|}=0\,.
 \]
 Then~$\Dxx$ is called the approximate differential of~$f$ at~$\xx_0$.
 \end{definition}
@@ -117,8 +117,7 @@ Let $E\subset \RR^d$ be a measurable set with finite measure, $X:\Omega\rightarr
 $\varphi\in\Cc^1(\RR^m)$, $\Phi_{\mathrm{ap}}: E\rightarrow \RR^m$ an approximately differentiable function, and $\Phi\in\Cc^1(\RR^d; \RR^m)$
 its continuously differentiable extension to $\RR^d$.
 Then
-$\EE[\varphi(\Dx\Phi_{\mathrm{ap}}(X))] = \EE[\varphi(\nabla_x\Phi(X))]
-$.
+$\EE[\varphi(\Dx\Phi_{\mathrm{ap}}(X))] = \EE[\varphi(\nabla_x\Phi(X))]$.
 
 \end{lemma}
 \begin{proof}
@@ -130,8 +129,7 @@ The claim follows since~$\PP$ is absolutely continuous with respect to the Lebes
 \end{proof}
 \begin{corollary}\label{coro:diffexpectationeq2}
     Let $E\subset \RR^d$ be a measurable set with finite measure, ${X:\Omega\rightarrow E}$ a continuous random variable on some probability space~$(\Omega, \Ff, \PP)$, $\varphi\in\Cc^1(\RR^m)$, $\Phi:E\rightarrow \RR^m$ an approximately differentiable function, and~${\Psi\in\Ww^{1,p}(E,\RR^m)}$
-    for $p\geq 1$ such that $\Phi = \Psi$ almost everywhere. Then
-    $\EE[\varphi(\Dxx\Phi(X))] = \EE[\varphi(\Dxx\Psi(X))]$.
+    for $p\geq 1$ such that $\Phi = \Psi$ almost everywhere. Then $\EE[\varphi(\Dxx\Phi(X))] = \EE[\varphi(\Dxx\Psi(X))]$.
 \end{corollary}
 \begin{proof}
 This is a direct consequence of Lemma~\ref{lem:diffexpectationeq}, after noting that the two notions of derivatives are the same on $\Ww^{1,p}(E,\RR^m)$ (see Remark~\ref{rem:approxweakeq}).
@@ -140,13 +138,13 @@ This is a direct consequence of Lemma~\ref{lem:diffexpectationeq}, after noting 
 From a practical perspective, the second-order derivative of the network with respect to the input will be zero for all intents and purposes. 
 However, as will become apparent in Lemma~\ref{lem:derivativeBounds}, we need to investigate it further, in particular the measure zero set of points where ReLu-RWNN is not differentiable. Rewriting the diagonal operator in terms of the natural basis $\{e_{i}\}$ and evaluating the function $\Hb$ component-wise yields
 $$
-\nabla_{\xxbf}\Psi_K(\xxbf; \Theta)=\Theta \left(\sum_{j=1}^{K} e_{j} e_{j}^\top H\left(e_{j}^\top \Am \xxbf+b_{j}\right) \right) \Am.
+\nabla_{\xxbf}\Psi_K(\xxbf; \Theta)=\Theta \left(\sum_{j=1}^{K} e_{j} e_{j}^\top H\left(e_{j}^\top \Am \xxbf+b_{j}\right) \right) \Am\,.
 $$
 The $i$-th component of the second derivative is thus
 \begin{align*}
 \left[\nabla_{\xxbf}^2\Psi_K(\xxbf; \Theta)\right]_i
 &= \Theta\left( \sum_{j=1}^{K} e_{j} e_{j}^\top a_{j i}H'\left(e_{j}^\top \Am \xxbf+b_{j}\right)\right)\Am \\
-&= \Theta \operatorname{diag} \left(a_{i}\right) \operatorname{diag} \left(\Hb'(\Am \xxbf+\bm)\right) \Am,
+&= \Theta \operatorname{diag} \left(a_{i}\right) \operatorname{diag} \left(\Hb'(\Am \xxbf+\bm)\right) \Am\,,
 \end{align*}
 where $a_i$ denotes the $i$-th column of the matrix~$\Am$. 
 Next, we let
@@ -154,7 +152,7 @@ $$\delta_0^{\eps}(\xxbf) \defEqual \frac{H(\xxbf)-H(\xxbf-\eps)}{\eps}$$
 for $\xxbf\in\RR$ and define the left derivative of $H$ as $H'=\lim_{\eps\downarrow 0}\delta_0^\eps=\delta_0$ in the distributional sense. This finally gives the second derivative of the network:
 $$
 \left[\nabla_{\xxbf}^2\Psi_K(\xxbf; \Theta)\right]_i
- = \Theta\operatorname{diag}\left(a_{i}\right)\operatorname{diag}\left(\boldsymbol\delta_0(\Am \xxbf+\bm)\right) \Am,
+ = \Theta\operatorname{diag}\left(a_{i}\right)\operatorname{diag}\left(\boldsymbol\delta_0(\Am \xxbf+\bm)\right) \Am\,,
 $$
 where $\boldsymbol \delta_0$ denotes the vector function applying $\delta_0$ component-wise.
 
@@ -166,20 +164,20 @@ If the loss function is the mean square error (MSE), we can derive the estimator
 \begin{align*}
     \nabla_{\betam} \EE\left[\|Y-\betam X\|^2\right] &= \nabla_{\betam} \EE[(Y-\betam X)^\top(Y-\betam X)] \\ 
     &= \EE\left[\nabla_{\betam} (Y^\top Y - Y^\top \betam X - X^\top\betam^\top Y + X^\top\betam^\top\betam X)\right] \\
-    &= \EE\left[2\betam XX^\top - 2YX^\top\right],
+    &= \EE\left[2\betam XX^\top - 2YX^\top\right]\,,
 \end{align*}
 which gives the minimiser\footnote{The matrix $\EE[XX^\top]$ may not be invertible, but its generalised Moore-Penrose inverse always exists.}
 $\betam = \EE\left[YX^\top\right] \EE\left[XX^\top\right]^{-1}$,
 and its estimator
 \[
-\widehat\betam \defEqual  \left(\sum^n_{j=1} Y_j X_{j}^{\top}\right)\left(\sum^n_{j=1} X_jX_j^\top\right)^{-1}.
+\widehat\betam \defEqual  \left(\sum^n_{j=1} Y_j X_{j}^{\top}\right)\left(\sum^n_{j=1} X_jX_j^\top\right)^{-1}\,.
 \]
 Depending on the realisation of the reservoir of the RWNN, the covariates of~$X$ may be collinear, 
 so that~$X$ is close to rank deficient. 
 A standard remedy is to use the Ridge regularised version~\cite{Hoerl1970RidgeProblems} of the estimator
 \[
 \widehat\betam_R = \left(\sum^n_{j=1} Y_j X_{j}^{\top}\right)\left(\sum^n_{j=1} X_jX_j^\top+\lambda I\right)^{-1},
-\quad \text{for } \lambda>0,
+\quad \text{for } \lambda>0\,,
 \]
 which results in a superior, more robust performance in our experiments.
 \begin{remark}
@@ -194,7 +192,7 @@ One of the advantages of RLS estimators is the ability to vectorise them over th
 Let the process $\XX$ of the traded and non-traded components of the underlying under the risk-neutral measure $\QQ$ be given by the following $d$-dimensional SDE:
 \begin{equation}\label{eq:markovianSDE}
 \XX_s^{t,\xxbf} = \xxbf + \int_t^s \mu(r, \XX_r^{t,\xxbf})\D r
-+ \int_t^s \Sigma\left(r, \XX_r^{t,\xxbf}\right)\D W_r,
++ \int_t^s \Sigma\left(r, \XX_r^{t,\xxbf}\right)\D W_r\,,
 \end{equation}
 where $\mu: [0, T]\times\RR^d\rightarrow\RR^d$
 and $\Sigma:[0, T]\times\RR^d\rightarrow\RR^{d\times d}$ adhere to Assumption~\ref{ass:wellposednessBSDE}, 
@@ -202,23 +200,23 @@ and~$W$ is a standard $d$-dimensional Brownian motion on the probability space $
 with the natural filtration $\FF = \{\Ff_t\}_{0\leq t\leq T}$ of~$W$. 
 By the Feynman-Kac formula, options whose discounted expected payoff under~$\QQ$ can be represented as
 \begin{equation}
-    u(t, \xxbf)=\EE\left[\int_t^T \E^{-r(s-t)} f\left(s, \XX_s^{t, \xxbf}\right) \D s + \E^{-r(T-t)} g\left(\XX_T^{t, \xxbf}\right)\right]\quad \textup{ for all } (t, \xxbf) \in[0, T] \times \Aa,
+    u(t, \xxbf)=\EE\left[\int_t^T \E^{-r(s-t)} f\left(s, \XX_s^{t, \xxbf}\right) \D s + \E^{-r(T-t)} g\left(\XX_T^{t, \xxbf}\right)\right]\quad \textup{ for all } (t, \xxbf) \in[0, T] \times \Aa\,,
 \end{equation}
 for~$\Aa\subset\RR^d$ with interest rate $r\geq 0$ and continuous functions $f:[0,T]\times\RR^d\to\RR$
 and $g:\RR^d\to\RR$ can be viewed as solutions to the Cauchy linear parabolic PDE
 \begin{equation*}
 \left\{
 \begin{array}{rl}
-\partial_t u + \Ll u + f - ru= 0, & \text { on }[0, T) \times \Aa, \\
-u(T, \cdot)= g, & \text { on } \Aa,
+\partial_t u + \Ll u + f - ru= 0, & \text { on }[0, T) \times \Aa\,, \\
+u(T, \cdot)= g, & \text { on } \Aa\,,
 \end{array}
 \right.
 \end{equation*}
 where
 \begin{align}\label{eq:infinitesimal_generator}
 \Ll u \defEqual \frac{1}{2}\operatorname{Tr}
-\left(\Sigma\Sigma^\top \nabla_{\xxbf}^2 u\right) +  (\nabla_{\xxbf} u)\mu,
-\qquad\text{on }[0,T)\times \Aa,
+\left(\Sigma\Sigma^\top \nabla_{\xxbf}^2 u\right) +  (\nabla_{\xxbf} u)\mu\,,
+\qquad\text{on }[0,T)\times \Aa\,,
 \end{align}
 is the infinitesimal generator associated with diffusion~\eqref{eq:markovianSDE}.
 In this Markovian setting, we thus adopt a set-up similar to~\cite{Hure2020DeepPDEs} and consider a slightly more general PDE
@@ -226,8 +224,8 @@ In this Markovian setting, we thus adopt a set-up similar to~\cite{Hure2020DeepP
 \left\{
 \begin{array}{rll}
     \partial_t u(t,\xxbf) + \Ll u(t,\xxbf) + 
-    f\Big(t, \xxbf, u(t,\xxbf), \nabla_{\xxbf} u(t,\xxbf) \cdot \Sigma(t,\xxbf)\Big) &= 0, & \text{on }[0, T) \times \Aa,\\
-     u(T, \xxbf) &= g(\xxbf), & \text{on }\Aa,
+    f\Big(t, \xxbf, u(t,\xxbf), \nabla_{\xxbf} u(t,\xxbf) \cdot \Sigma(t,\xxbf)\Big) &= 0\,, & \text{on }[0, T) \times \Aa\,,\\
+     u(T, \xxbf) &= g(\xxbf), & \text{on }\Aa\,,
 \end{array}
 \right.
 \end{equation}
@@ -242,7 +240,7 @@ Otherwise, the optimisation (below) can still be solved using other methods, suc
 The function $f:[0,T]\times \RR^d \times \RR \times \RR^{d}\times\RR^{d} \rightarrow \RR$ has an affine structure in $\yybf \in \RR^m$ and in $\zzbf^1,\zzbf^2 \in \RR^{d}$:
 $$
 f\left(t, \xxbf, \yybf, \zzbf^1, \zzbf^2\right)
-= a(t,\xxbf)\yybf + b(t, \xxbf)\zzbf^1 + c(t, \xxbf) \zzbf^2 + \widetilde{f}(t, \xxbf),
+= a(t,\xxbf)\yybf + b(t, \xxbf)\zzbf^1 + c(t, \xxbf) \zzbf^2 + \widetilde{f}(t, \xxbf)\,,
 $$
 for some real-valued functions $a,b,c,\widetilde{f}$ on $[0,T]\times\RR^d$ that map to conformable dimensions. 
 \end{assumption}
@@ -251,8 +249,8 @@ for some real-valued functions $a,b,c,\widetilde{f}$ on $[0,T]\times\RR^d$ that 
 \subsection{Random weighted neural network scheme}
 The first step in so-called deep BSDE schemes~\cite{E2017DeepEquations, Han2018SolvingLearning, Hure2020DeepPDEs} is to establish the BSDE associated with the PDE~\eqref{eq:markovianPDE} and the process~\eqref{eq:markovianSDE} through the nonlinear Feynman-Kac formula. By~\cite{Pardoux1990AdaptedEquation} there exist $\FF$-adapted processes $(Y, Z)$, which are unique solutions to the BSDE
 \begin{equation}\label{eq:markovianBSDE}
-Y_{t}=g\left(\XX_{T}\right)+\int_{t}^{T} f\left(s, \XX_{s}, Y_{s}, Z_{s}\right) \D s-\int_{t}^{T} Z_{s} \D W_{s},
-\qquad\text{for any }t \in [0,T],
+Y_{t}=g\left(\XX_{T}\right)+\int_{t}^{T} f\left(s, \XX_{s}, Y_{s}, Z_{s}\right) \D s-\int_{t}^{T} Z_{s} \D W_{s}\,,
+\qquad\text{for any } t \in [0,T],
 \end{equation}
 and which are connected to the PDE~\eqref{eq:markovianPDE} via
 $$
@@ -260,15 +258,15 @@ Y_t = u(t, \XX_t) \qquad \text{and} \qquad Z_t = \nabla_x u(t,\XX_t)\cdot\Sigma(
 $$
 with terminal condition $u(T, \cdot)=g$. Next, the BSDE~\eqref{eq:markovianBSDE} is rewritten in forward form
 \begin{equation*}
-    Y_{t}=Y_0 - \int_{0}^{t} f\left(s, \XX_{s}, Y_{s}, Z_{s}\right) \D s + \int_{0}^{t} Z_{s} \D W_{s},
-\qquad\text{for any }t \in [0,T],
+    Y_{t}=Y_0 - \int_{0}^{t} f\left(s, \XX_{s}, Y_{s}\textbf{}, Z_{s}\right) \D s + \int_{0}^{t} Z_{s} \D W_{s}\textbf{},
+\qquad\text{for any }t \in [0,T]\textbf{},
 \end{equation*}
 and both processes are discretised according to the Euler-Maruyama scheme. To this end let $\pi\defEqual \left\{0=t_{0}<t_{1}<\ldots<t_{N}=T\right\}$ be a partition of the time interval $[0,T]$ with modulus $|\pi|=\max_{i=\{0,1, \dots, N-1\}} \Deli $ and $\Deli \defEqual  t_{i+1}-t_{i}$. Then the scheme is given by
 \begin{equation}\label{eq:EulerMaruyama}
 \left\{
 \begin{array}{rl}
-    \XX_{t_{i+1}} &= \XX_{t_{i}} + \mu(t_{i}, \XX_{t_{i}})\Deli  + \Sigma(t_{i}, \XX_{t_{i}})\DelWi, \\
-    Y_{t_{i+1}} &= Y_{t_{i}} - f\left(t_{i}, \XX_{t_{i}}, Y_{t_{i}}, Z_{t_i}\right)\Deli + Z_{t_i}\DelWi,
+    \XX_{t_{i+1}} &= \XX_{t_{i}} + \mu(t_{i}, \XX_{t_{i}})\Deli  + \Sigma(t_{i}, \XX_{t_{i}})\DelWi\textbf{}, \\
+    Y_{t_{i+1}} &= Y_{t_{i}} - f\left(t_{i}, \XX_{t_{i}}, Y_{t_{i}}, Z_{t_i}\right)\Deli + Z_{t_i}\DelWi\,,
 \end{array}
 \right.
 \end{equation}
@@ -279,10 +277,10 @@ and~$Z_{t_i}$ as
 \begin{array}{rll}
 u(t_i,\XX_{t_i}) = Y_{t_i}
 &\hspace*{-0.25cm}\approx \Uf_i(\XX_{t_i};\Theta^i)
-&\hspace*{-0.25cm}\defEqual\Theta^i \Phi_K^i(\XX_{t_i}),\\
+&\hspace*{-0.25cm}\defEqual\Theta^i \Phi_K^i(\XX_{t_i})\,,\\
 Z_{t_i} &\hspace*{-0.25cm}\approx \Zf_{i}(\XX_{t_i}) 
 &\hspace*{-0.25cm}\defEqual \Dxx \Uf_i(\XX_{t_i};\Theta^i)\cdot\Sigma(t_i,\XX_{t_i})
- = \Theta^i \Dxx \Phi_K^i(\XX_{t_i})\cdot\Sigma(t_i,\XX_{t_i}).
+ = \Theta^i \Dxx \Phi_K^i(\XX_{t_i})\cdot\Sigma(t_i,\XX_{t_i})\,.
  \end{array}
 \end{equation*}
 Recall that the derivative~$\Zf_{i}(\XX_{t_i})$ is the approximate derivative from Definition~\ref{def:approximatediff}. The following formulation of the loss function $\ell$ using the approximate derivative is sensible by Lemma~\ref{lem:diffexpectationeq}: notice that for the optimal parameter $\Theta^{i+1, *}$ in step $(i+1)$, the optimal approximation $\widehat \Uf_{i+1}(\XX_{t_{i+1}})\defEqual\Uf_{i+1}(\XX_{t_{i+1}}; \Theta^{i+1, *})$ 
@@ -293,20 +291,20 @@ does not depend on $\Theta^i$, hence under Assumption~\ref{ass:faffine} with $c=
     &\defEqual \EE^\Phi\left[\left\| \widehat \Uf_{i+1}(\XX_{t_{i+1}}) - \left[\Uf_i(\XX_{t_i};\Theta^i) - f\Big(t_{i}, \XX_{t_{i}}, \Uf_i(\XX_{t_i};\Theta^i), \Zf_{i}(\XX_{t_i}; \Theta^i)\Big)\Deli + \Zf_{i}(\XX_{t_i}; \Theta^i)\DelWi\right] \right\|^2\right] \\
     &= \EE^\Phi\left[\left\| \widehat \Uf_{i+1}(\XX_{t_{i+1}}) - \left[(\Uf_i(\XX_{t_i};\Theta^i) - \left(a_{i}\Uf_i(\XX_{t_i};\Theta^i) + b_{i}\Zf_{i}(\XX_{t_i}; \Theta^i) + \widetilde{f}_{i}\right)\Deli + \Zf_{i}(\XX_{t_i}; \Theta^i)\DelWi\right] \right\|^2\right] \\
     &= \EE^\Phi\left[\left\| \widehat \Uf_{i+1}(\XX_{t_{i+1}}) + \widetilde{f}_{i}\Deli - \Theta^i\Big\{(1-a_{i}\Deli)\Phi_K^i(\XX_{t_i}) + \Dx \Phi_K^i(\XX_{t_i}) \Sigma_i \left(b_{i}\Deli  + \DelWi\right)\Big\} \right\|^2\right] \\
-    &= \EE^\Phi\left[\left\| \Y^i - \Theta^i \X^i \right\|^2\right]
+    &= \EE^\Phi\left[\left\| \Y^i - \Theta^i \X^i \right\|^2\right]\,,
 \end{align*}
 \end{small}%
-where $p_{i} \defEqual  p(t_i, \XX_{t_i})$ for $p \in \{a, b, \widetilde{f}, \Sigma\}$, and the expectation $\EE^\Phi$ is of course conditional on the realisation of the random basis $\Phi_K^i$, i.e., conditional on the random weights and biases of the RWNN. Furthermore, we used the notations
+where $p_{i} \defEqual p(t_i, \XX_{t_i})$ for $p \in \{a, b, \widetilde{f}, \Sigma\}$, and the expectation $\EE^\Phi$ is, of course, conditional on the realisation of the random basis $\Phi_K^i$, i.e., conditional on the random weights and biases of the RWNN. Furthermore, we used the notations
 \[
 \Y^i \defEqual \widehat \Uf_{i+1}(\XX_{t_{i+1}}) + \widetilde{f}_{i}\Deli
     \qquad\text{and}\qquad
 \X^i \defEqual 
-(1-a_{i}\Deli)\Phi_K(\XX_{t_i}) + \Dxx\Phi_K(\XX_{t_i})\cdot \Sigma_i \left(b_{i}\Deli  + \DelWi\right).
+(1-a_{i}\Deli)\Phi_K(\XX_{t_i}) + \Dxx\Phi_K(\XX_{t_i})\cdot \Sigma_i \left(b_{i}\Deli  + \DelWi\right)\,.
 \]
 The problem can now be solved via least squares from Section~\ref{sec:randomizedLS}, yielding the estimator
 $$
 \Theta^{i,*} = \EE^\Phi\left[\Y^i\X^{i\top}\right]
-\EE^\Phi\left[\X^i\X^{i\top}\right]^{-1}.
+\EE^\Phi\left[\X^i\X^{i\top}\right]^{-1}\,.
 $$
 
 \subsection{Algorithm}
@@ -368,14 +366,14 @@ $\EE\left[\int_{0}^{t} V_{s} \D s\right]<\infty$, for any~$t\geq 0$.
 \end{samepage}
 By no-arbitrage, the fair price of a European option with payoff $h:\RR^+\rightarrow\RR^+$ reads
 $$
-u(t, x) \defEqual \EE\left[\E^{-r(T-t)} h\left(\E^{X_{T}^{t, x}+r T}\right) \middle\vert \Ff_{t}\right], 
-\quad \text{for all }(t, x) \in[0, T] \times \RR,
+u(t, x) \defEqual \EE\left[\E^{-r(T-t)} h\left(\E^{X_{T}^{t, x}+r T}\right) \middle\vert \Ff_{t}\right]\,, 
+\quad \text{for all } (t, x) \in[0, T] \times \RR\,,
 $$
 subject to~\eqref{eq:Xdynamics}.
 Since~$\XX$ is not Markovian, one cannot characterise the value function $u(t, x)$ via a deterministic PDE. 
 Bayer, Qiu and Yao~\cite{Bayer2022PricingSPDEs} proved that~$u$ can be viewed as a random field which, together with another random field~$\psi$, satisfies the backward stochastic partial differential equation (BSPDE)
 \begin{equation}\label{eq:BSPDEPricing}
--\D u(t,x) = \left[\frac{V_{t}}{2} \partial_x^{2} u(t, x)+\rho \sqrt{V_{t}} \partial_x \psi(t,x)-\frac{V_{t}}{2} \partial_x u(t,x)-r u(t,x)\right] \D t-\psi(t,x) \D W^1_{t},
+-\D u(t,x) = \left[\frac{V_{t}}{2} \partial_x^{2} u(t, x)+\rho \sqrt{V_{t}} \partial_x \psi(t,x)-\frac{V_{t}}{2} \partial_x u(t,x)-r u(t,x)\right] \D t-\psi(t,x) \D W^1_{t}\,,
 \end{equation}
 in a distributional sense, for $(t, x) \in[0, T] \times \RR$, with boundary condition~${u(T, x) = h\left(\E^{x+r T}\right)}$.
 where the variance process $\{V_{t}\}_{t \geq 0}$ is defined exogenously under Assumption~\ref{ass:volatilityProcess}. 
@@ -384,8 +382,8 @@ We in fact consider the slightly more general BSPDEs
 \left\{\begin{array}{rl}
 -\D u(t,x) &= \displaystyle \bigg\{\frac{V_{t}}{2} \Dx^{2} u(t,x)+\rho \sqrt{V_{t}} \Dx \psi(t,x)-\frac{V_{t}}{2} \Dx u(t,x) \\
 & \quad \displaystyle + f\left(t, \E^{x}, u(t,x), \rho_2\sqrt{V_{t}} \Dx u(t,x), \psi(t,x)+ \rho_1 \sqrt{V_{t}} \Dx u(t,x)\right)\bigg\} \D t \\
-& \quad \displaystyle -\psi(t,x) \D W^1_{t}, \quad(t, x) \in[0, T) \times \RR, \\
-u(T,x) &= \displaystyle g \left(\E^{x}\right), \quad x \in \RR,
+& \quad \displaystyle -\psi(t,x) \D W^1_{t}, \quad(t, x) \in[0, T) \times \RR\,, \\
+u(T,x) &= \displaystyle g \left(\E^{x}\right), \quad x \in \RR\,,
 \end{array}\right.
 \end{equation}
 for $g:\RR^+\rightarrow \RR$. We present exact conditions on~$f$ and~$g$ ensuring well-posedness in Assumption~\ref{ass:wellposednessBSPDE},
@@ -396,8 +394,8 @@ By~\cite{Briand2003LpEquations} the corresponding BSDE is then,
 for $0 \leq t \leq s \leq T$,
 \begin{equation}\label{eq:BSDEGeneral}
 \left\{\begin{aligned}
--\D Y_{s}^{t, x} &=f\left(s, \E^{X_{s}^{t, x}}, Y_{s}^{t, x}, {Z_{s}^{1}}^{t, x}, {Z_{s}^{2}}^{t, x}\right) \D s - {Z_{s}^{1}}^{t, x} \D W^1_{s} - {Z_{s}^{2}}^{t, x} \D W^2_{s},\\
-Y_{T}^{t, x} &=g\left(\E^{X_{T}^{t, x}}\right),
+-\D Y_{s}^{t, x} &=f\left(s, \E^{X_{s}^{t, x}}, Y_{s}^{t, x}, {Z_{s}^{1}}^{t, x}, {Z_{s}^{2}}^{t, x}\right) \D s - {Z_{s}^{1}}^{t, x} \D W^1_{s} - {Z_{s}^{2}}^{t, x} \D W^2_{s}\,, \\
+Y_{T}^{t, x} &=g\left(\E^{X_{T}^{t, x}}\right)\,,
 \end{aligned}\right.
 \end{equation}
 where $(Y_{s}^{t, x}, {Z_{s}^{1}}^{t, x}, {Z_{s}^{2}}^{t, x})$ is defined as the solution to BSDE~\eqref{eq:BSDEGeneral} in the weak sense. 
@@ -406,9 +404,9 @@ where $(Y_{s}^{t, x}, {Z_{s}^{1}}^{t, x}, {Z_{s}^{2}}^{t, x})$ is defined as the
 Let the quadruple $\left(X_{s}, Y_{s}, Z^1_{s}, Z^2_{s}\right)$ be the solution to the forward BSDE (FBSDE)
 \begin{equation}\label{eq:logprocess}
 \left\{\begin{aligned}
--\D Y_{s} &=f\left(s, \E^{X_{s}}, Y_{s}, Z^1_{s}, Z^2_{s}\right) \D s- Z^1_{s} \D W^1_{s}-Z^2_{s} \D W^2_{s},\\
-\D X_{s} &=-\frac{V_{s}}{2} \D s+\sqrt{V_{s}}\left(\rho_1 \D W^1_{s} + \rho_2\D W^2_{s}\right),\\
-V_{s} &= \xi_{s} \Ee\left(\eta \widehat{W}_{s}\right), \quad \text { with } \quad \widehat{W}_{s}=\int_{0}^{s} \mathcal{K}(s, r) \D W^1_{r}, \quad ,
+-\D Y_{s} &=f\left(s, \E^{X_{s}}, Y_{s}, Z^1_{s}, Z^2_{s}\right) \D s- Z^1_{s} \D W^1_{s}-Z^2_{s} \D W^2_{s}\,,\\
+\D X_{s} &=-\frac{V_{s}}{2} \D s+\sqrt{V_{s}}\left(\rho_1 \D W^1_{s} + \rho_2\D W^2_{s}\right)\,,\\
+V_{s} &= \xi_{s} \Ee\left(\eta \widehat{W}_{s}\right), \quad \text { with } \quad \widehat{W}_{s}=\int_{0}^{s} \mathcal{K}(s, r) \D W^1_{r}\,,
 \end{aligned}\right.
 \end{equation}
 for $s \in[0, T]$, with terminal condition
@@ -420,37 +418,37 @@ $\rho_1 \in [-1,1]$.
 Here~$\Ee(\cdot)$ denotes the Wick stochastic exponential and is defined as $\Ee(\zeta)\defEqual \exp\left(\zeta-\frac12\EE[|\zeta|^2]\right)$ for a zero-mean Gaussian variable $\zeta$. 
 Then by \cite[Theorem~2.4]{Bayer2022PricingSPDEs},
 \begin{align}
-Y_{t} &= u\left(t, X_{t}\right),  & \text{ for } t\in[0,T], \\
+Y_{t} &= u\left(t, X_{t}\right),  & \text{ for } t\in[0,T]\,, \\
 Z^1_{t} &= \psi\left(t, X_{t}\right) + 
-\rho_1 \sqrt{V_{t}} \Dx u\left(t, X_{t}\right), & \textup{ for } t\in[0,T), \\
-Z^2_{t} &= \rho_2\sqrt{V_{t}} \Dx u\left(t, X_{t}\right), & \textup{ for } t\in[0,T),
+\rho_1 \sqrt{V_{t}} \Dx u\left(t, X_{t}\right), & \textup{ for } t\in[0,T)\,, \\
+Z^2_{t} &= \rho_2\sqrt{V_{t}} \Dx u\left(t, X_{t}\right), & \textup{ for } t\in[0,T)\,,
 \end{align}
 where $(u, \psi)$ is the unique weak solution to~\eqref{eq:BSDEGeneral}. Accordingly, the forward equation reads
 \begin{equation*}
-Y_t = Y_0-\int_{0}^{t} f\left(s, \E^{X_{s}}, Y_s, Z_s^1, Z_s^2\right) \D s +\int_{0}^{t}Z_s^1 \D W^1_{s}+\int_{0}^{t} Z_s^2 \D W^2_{s},
+Y_t = Y_0-\int_{0}^{t} f\left(s, \E^{X_{s}}, Y_s, Z_s^1, Z_s^2\right) \D s +\int_{0}^{t}Z_s^1 \D W^1_{s}+\int_{0}^{t} Z_s^2 \D W^2_{s}\,,
 \qquad\text{ for }t \in[0, T].
 \end{equation*}
 By simulating $(W^1, W^2, V)$, 
 the forward process~$X$ may be approximated by an Euler scheme--with the same notations as in the Markovian case--and the forward representation above yields the approximation
 $$
-u\left(t_{i+1}, X_{t_{i+1}}\right) \approx u(t_{i}, X_{t_i}) - f\left(t_i, \E^{X_{t_{i}}}, u\left({t_{i}}, X_{t_{i}}\right), Z^1_{t_i}, Z^2_{t_i}\right) \Deli  + Z^1_{t_i} \Delta^{W^1}_{i} + Z^2_{t_i} \Delta^{W^2}_{i},
+u\left(t_{i+1}, X_{t_{i+1}}\right) \approx u(t_{i}, X_{t_i}) - f\left(t_i, \E^{X_{t_{i}}}, u\left({t_{i}}, X_{t_{i}}\right), Z^1_{t_i}, Z^2_{t_i}\right) \Deli  + Z^1_{t_i} \Delta^{W^1}_{i} + Z^2_{t_i} \Delta^{W^2}_{i}\,,
 $$
 with
 $$
 Z^1_{t_i}  = \rho_1 \sqrt{V_{t_{i}}} \Dx u\left({t_{i}}, X_{t_{i}}\right) + \psi\left({t_{i}}, X_{t_{i}}\right)
 \qquad\text{and}\qquad
-Z^2_{t_i}  = \rho_2\sqrt{V_{t_{i}}} \Dx u\left({t_{i}}, X_{t_{i}}\right).
+Z^2_{t_i}  = \rho_2\sqrt{V_{t_{i}}} \Dx u\left({t_{i}}\,, X_{t_{i}}\right)\,.
 $$
 By Lemma~\ref{lem:sol_as_RWNN} we can, for each time step $i\in\{0, \dots, N-1\}$, approximate the solutions~$u(t_i,\cdot)$ and~$\psi(t_i,\cdot)$ by two separate networks~$\Uf_i$ and~$\Psi_i$ in $\RWNN_K^{\relu}$: 
 \begin{alignat*}{3}
-    Y_{t_i} &\approx \Uf_i(X_{t_i}; \Theta^i) && = \Theta^i \Phi^{\Theta,i}_K(X_{t_i}), \\
-    Z^1_{t_i} &\approx \Zf^1_i(X_{t_i}; \Theta^i, \Xi^i) && = \Theta^i \left(\Dx \Phi_K^{\Theta,i}(X_{t_i})\right) \rho_1\sqrt{V_{t_i}} + \Xi^i\Phi^{\Xi,i}_K(X_{t_i}), \\
-    Z^2_{t_i} &\approx \Zf^2_i(X_{t_i}; \Theta^i, \Xi^i) && = \Theta^i \left(\Dx \Phi_K^{\Theta,i}(X_{t_i})\right) \rho_2\sqrt{V_{t_i}}.
+    Y_{t_i} &\approx \Uf_i(X_{t_i}; \Theta^i) && = \Theta^i \Phi^{\Theta,i}_K(X_{t_i})\,, \\
+    Z^1_{t_i} &\approx \Zf^1_i(X_{t_i}; \Theta^i, \Xi^i) && = \Theta^i \left(\Dx \Phi_K^{\Theta,i}(X_{t_i})\right) \rho_1\sqrt{V_{t_i}} + \Xi^i\Phi^{\Xi,i}_K(X_{t_i})\,, \\
+    Z^2_{t_i} &\approx \Zf^2_i(X_{t_i}; \Theta^i, \Xi^i) && = \Theta^i \left(\Dx \Phi_K^{\Theta,i}(X_{t_i})\right) \rho_2\sqrt{V_{t_i}}\,.
 \end{alignat*}
 Here $\Phi_K^\Xi$ and $\Phi_K^\Theta$ are realisations of random bases (reservoirs) of the RWNNs with respective parameters~$\Xi$ and~$\Theta$. 
 The next part relies on Assumption~\ref{ass:faffine}, namely
 $$
-f\left(t_i, \E^{X_{t_{i}}},  Y_{t_i},  Z^1_{t_i},  Z^2_{t_i}\right) = a(t_i,X_{t_i}) Y_{t_i} + b(t_i,X_{t_i}) Z^1_{t_i} + c(t_i,X_{t_i}) Z^2_{t_i} + \widetilde{f}(t_i,X_{t_i}),
+f\left(t_i, \E^{X_{t_{i}}},  Y_{t_i},  Z^1_{t_i},  Z^2_{t_i}\right) = a(t_i,X_{t_i}) Y_{t_i} + b(t_i,X_{t_i}) Z^1_{t_i} + c(t_i,X_{t_i}) Z^2_{t_i} + \widetilde{f}(t_i,X_{t_i})\,,
 $$
 for some functions $a,b,c,\widetilde{f}$ mapping to~$\RR$, so that, as in the Markovian case, the minimisation of the expected quadratic loss at every time step $i\in\{N-1,\dots,0\}$ reads
 \begin{small}
@@ -462,7 +460,7 @@ for some functions $a,b,c,\widetilde{f}$ mapping to~$\RR$, so that, as in the Ma
     &= \EE^\Phi\Bigg[\bigg|\widehat\Uf_{i+1}(X_{t_{i+1}}) + \widetilde{f}\Deli  - \bigg\{ \Xi^i\Phi_K^{\Xi,i}(X_{t_i})\left(\Delta^{W^1}_{i}-b\Deli \right) \\
     & \hspace{3cm} + \Theta^i\left((1-a\Deli )\Phi_K^{\Theta,i}(X_{t_i}) + \Dx\Phi_K^{\Theta,i}(X_{t_i})\sqrt{V_{t_i}}\left(\Delta^{B}_{i} - (b\rho_1 + c\rho_2)\Deli \right) \right) \bigg\}\bigg|^2\Bigg] \\
     &= \EE^\Phi\left[\left|\Y^i - \Xi^i \X_1^i -
-    \Theta^i\X_2^i \right|^2\right],
+    \Theta^i\X_2^i \right|^2\right]\,,
 \end{align*}
 \end{small}%
 with $\Delta^{B}_{i}=(\rho_1\Delta^{W^1}_{i} + \rho_2\Delta^{W^2}_{i})$ and where $\widehat\Uf_{i+1}(X_{t_{i+1}})\defEqual \Uf_{i+1}(X_{t_{i+1}}; \Theta^{i+1,*})$ was set in the previous time step and is now constant (without dependence on~$\Theta^i$). We defined
@@ -472,15 +470,12 @@ with $\Delta^{B}_{i}=(\rho_1\Delta^{W^1}_{i} + \rho_2\Delta^{W^2}_{i})$ and wher
 \Y^i & \defEqual  \displaystyle \widehat\Uf_{i+1}(X_{t_{i+1}}) + \widetilde{f}\Deli , \\
      \X_1^i &\defEqual  \displaystyle \Phi_K^\Xi(X_{t_i})\left(\Delta^{W^1}_{i}-b\Deli \right), \\ 
     \X_2^i &\defEqual  \displaystyle (1-a\Deli )\Phi_K^\Theta(X_{t_i}) + \Dx\Phi_K^\Theta(X_{t_i})
-    \sqrt{V_{t_i}}\left(\Delta^{B}_{i}-(b\rho_1 + c\rho_2)\Deli  \right).
+    \sqrt{V_{t_i}}\left(\Delta^{B}_{i}-(b\rho_1 + c\rho_2)\Deli \right)\,.
 \end{array}
 \right.
 \end{equation}
 In matrix form, this yields
-$
-\ell(\Theta^i, \Xi^i) = \EE^\Phi[\|\Y^i - \betam^i\X^i\|^2]$,
-with 
-$\betam^i=\begin{bmatrix}\Xi^i, \Theta^i\end{bmatrix}$
+$\ell(\Theta^i, \Xi^i) = \EE^\Phi[\|\Y^i - \betam^i\X^i\|^2]\,,$ with $\betam^i=\begin{bmatrix}\Xi^i, \Theta^i\end{bmatrix}$
 and
 $\X^i= \begin{bmatrix}\X_1^i, \X_2^i\end{bmatrix}^{\top}$,
 for which the RLS from Section~\ref{sec:randomizedLS}
@@ -492,7 +487,7 @@ yields the solution
     \left[\begin{array}{cc}
          \X_1^i\X_1^{i\top} & \X_1^i\X_2^{i\top} \\
          \X_2^i\X_1^{i\top} & \X_2^i\X_2^{i\top}
-    \end{array}\right]\right]^{-1}.
+    \end{array}\right]\right]^{-1}\,.
 \end{equation}
 
 
@@ -558,7 +553,7 @@ In the forthcoming convergence analysis, this does not play any role, and we, th
     \begin{align}
     & \left|f\left(t, \E^x, y, z^1, z^2\right)
     -f\left(\widetilde{t}, \E^{\widetilde{x}},\widetilde{y},\widetilde{z}^1,\widetilde{z}^2\right)\right| \\
-    & \hspace*{2cm} \leq L_f\left\{\omega(|t-\widetilde{t}|)^{\half} + |x-\widetilde{x}| + |y-\widetilde y| + |z^1-\widetilde{z}^1| + |z^2-\widetilde{z}^2|\right\}.
+    & \hspace*{2cm} \leq L_f\left\{\omega(|t-\widetilde{t}|)^{\half} + |x-\widetilde{x}| + |y-\widetilde y| + |z^1-\widetilde{z}^1| + |z^2-\widetilde{z}^2|\right\}\,.
     \end{align}
 \end{enumerate}
 \end{assumption}
@@ -568,7 +563,7 @@ The first absolute moment of the discretisation scheme over the partition~$\pi$ 
 Under Assumptions~\ref{ass:volatilityProcess}-\ref{ass:RWNNscheme} Briand, Delyon, Hu, Pardoux, Stoica~\cite{Briand2003LpEquations} established that
 \begin{align}
     \EE\left[\sup _{0 \leq t \leq T}\left|X_{t}\right|^{2}\right] &\leq C\left(1+\left|x_{0}\right|^{2}\right),\label{eq:solution_moment_bound} \\
-    \max_{i\in\{0,\dots,N-1\}} \EE\left[\left|X_{t_{i+1}}-X^\pi_{t_{i+1}}\right|^{2}+\sup _{t \in\left[t_{i}, t_{i+1}\right]}\left|X_{t}-X^\pi_{t_{i}}\right|^{2}\right] &\leq C \omega(|\pi|),\label{eq:fwd_process_estimation}
+    \max_{i\in\{0,\dots,N-1\}} \EE\left[\left|X_{t_{i+1}}-X^\pi_{t_{i+1}}\right|^{2}+\sup _{t \in\left[t_{i}, t_{i+1}\right]}\left|X_{t}-X^\pi_{t_{i}}\right|^{2}\right] &\leq C \omega(|\pi|)\,,\label{eq:fwd_process_estimation}
 \end{align}
 for some $C>0$ independent of $|\pi|$,
 and we furthermore have~\cite{Briand2003LpEquations}
@@ -581,7 +576,7 @@ as well as the standard $L^{2}$-regularity result on $Y$:
 \end{equation}
 For $k\in\{1,2\}$, define the errors
 \begin{equation}\label{eq:Z_error}
-\eps^{Z^k}(\pi) \defEqual \EE\left[\sum_{i=0}^{N-1} \int_{t_{i}}^{t_{i+1}}\left|Z^k_{t}-\overline{Z}^k_{t_{i}}\right|^{2} \D t\right], \quad \text { with } \quad \overline{Z}^k_{t_{i}} \defEqual \frac{1}{\Deli} \EE_{i}\left[\int_{t_{i}}^{t_{i+1}} Z^k_{t} \D t\right],
+\eps^{Z^k}(\pi) \defEqual \EE\left[\sum_{i=0}^{N-1} \int_{t_{i}}^{t_{i+1}}\left|Z^k_{t}-\overline{Z}^k_{t_{i}}\right|^{2} \D t\right], \quad \text { with } \quad \overline{Z}^k_{t_{i}} \defEqual \frac{1}{\Deli} \EE_{i}\left[\int_{t_{i}}^{t_{i+1}} Z^k_{t} \D t\right]\,,
 \end{equation}
 where $\EE_{i}$ denotes the conditional expectation given $\Ff_{t_{i}}$. 
 We furthermore define the auxiliary processes, for $i\in\{0, \ldots, {N-1}\}$,
@@ -589,7 +584,7 @@ We furthermore define the auxiliary processes, for $i\in\{0, \ldots, {N-1}\}$,
 \begin{split}
 \widehat{\Vv}_{t_{i}} &\defEqual \EE_{i}\left[\widehat{\Uf}_{i+1}\left(X^\pi_{t_{i+1}}\right)\right]+f\left(t_i, \E^{X^\pi_{t_{i}}}, \widehat{\Vv}_{t_{i}}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \Deli,  \\
 \ZowO_{t_{i}} &\defEqual \widehat\Psi_i(X^\pi_{t_i}) + \frac{1}{\Deli} \EE_{i}\left[\widehat{\Uf}_{i+1}\left(X^\pi_{t_{i+1}}\right) \Delta^{W^1}_{i}\right], \\
-\ZowT_{t_{i}} &\defEqual \frac{1}{\Deli} \EE_{i}\left[\widehat{\Uf}_{i+1}\left(X^\pi_{t_{i+1}}\right) \Delta^{W^2}_{i}\right],
+\ZowT_{t_{i}} &\defEqual \frac{1}{\Deli} \EE_{i}\left[\widehat{\Uf}_{i+1}\left(X^\pi_{t_{i+1}}\right) \Delta^{W^2}_{i}\right]\,,
 \end{split}
 \end{align}
 with $\widehat\Uf_i(\xx)\defEqual\Uf_i(x;\Theta^{i,*})$ and $ \widehat\Psi_i(x)\defEqual\Psi(x;\Xi^{i,*})$ as before.
@@ -601,27 +596,27 @@ since~$f$ is Lipschitz.
 By Assumption~\ref{ass:RWNNscheme}(i), 
 there exist $\widehat v_i, \zowk_{t_{i}}$ for which
 \begin{equation}\label{eq:existenceAuxilary}
-    \widehat\Vv_{t_i} = \widehat v_i(X^\pi_{t_i})\qquad \text{and} \qquad \Zowk_{t_{i}} = \zowk_{t_{i}}(X^\pi_{t_i}) \quad \text{for } i\in\{0,\dots,N-1\}, k\in\{1,2\}.
+    \widehat\Vv_{t_i} = \widehat v_i(X^\pi_{t_i})\qquad \text{and} \qquad \Zowk_{t_{i}} = \zowk_{t_{i}}(X^\pi_{t_i}) \quad \text{for } i\in\{0,\dots,N-1\}, k\in\{1,2\}\,.
 \end{equation}
 Then by the martingale representation theorem~\cite[Theorem  14.5.1]{Cohen2015StochasticApplications}, there exist integrable processes~$\ZowO$ and~$\ZowT$ such that
 \begin{equation}\label{eq:martingaleRep}
-    \widehat{\Uf}_{i+1}\left(X^\pi_{t_{i+1}}\right)=\widehat{\Vv}_{t_{i}}-f\left(t_{i},\E^{X^\pi_{t_{i}}}, \widehat{\Vv}_{t_{i}}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \Deli +\int_{t_{i}}^{t_{i+1}}{\widehat{Z}}_{t}^1\D W^1_{t}+\int_{t_{i}}^{t_{i+1}} {\widehat{Z}}_{t}^2 \D W^2_{t},
+    \widehat{\Uf}_{i+1}\left(X^\pi_{t_{i+1}}\right)=\widehat{\Vv}_{t_{i}}-f\left(t_{i},\E^{X^\pi_{t_{i}}}, \widehat{\Vv}_{t_{i}}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \Deli +\int_{t_{i}}^{t_{i+1}}{\widehat{Z}}_{t}^1\D W^1_{t}+\int_{t_{i}}^{t_{i+1}} {\widehat{Z}}_{t}^2 \D W^2_{t}\,,
 \end{equation}
 since $\Zowk_{t}$ are $\Ff_t^W$-adapted as asserted by the martingale representation theorem. 
 From here, It\^o's isometry yields
 \begin{align*}
     \ZowO_{t_{i}} &= \widehat\Psi_i(X^\pi_{t_i}) +  \frac1{\Deli}\EE_i\left[\widehat\Uf_{i+1}(X^\pi_{t_{i+1}})\Delta^{W^k}_{i} \right] \\
     &= \frac1{\Deli}\int_{t_i}^{t_{i+1}}\widehat\Psi_i(X^\pi_{t_i})\D t +  \frac1{\Deli}\EE_i\left[\left(\widehat\Vv_{t_i} +\int_{t_{i}}^{t_{i+1}} \widehat{Z}_{t}^1 \D W^1_{t}+\int_{t_{i}}^{t_{i+1}} \widehat{Z}_{t}^2 \D W^2_{t} \right)\int_{t_i}^{t_{i+1}} \D W^1_t \right]  \\
-    &= \frac1{\Deli}\EE_i\left[\int_{t_i}^{t_{i+1}}\left( \widehat\Psi_i(X^\pi_{t_i}) + \widehat{Z}_{t}^1 \right)\D t \right],
+    &= \frac1{\Deli}\EE_i\left[\int_{t_i}^{t_{i+1}}\left( \widehat\Psi_i(X^\pi_{t_i}) + \widehat{Z}_{t}^1 \right)\D t \right]\,,
 \end{align*}
 and similarly, 
 $$
-\ZowT_{t_{i}} = \frac1{\Deli}\EE_i\left[\int_{t_i}^{t_{i+1}} \widehat{Z}_{t}^2 \D t \right].
+\ZowT_{t_{i}} = \frac1{\Deli}\EE_i\left[\int_{t_i}^{t_{i+1}} \widehat{Z}_{t}^2 \D t \right]\,.
 $$
 We consider convergence in terms of the following error:
 \[
 \begin{aligned}
-\mathscr{E}\left(\widehat{\Uf}, \widehat\Psi\right) \defEqual &\max _{i\in\{0, \dots, N-1\}} \EE^\Phi\left[\left|Y_{t_i}-\widehat{\Uf}_i\left(X^\pi_{t_i}\right)\right|^2\right]+\EE^\Phi\left[\sum_{i=0}^{N-1} \int_{t_i}^{t_{i+1}}\sum_{k=1}^2\left|Z_t^k-\widehat{\mathcal{Z}}^k_i\left(X^\pi_{t_i}\right)\right|^2 \D t\right],
+\mathscr{E}\left(\widehat{\Uf}, \widehat\Psi\right) \defEqual &\max _{i\in\{0, \dots, N-1\}} \EE^\Phi\left[\left|Y_{t_i}-\widehat{\Uf}_i\left(X^\pi_{t_i}\right)\right|^2\right]+\EE^\Phi\left[\sum_{i=0}^{N-1} \int_{t_i}^{t_{i+1}}\sum_{k=1}^2\left|Z_t^k-\widehat{\mathcal{Z}}^k_i\left(X^\pi_{t_i}\right)\right|^2 \D t\right]\,,
 \end{aligned}
 \]
 with $\widehat{\Zz}^1_{i}, \widehat{\Zz}^2_{i}$
@@ -659,7 +654,7 @@ Let $\Psi_K(\cdot; \Theta)\in\RWNN^{\relu}_K$ and $(X^\pi_{t_i}, V^\pi_{t_i})_{i
 for all $i\in\{0,\dots,N-1\}$,
 $$
 \left\|\EE_i^\Phi\left[\Dx\Psi_K(X^\pi_{t_{i+1}}; \Theta)\right]\right\| \leq L_1 
-\qquad \text{and} \qquad \left\|\EE_i^\Phi\left[\Dx^2\Psi_K(X^\pi_{t_{i+1}}; \Theta)\right]\right\| \leq L_2.
+\qquad \text{and} \qquad \left\|\EE_i^\Phi\left[\Dx^2\Psi_K(X^\pi_{t_{i+1}}; \Theta)\right]\right\| \leq L_2\,.
 $$
 \end{lemma}
 \begin{proof}
@@ -670,7 +665,7 @@ For all $x,y\in\RR^d$,
     &= \left\| \Theta \left(\brelu(\Am x+b)-\brelu(Ay+b)\right) \right\| \\
     &\leq \|\Theta\|_F\|\brelu(\Am x+b)-\brelu(Ay+b)\| \\
     &\leq \|\Theta\|_F\|\Am x-Ay\| \leq \|\Theta\|_F\|A\|_F\|x-y\|
-    \leq L_1\|x-y\|,
+    \leq L_1\|x-y\|\,,
 \end{align*}
 since $\relu$ is $1$-Lipschitz. 
 The estimator $\Theta$ has an explicit form~\eqref{eq:betaestimator} and its norm is finite, therefore $\Psi_K(\cdot; \Theta)$ is globally Lipschitz and its first derivative is bounded by $L_1>0$. 
@@ -680,12 +675,12 @@ for the component $j\in\{1,\dots,m\}$,
 \begin{align*}
     \EE_i^\Phi\left[\Dx^2 \Psi_K(X^\pi_{t_{i+1}}; \Theta)\right]_j %&= \int\Theta\delta_0(AX^\pi_{t_{i+1}}+)\D \PP \\
     &= \int \Theta\operatorname{diag}\left(e_{j}\right)\operatorname{diag}\left(\boldsymbol\delta_0\left(x-\frac12 V^\pi_{t_i}\Deli  + \sqrt{V_{t_i}}w\right)\right) \boldsymbol p_\Nn(w) \D w \\
-    &= \Theta \operatorname{diag}\left(e_{j}\right)\operatorname{diag}\left( \boldsymbol p_\Nn\left(0; x-\frac12 V^\pi_{t_i}\Deli, V^\pi_{t_i}\Deli \right)\right),
+    &= \Theta \operatorname{diag}\left(e_{j}\right)\operatorname{diag}\left( \boldsymbol p_\Nn\left(0; x-\frac12 V^\pi_{t_i}\Deli, V^\pi_{t_i}\Deli \right)\right)\,,
 \end{align*}
 since $\Delta^{B}_{i}\sim\Nn(0, \Deli)$ and $\boldsymbol p_\Nn$ is the Gaussian density applied component-wise. 
 Since the weights are sampled on a compact and  $\|\Theta\|$ is finite, then there exists $C>0$ such that
 $$
-\left\|\EE_i^\Phi\left[\Dx^2 \Psi_K(X^\pi_{t_{i+1}}; \Theta)\right]\right\| \leq C\|\Theta\|_F = L_2.
+\left\|\EE_i^\Phi\left[\Dx^2 \Psi_K(X^\pi_{t_{i+1}}; \Theta)\right]\right\| \leq C\|\Theta\|_F = L_2\,.
 $$
 \end{proof}
 From here the error bound of approximating $\widehat\Vv_{t_i}$, $\ZowO_{t_{i}}$ and $\ZowT_{t_{i}}$ with their RWNN approximators $\widehat\Uf_i$, $\widehat{\Zz}^1_{i}$ and $\widehat{\Zz}^2_{i}$ 
@@ -696,9 +691,9 @@ introduce
 \begin{equation*}
 \begin{array}{rlrl}
 \Zz^1_{i}(x) &\defEqual \Psi_i(x)+\rho_1\sqrt{V_{t_i}}\,\Dx\Uf_i(x), & 
-\Zz^2_{i}(x) &\defEqual \rho_2\sqrt{V_{t_i}}\,\Dx\Uf_i(x),\\
+\Zz^2_{i}(x) &\defEqual \rho_2\sqrt{V_{t_i}}\,\Dx\Uf_i(x)\,,\\
 \widehat{\Zz}^1_{i}(x) &\defEqual \widehat\Psi_i(x)+\rho_1\sqrt{V_{t_i}}\,\Dx\widehat\Uf_i(x), & 
-\widehat{\Zz}^2_{i}(x) &\defEqual \rho_2\sqrt{V_{t_i}}\,\Dx\widehat\Uf_i(x).
+\widehat{\Zz}^2_{i}(x) &\defEqual \rho_2\sqrt{V_{t_i}}\,\Dx\widehat\Uf_i(x)\,.
 \end{array}
 \end{equation*}
 
@@ -707,7 +702,7 @@ There exists $M>0$ such that,
 for any $i\in\{0,\dots,N-1\}$, $k=1,2$,
 $$
 \EE^\Phi\left[
-\left|\Zz_i^k(X^\pi_{t_i}) - \overline{\widehat{Z}}^{k}_{t_{i}}\right|^2\right] \leq\rho_k^2|\pi|^2 M.
+\left|\Zz_i^k(X^\pi_{t_i}) - \overline{\widehat{Z}}^{k}_{t_{i}}\right|^2\right] \leq\rho_k^2|\pi|^2 M\,.
 $$
 \end{lemma}
 
@@ -723,30 +718,30 @@ From~\eqref{eq:auxilaryProcesses} and~\eqref{eq:existenceAuxilary}, we have, for
     \begin{align*}
         \zowk_{i}(x) 
         &= \Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} \\
-        &\qquad + \frac{1}{\Deli} \EE^\Phi_{i}\left[\widehat{\Uf}_{i+1}\left(x - \frac{1}{2}V^{x,\pi}_{t_i}\Deli + \sqrt{V^{x,\pi}_{t_i}}\sqrt{\Deli}\left(\rho_1 \Rr^1 + \rho_2 \Rr^2\right)\right) \sqrt{\Deli} \Rr^k\right].
+        &\qquad + \frac{1}{\Deli} \EE^\Phi_{i}\left[\widehat{\Uf}_{i+1}\left(x - \frac{1}{2}V^{x,\pi}_{t_i}\Deli + \sqrt{V^{x,\pi}_{t_i}}\sqrt{\Deli}\left(\rho_1 \Rr^1 + \rho_2 \Rr^2\right)\right) \sqrt{\Deli} \Rr^k\right]\,.
     \end{align*}
     Notice that, while any sensible forward scheme for $\{V_t\}_{t\in[0,T]}$ does depend on a series of Brownian increments, $V^{x,\pi}_{t_i}$ only depends on $\left(\Delta^{W}_{i-1},\dots,\Delta^{W}_{0}\right)$, which are known at time~$t_i$. Thus, since usual derivative operations are available for approximately differentiable functions (Remark~\ref{rem:usualdiffrules}) multivariate integration by parts for Gaussian measures (a formulation of Isserlis' Theorem~\cite{Isserlis1918OnVariables}) yields
     $$
-    \zowk_{i}(x) = \Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} + \rho_k\sqrt{V_{t_i}}\EE^\Phi\left[\Dx \widehat \Uf_{i+1}\left(X^{x, \pi}_{t_{i+1}}\right)\right],
+    \zowk_{i}(x) = \Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} + \rho_k\sqrt{V_{t_i}}\EE^\Phi\left[\Dx \widehat \Uf_{i+1}\left(X^{x, \pi}_{t_{i+1}}\right)\right]\,,
     $$
     with corresponding derivatives
     $$
-    \Dx\zowk_{i}(x) = \Dx\Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} + \rho_k\sqrt{V_{t_i}}\EE^\Phi\left[\Dx^2 \widehat\Uf_{i+1}\left(X^{x,\pi}_{t_{i+1}}\right)\right].
+    \Dx\zowk_{i}(x) = \Dx\Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} + \rho_k\sqrt{V_{t_i}}\EE^\Phi\left[\Dx^2 \widehat\Uf_{i+1}\left(X^{x,\pi}_{t_{i+1}}\right)\right]\,.
     $$
 An application of the implicit function theorem then implies
 \begin{equation}\label{eq:derivativeVhat}
         \Dx \widehat v_i(x) =  \EE^\Phi_{i}\left[\Dx\widehat{\Uf}_{i+1}\left(X^{x,\pi}_{t_{i+1}}\right)\right] + \Deli \left\{\Dx \widehat f_i(x) + \Dr_y \widehat f_i(x)\Dx \widehat v_i(x)
-        + \sum_{k=1}^{2}\Dr_{z^k} \widehat f_i(x) \Dx \zowk_{i}(x)\right\},
+        + \sum_{k=1}^{2}\Dr_{z^k} \widehat f_i(x) \Dx \zowk_{i}(x)\right\}\,,
     \end{equation}
     where $\widehat f_i(x) \defEqual  f\left(t_i, \E^{x}, \widehat{v}_{i}(x), \zowO_{i}(x), \zowT_{i}(x)\right)$ and
     \begin{align*}
         & \Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} + \left(1-\Deli \Dr_y\widehat f_i(x)\right)\rho_k\sqrt{V^{\pi}_{t_i}}\Dx \widehat v_i(x) \\
-        & = \overline{\widehat{z}}^k_{i}(x)  + \rho_k\sqrt{V^{\pi}_{t_i}}\Deli \left(\Dx \widehat f_i(x) + \Dr_{z^1} \widehat f_i(x) \Dx \zowO_{i}(x) + \Dr_{z^2} \widehat f_i(x)\Dx \zowT_{i}(x)\right).
+        & = \overline{\widehat{z}}^k_{i}(x)  + \rho_k\sqrt{V^{\pi}_{t_i}}\Deli \left(\Dx \widehat f_i(x) + \Dr_{z^1} \widehat f_i(x) \Dx \zowO_{i}(x) + \Dr_{z^2} \widehat f_i(x)\Dx \zowT_{i}(x)\right)\,.
     \end{align*}
     Thus, for small enough $|\pi|$, since~$f$ is Lipschitz  (Assumption~\ref{ass:RWNNscheme}) and Lemma~\ref{lem:derivativeBounds}, 
     \begin{align*}
         \Psi_i\left(X^{x,\pi}_{t_{i+1}}\right)\ind_{\{k=1\}} + \rho_k\sqrt{V^{\pi}_{t_i}}\Dx \widehat v_i(x) &\leq \overline{\widehat{z}}^k_{i}(x) + \rho_k\Deli  \sqrt{V^{\pi}_{t_i}}\left(1+\Dx \zowO_{i}(x) + \Dx \zowT_{i}(x)\right) \\
-        &\leq \overline{\widehat{z}}^k_{i}(x) + \rho_k\Deli \sqrt{V^{\pi}_{t_i}}\left(1 + L_1 + \sqrt{2} L_2 \sqrt{V^{\pi}_{t_i}}\right).
+        &\leq \overline{\widehat{z}}^k_{i}(x) + \rho_k\Deli \sqrt{V^{\pi}_{t_i}}\left(1 + L_1 + \sqrt{2} L_2 \sqrt{V^{\pi}_{t_i}}\right)\,.
     \end{align*}
 Therefore
 \begin{align*}
@@ -757,7 +752,7 @@ Therefore
     |\rho_1\Deli |^2 \EE\left[\left|  \sqrt{V^\pi_{t_i}}\left(1+L_1+\sqrt{2}L_2\sqrt{V^\pi_{t_i}}\right)\right|^2 \right] \\
     &\qquad \leq 
     \rho_1^2|\pi|^2 \left\{\EE\left[\left|V^\pi_{t_i}\right| \right]\left(1 + L_1 + \sqrt{2}L_2\EE\left[\left|V^\pi_{t_i}\right| \right]\right)\right\} \\
-    & \qquad \leq \rho_1^2|\pi|^2 M,
+    & \qquad \leq \rho_1^2|\pi|^2 M\,,
 \end{align*}
 using Corollary~\ref{coro:diffexpectationeq2} in the second inequality and the boundedness of~$\EE[|V^{\pi}|]$ from Assumption~\ref{ass:discretisationbound}
 in the last line.
@@ -776,11 +771,11 @@ for all $i\in\{0, \dots, N-1\}$ and~$K$ hidden units, for some $C>0$, where~$C^*
 \begin{proof}[Proof of Lemma~\ref{lem:step_RWWN_bound}]
 Fix $i\in\{0,\dots,N-1\}$. Relying on the martingale representation in~\eqref{eq:martingaleRep} and Lemma~\ref{lem:sol_as_RWNN}, we can define the following loss function for the pair $(\Uf_i(\cdot; \Theta),\Psi_i(\cdot;\Xi))\in\RWNN^{\relu}_K$ and their corresponding parameters~$\Theta$ and~$\Xi$:
     \begin{equation}\label{eq:LHat_LTilde}
-        \widehat{L}_i(\Theta,\Xi) \defEqual  \widetilde{L}_i(\Theta,\Xi) + \EE^\Phi\left[\int_{t_i}^{t_{i+1}}\sum_{k=1}^2\left|\widehat Z_t^k - \Zowk_{t_{i}}\right|^2\right],
+        \widehat{L}_i(\Theta,\Xi) \defEqual  \widetilde{L}_i(\Theta,\Xi) + \EE^\Phi\left[\int_{t_i}^{t_{i+1}}\sum_{k=1}^2\left|\widehat Z_t^k - \Zowk_{t_{i}}\right|^2\right]\,,
     \end{equation}
     with
     \begin{align*}
-        \widetilde{L}_i(\Theta,\Xi) \defEqual  \EE^\Phi\bigg[\Big\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta) + \Deli  \Big\{ f\left(t_i, \E^{X^\pi_{t_i}}, \Uf(X^\pi_{t_i}; \Theta), \Zz^1_i(X^\pi_{t_i}; \Theta, \Xi), \Zz^2_i(X^\pi_{t_i}; \Theta, \Xi)\right) \\ - f\left(t_i, \E^{X^\pi_{t_i}}, \Vv_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \Big\} \Big\rvert^2\bigg] + \Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right].
+        \widetilde{L}_i(\Theta,\Xi) \defEqual  \EE^\Phi\bigg[\Big\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta) + \Deli  \Big\{ f\left(t_i, \E^{X^\pi_{t_i}}, \Uf(X^\pi_{t_i}; \Theta), \Zz^1_i(X^\pi_{t_i}; \Theta, \Xi), \Zz^2_i(X^\pi_{t_i}; \Theta, \Xi)\right) \\ - f\left(t_i, \E^{X^\pi_{t_i}}, \Vv_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \Big\} \Big\rvert^2\bigg] + \Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right]\,.
     \end{align*}
     Recall the following useful identity, valid for any
     $a, b\in\RR$ and $\chi>0$:
@@ -791,17 +786,17 @@ Fix $i\in\{0,\dots,N-1\}$. Relying on the martingale representation in~\eqref{eq
     \begin{small}
     \begin{align*}
         & \widetilde{L}_i(\Theta, \Xi) \leq \Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right] + (1 + C\Deli ) \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] \\ 
-        & + \left(1+\frac1{C\Deli }\right)\EE^\Phi\left[\left\lvert  f\left(t_i, \E^{X^\pi_{t_i}}, \Uf(X^\pi_{t_i}; \Theta), \Zz^1_i(X^\pi_{t_i}; \Theta, \Xi), \Zz^2_i(X^\pi_{t_i}; \Theta, \Xi)\right) - f\left(t_i, \E^{X^\pi_{t_i}}, \Vv_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \right\rvert^2\right].
+        & + \left(1+\frac1{C\Deli }\right)\EE^\Phi\left[\left\lvert  f\left(t_i, \E^{X^\pi_{t_i}}, \Uf(X^\pi_{t_i}; \Theta), \Zz^1_i(X^\pi_{t_i}; \Theta, \Xi), \Zz^2_i(X^\pi_{t_i}; \Theta, \Xi)\right) - f\left(t_i, \E^{X^\pi_{t_i}}, \Vv_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \right\rvert^2\right]\,.
     \end{align*}
     \end{small}%
     Now by the Lipschitz condition on~$f$ from Assumption~\ref{ass:RWNNscheme},
     \begin{equation*}
-        \widetilde{L}_i(\Theta, \Xi) \leq (1 + C\Deli ) \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + C\Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right].
+        \widetilde{L}_i(\Theta, \Xi) \leq (1 + C\Deli ) \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + C\Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right]\,.
     \end{equation*}
     For any $a, b\in\RR$, $\chi<0$, Inequality~\eqref{eq:Young} holds with the reverse sign, hence, with $\chi = -\gamma\Deli$,
     \begin{align*}
         & \widetilde{L}_i(\Theta, \Xi) \geq \Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right] + (1 - \gamma\Deli ) \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] \\
-        & - \frac1{\gamma\Deli }\EE^\Phi\left[\left\lvert  f\Big(t_i, \E^{X^\pi_{t_i}}, \Uf(X^\pi_{t_i}; \Theta), \Zz^1_i(X^\pi_{t_i}; \Theta, \Xi), \Zz^2_i(X^\pi_{t_i}; \Theta, \Xi)\Big) - f\left(t_i, \E^{X^\pi_{t_i}}, \Vv_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \right\rvert^2\right].
+        & - \frac1{\gamma\Deli }\EE^\Phi\left[\left\lvert  f\Big(t_i, \E^{X^\pi_{t_i}}, \Uf(X^\pi_{t_i}; \Theta), \Zz^1_i(X^\pi_{t_i}; \Theta, \Xi), \Zz^2_i(X^\pi_{t_i}; \Theta, \Xi)\Big) - f\left(t_i, \E^{X^\pi_{t_i}}, \Vv_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \right\rvert^2\right]\,.
     \end{align*}
     Again since~$f$ is Lipschitz, the arithmetic-geometric inequality implies
     \begin{align*}
@@ -809,30 +804,30 @@ Fix $i\in\{0,\dots,N-1\}$. Relying on the martingale representation in~\eqref{eq
         &\geq (1 - \gamma\Deli ) \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right]\\
         & \qquad - \frac{\Deli}\gamma\EE^\Phi\left[ L_f^2 \bigg\lvert \left\lvert \widehat\Vv_{t_i} - \Uf(X^\pi_{t_i}; \Theta)\right\rvert  + \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert\bigg\rvert^2\right] \\ 
         &\geq (1 - \gamma\Deli ) \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right]\\
-        & \qquad - \frac{3\Deli  L_f^2}{\gamma}\left( \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right] \right).
+        & \qquad - \frac{3\Deli  L_f^2}{\gamma}\left( \EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right] \right)\,.
     \end{align*}
     Taking $\gamma=6L_f^2$ gives
     \[
-        \widetilde{L}_i(\Theta, \Xi) \geq (1-C\Deli )\EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + \frac{\Deli}2\sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right].
+        \widetilde{L}_i(\Theta, \Xi) \geq (1-C\Deli )\EE^\Phi\left[\left\lvert \widehat \Vv_{t_i} - \Uf_i(X^\pi_{t_i}; \Theta)\right\rvert^2\right] + \frac{\Deli}2\sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right]\,.
     \]
 For a given $i\in\{0,\dots,N-1\}$ take $(\Theta^*, \Xi^*)\in\argmin_{\Theta, \Xi} \widehat{L}_i(\Theta, \Xi)$ so that $\widehat\Uf_i=\Uf_i(\cdot; \Theta^*)$ and $\widehat{\Zz}_i^k(\cdot) \defEqual  \Zz^k_i(\cdot; \Theta^*, \Xi^*)$. 
     From~\eqref{eq:LHat_LTilde}, $\widehat{L}_i$ and~$\widetilde{L}_i$ have the same minimisers, thus combining both bounds gives for all $(\Theta,\Xi)\in\RR^{m\times K}\times\RR^{m\times K}$,
     \begin{align*}
             &\left(1-C \Deli \right) \EE^\Phi\left[\left|\widehat \Vv_{t_{i}}-\widehat\Uf_{i}\left(X^\pi_{t_{i}}\right)\right|^{2}\right]+\frac{\Deli}2\sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \widehat{\Zz}_i^k\right\rvert^2\right] \leq \widetilde{L}_i(\Theta^*,\Xi^*)\leq \widetilde{L}_{i}(\Theta, \Xi) \\
-            &\leq\left(1+C \Deli \right) \EE^\Phi\left[\left|\widehat \Vv_{t_{i}}-\Uf_{i}\left(X^\pi_{t_{i}} ; \Theta\right)\right|^{2}\right]+C \Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right].
+            &\leq\left(1+C \Deli \right) \EE^\Phi\left[\left|\widehat \Vv_{t_{i}}-\Uf_{i}\left(X^\pi_{t_{i}} ; \Theta\right)\right|^{2}\right]+C \Deli \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right]\,.
     \end{align*}
     Letting $|\pi|$ be sufficiently small gives together with Lemma~\ref{lem:approxError}
     \begin{align*}
         \EE^\Phi\left[\left|\widehat \Vv_{t_{i}}-\widehat\Uf_{i}\left(X^\pi_{t_{i}}\right)\right|^{2}\right] &+ \Deli  \sum_{k=1}^2\EE^\Phi\left[ \left\lvert \Zowk_{t_{i}} - \Zz_i^k(X^\pi_{t_i}; \Theta, \Xi)\right\rvert^2\right] \\ 
         &\leq C \left\{\inf_\Theta\EE^\Phi\left[\left|\widehat v_i(X^\pi_{t_i})-\Uf_i(X^\pi_{t_i}; \Theta)\right|^2\right]
-         + |\pi|^3\left(\rho_1^2  + \rho_2^2\right)M\right\},
+         + |\pi|^3\left(\rho_1^2  + \rho_2^2\right)M\right\}\,,
     \end{align*}
     therefore
     \begin{align*}
     &\EE^\Phi\left[\left|\widehat{\Vv}_{t_{i}}-\widehat{\Uf}_{i}\left(X^\pi_{t_{i}}\right)\right|^{2}\right] + \Deli  \EE^\Phi\left[\sum_{k=1}^2\left|\Zowk_{t_{i}}-\widehat{\Zz}^k_{i}\left(X^\pi_{t_{i}}\right)\right|^{2}\right] \\
     & \qquad \leq C\left\{ \inf_\Theta\EE^\Phi\left[\left|\widehat v_i(X^\pi_{t_i})-\Uf_i(X^\pi_{t_i}; \Theta)\right|^2\right]
     + M|\pi|^3 \right\}
-    \leq C\left\{ \frac{C^{*}}{K}  + M|\pi|^3 \right\},
+    \leq C\left\{ \frac{C^{*}}{K}  + M|\pi|^3 \right\}\,,
     \end{align*}
     by Proposition~\ref{prop:UATRWNN} over any compact $\Qq = \{x\in\RR: |x|\leq Q\}$, $Q>0$.
 \end{proof}
@@ -845,13 +840,13 @@ We develop numerical approximations to European option prices given in~\eqref{eq
 \[
 f(t, x, y, z^1, z^2) = -r y
 \qquad \text {and} \qquad 
-g_{\textup{Call}}\left(x\right) = \left(\E^x-\mathscr{K}\right)^{+},
+g_{\textup{Call}}\left(x\right) = \left(\E^x-\mathscr{K}\right)^{+}\,,
 \]
 and discretising over the partition $\pi=\{0=t_0, t_1, \dots t_N=T\}$ for some~$N\in\NN$. 
 The precise discretisation schemes of the individual processes are given in their corresponding sections below. 
 We remark, however, that the approximated option price for a given Monte-Carlo sample can become (slightly) negative by construction so we add an absorption feature for both models:
 \begin{equation}\label{eq:absorption_scheme}
-Y^\pi_{t_i} \defEqual  \max\left\{0,\widetilde Y^\pi_{t_i}\right\}, \qquad \text{for } i\in\{0, \dots, N-1\},
+Y^\pi_{t_i} \defEqual  \max\left\{0,\widetilde Y^\pi_{t_i}\right\}, \qquad \text{for } i\in\{0, \dots, N-1\}\,,
 \end{equation}
 where $\big\{\widetilde Y^\pi_{t_i}\big\}_{i=0}^N$ denotes the approximation obtained through the RWNN scheme.
 
@@ -866,7 +861,7 @@ the higher the connectivity, the more inter-dependence between the neurons (see~
 In practice, however, too high a connectivity can lead to overfitting and poor generalisation. 
 Recall that our reservoir is given by
 \[
-\Phi_K: \RR^d \rightarrow \RR^K, \qquad x\mapsto\Phi_K(x)\defEqual\varrhob(\Am x+\bm),
+\Phi_K: \RR^d \rightarrow \RR^K, \qquad x\mapsto\Phi_K(x)\defEqual\varrhob(\Am x+\bm)\,,
 \]
 where only $\Am\in\RR^{K\times d}$ is affected by the connectivity parameter $c\in(0,1]$. 
 A value $c=1$ means that~$\Am$ is dense and fully determined by sampled weights. 
@@ -883,14 +878,14 @@ Despite its well-known limitations, it remains a reference and is the first mode
 Since it offers an analytical pricing formula as a benchmark for numerical results, it will serve as a proof of concept for our numerical scheme.
 Under the pricing measure~$\QQ$, the underlying assets $\Sb = (S^1,\ldots, S^d)$ satisfy
 \begin{equation}
-    \D S^j_t = r S^j_t \D t + \sigma_j S^j_t \D W^j_t, \quad \text{for } t\in[0,T],\; j\in\{1,\dots,d\},
+    \D S^j_t = r S^j_t \D t + \sigma_j S^j_t \D W^j_t, \quad \text{for } t\in[0,T],\; j\in\{1,\dots,d\}\,,
 \end{equation}
 where $\{W^j_t\}_{t\in[0,T]}$ are standard Brownian motions such that $\langle W^i, W^j \rangle = \rho_{i,j}\D t$, 
 with $\rho_{i,j}\in [-1,1]$, $r\geq 0$ is the risk-free rate and $\sigma_j>0$ is the volatility coefficient. 
 The corresponding $d$-dimensional option pricing PDE is then given by
 \begin{small}
 \begin{equation*}
-\frac{\partial u(t,\Sb)}{\partial t}+\sum_{j=1}^d r S^j \frac{\partial u(t,\Sb)}{\partial S^j} + \sum_{j=1}^d \frac{(\sigma_i S^j)^2}{2} \frac{\partial^2 u(t,\Sb)}{(\partial S^j)^2} + \sum_{j=1}^{d-1} \sum_{k=j+1}^d \rho_{j, k} \sigma_j \sigma_k S^j S^k \frac{\partial^2 u(t,\Sb)}{\partial S^j \partial S^k} = r u(t,\Sb),
+\frac{\partial u(t,\Sb)}{\partial t}+\sum_{j=1}^d r S^j \frac{\partial u(t,\Sb)}{\partial S^j} + \sum_{j=1}^d \frac{(\sigma_i S^j)^2}{2} \frac{\partial^2 u(t,\Sb)}{(\partial S^j)^2} + \sum_{j=1}^{d-1} \sum_{k=j+1}^d \rho_{j, k} \sigma_j \sigma_k S^j S^k \frac{\partial^2 u(t,\Sb)}{\partial S^j \partial S^k} = r u(t,\Sb)\,,
 \end{equation*}
 \end{small}
 for $t\in[0,T)$ with terminal condition~$u(T,\Sb_T) = g(S^1_T,\dots, S^d_T)$.
@@ -900,8 +895,8 @@ To use Algorithm~\ref{alg:markovian}, the process $S$ has to be discretised, for
 \left\{
 \begin{array}{ll}
     X^{\pi, j}_{t_{i+1}} &= X^{\pi, j}_{t_{i}}
-    + \left(r-\frac{\sigma_j^2}{2}\right)\Deli  + \sigma_j\Delta^{W^j}_{i}, \\
-    S^{\pi, j}_{t_{i+1}} &= \exp\left\{X^{\pi, j}_{t_{i+1}}\right\},
+    + \left(r-\frac{\sigma_j^2}{2}\right)\Deli  + \sigma_j\Delta^{W^j}_{i}\,, \\
+    S^{\pi, j}_{t_{i+1}} &= \exp\left\{X^{\pi, j}_{t_{i+1}}\right\}\,,
 \end{array}
 \right.
 \end{equation*}
@@ -916,7 +911,7 @@ We empirically analyse the error rate in terms of the number of hidden nodes $K$
 \begin{figure}[hbt!]%
     \centering
     \includegraphics[width=0.75\textwidth]{content/reschap2/Figures/BS_convergence_K_1e3.pdf}
-    \caption{Empirical convergence of MSE under Black-Scholes in terms of  the number of hidden nodes. Error bars mark 0.1 and 0.9 quantiles of 20 separate runs of the algorithm. The slope coefficient of the dashed line is obtained through regression of the means of individual runs, while the solid line represents $1/K$ convergence and is shown as a reference.}
+    \caption{Empirical convergence of MSE under Black-Scholes in terms of the number of hidden nodes. Error bars mark 0.1 and 0.9 quantiles of 20 separate runs of the algorithm. The slope coefficient of the dashed line is obtained through regression of the means of individual runs, while the solid line represents $1/K$ convergence and is shown as a reference.}
     \label{fig:BSconvergence}
 \end{figure}
 
@@ -1021,17 +1016,17 @@ The rough Bergomi model belongs to the recently developed class of rough stochas
 \left\{
 \begin{array}{rl}
 \displaystyle\frac{\D S_t}{S_t} &= r \D t + \sqrt{V_t} \D \left(\rho_1\D W^1_t + \rho_2 W^2_t\right), \\
-V_t &= \displaystyle \xi_0(t)\Ee\left( \eta\sqrt{2H} \int_0^t (t-u)^{H-\frac{1}{2}} \D W_u^1 \right),
+V_t &= \displaystyle \xi_0(t)\Ee\left( \eta\sqrt{2H} \int_0^t (t-u)^{H-\frac{1}{2}} \D W_u^1 \right)\,,
 \end{array}
 \right.
 \end{equation*}
 where $\eta>0$ and $H\in(0,1)$ is the Hurst parameter. 
 The corresponding BSPDE reads
 \begin{equation}\label{eq:roughBergomi}
--\D u(t,x) = \left[\frac{V_{t}}{2} \partial_x^{2} u(t, x)+\rho \sqrt{V_{t}} \partial_x \psi(t,x)-\frac{V_{t}}{2} \partial_x u(t,x)-r u(t,x)\right] \D t-\psi(t,x) \D W^1_{t},
+-\D u(t,x) = \left[\frac{V_{t}}{2} \partial_x^{2} u(t, x)+\rho \sqrt{V_{t}} \partial_x \psi(t,x)-\frac{V_{t}}{2} \partial_x u(t,x)-r u(t,x)\right] \D t-\psi(t,x) \D W^1_{t}\,,
 \end{equation}
 with terminal condition $u(T, x) = g_{\textup{Call}}\left(\E^{x+r T}\right)$. 
-While the existence of the solution  was only proven in the distributional sense~\cite{Bayer2022PricingSPDEs}, we nevertheless apply our RWNN~scheme.
+While the existence of the solution was only proven in the distributional sense~\cite{Bayer2022PricingSPDEs}, we nevertheless apply our RWNN~scheme.
 To test Algorithm~\ref{alg:nonmarkovian}, both the price and the volatility processes are discretised according to the Hybrid scheme developed in~\cite{Bennedsen2017HybridProcesses, McCrickerd2018TurbochargingModel}. 
 We set the rBergomi parameters as follows: $H=0.3$, $\eta=1.9$, $\rho=-0.7$, $r=0.01$, $T=1$, $S_0=1$ and choose the forward variance curve to be flat with $\xi_0(t) = 0.235\times 0.235$. Again, we are pricing an ATM vanilla Call option with $\mathscr K=S_0=1$. The number of discretisation steps is again $N=21$, the number of Monte-Carlo samples $n_{\mathrm{MC}}=50,000$ and the reservoir has $K\in\{10, 100, 1000\}$ nodes with connectivity $c=0.5$ in Section~\ref{sec:resutls_call_rB}. 
 

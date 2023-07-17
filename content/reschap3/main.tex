@@ -1,4 +1,5 @@
 \subsection{Introduction}
+
 Monte Carlo simulation is the  standard (if not the only) technique for most numerical problems in stochastic modelling.
 It has a long history and has been successfully applied in many fields, such as biology~\cite{Manly2018RandomizationBiology}, statistical Physics~\cite{Binder2012MontePhysics}, Finance~\cite{Glasserman1997CounterexamplesProbabilities} among others.
 The default order of magnitude for the variance of the estimator is~$\Oo(N^{-1/2})$ with~$N$ the number of sample paths.
@@ -61,7 +62,7 @@ The variance of the Monte-Carlo estimator based on iid samples of~$\widehat{G}_n
 $$
  \Var^{\QQ}\left[\widehat{G}_n Z^{-1}\right] 
  = \EE^{\QQ}\left[\widehat{G}_n^2 Z^{-2}\right]  - \EE^{\QQ}\left[\widehat{G}_n Z^{-1}\right]^2
- = \EE^{\PP}\left[\widehat{G}_n^2 Z^{-1}\right]  - \EE^{\PP}\left[\widehat{G}_n\right]^2.
+ = \EE^{\PP}\left[\widehat{G}_n^2 Z^{-1}\right]  - \EE^{\PP}\left[\widehat{G}_n\right]^2\,.
 $$
 If~$Z$ is chosen such that~$\EE^{\PP}[\widehat{G}_n^2 Z^{-1}] < \EE^{\PP}[\widehat{G}_n^2]$, 
 the variance is thus reduced.
@@ -69,7 +70,7 @@ Finding such~$Z$ however is usually hard, and
 we shall instead consider the approximation
 \begin{equation}\label{eq:proxy}
 \EE^{\PP}\left[\widehat{G}_n^2 Z^{-1}\right]
-\approx \eps\ln \EE^{\PP}\left[\exp\left\{\frac{1}{\eps}\ln(G_{\eps}^2 \ Z_{\eps}^{-1})\right\}\right], 
+\approx \eps\ln \EE^{\PP}\left[\exp\left\{\frac{1}{\eps}\ln(G_{\eps}^2 \ Z_{\eps}^{-1})\right\}\right]\,, 
 \end{equation}
 for small~$\eps>0$, for two random variables~$G_{\eps}$ and~$Z_{\eps}$ whose choices will be discussed later.
 The computation of this expression is then further simplified by the use of Varadhan's lemma (Theorem~\ref{thm:varadhan}), which casts the problem into a deterministic optimisation over the appropriate Cameron-Martin space.
@@ -93,8 +94,8 @@ We consider an asset price~$S\defEqual \{S_t\}_{t\in[0,T]}$ and the correspondin
 \begin{equation}\label{eq:log_price_dyn}
 \begin{array}{rll}
 \def\arraystretch{1.5}
-\D X_t & = \displaystyle -\frac{1}{2}V_t \D t + \sqrt{V_t} \D B_t, & X_0 = 0, \\
-\D V_t & = f(V_t)\D t + g(V_t)\D W_t, & V_0 = v_0>0,
+\D X_t & = \displaystyle -\frac{1}{2}V_t \D t + \sqrt{V_t} \D B_t\,, & X_0 = 0\,, \\
+\D V_t & = f(V_t)\D t + g(V_t)\D W_t\,, & V_0 = v_0>0\,,
 \end{array}
 \end{equation}
 where~$\Wf = (W,\Wp)$ is a standard two-dimensional Brownian motion, ${B\defEqual \rho W + \rrho\Wp}$ with correlation coefficient~$\rho \in (-1,1)$ and~$\rrho\defEqual \sqrt{1-\rho^2}$. The drift and diffusion coefficients of the volatility process satisfy~${f:\RR^+\rightarrow\RR}$ and~${g:\RR^+\rightarrow\RR^+}$ and Assumption~\ref{ass:SDE_coeffs} if not stated otherwise (e.g. in the case of large-time approximation in Section~\ref{sec:largetimeMDP} additional assumptions are required for ergodicity purposes). 
@@ -114,7 +115,7 @@ where~$\Wf = (W,\Wp)$ is a standard two-dimensional Brownian motion, ${B\defEqua
 \item The function~$g:\RR^+\rightarrow \RR^+$ is increasing, strictly positive outside origin.
 Furthermore, there exist~$K>0$ and~$p\geq\frac12$ such that, for all~$x,y\in\RR^+$,
 \[
-\left|g(x)-g(y)\right|\leq K |x-y|^p.
+\left|g(x)-g(y)\right|\leq K |x-y|^p\,.
 \]
 \end{enumerate}
 \end{assumption}
@@ -129,7 +130,7 @@ $G\in\Cc_T$,
 yielding the option price~$\EE[G(X)]$.
 Finding the optimal Radon-Nikodym derivative encoding the change of measure from~$\PP$ to~$\QQ$ is hard in general and we instead consider the particular class of change of measure
 \begin{equation}\label{eq:ZRadon}
-Z_T\defEqual \left.\frac{\D \QQ}{\D \PP}\right\vert_{\Ff_T} = \exp\left\{-\frac{1}{2}\|\dot{\hh}\|_{T}^2 + \dot{\hh}\ct \Wf^\top \right\},
+Z_T\defEqual \left.\frac{\D \QQ}{\D \PP}\right\vert_{\Ff_T} = \exp\left\{-\frac{1}{2}\|\dot{\hh}\|_{T}^2 + \dot{\hh}\ct \Wf^\top \right\}\,,
 \end{equation}
 which is well defined and satisfies~$\EE^{\PP}[Z_T]=1$
 whenever~$\hh \in \HH^0_T$.
@@ -200,7 +201,7 @@ let~$F:\Cc_T\rightarrow\RR^+$ be a smooth enough function so that Varadhan's Lem
 $$
 \Lf(\xm;\hm) = 2 F(x)  - \int_0^T\dot{\hm}_t \dot{\xm}_t\D t
 - \half\int_0^T\dot{\xm}_t^2\D t
-+ \half\int_0^T\dot{\hm}_t^2\D t.
++ \half\int_0^T\dot{\hm}_t^2\D t\,.
 $$
 However, in the small-time case, we actually have
 $$
@@ -214,7 +215,7 @@ In this small-time setting, the dual problem~\eqref{eq:Dual} then reads
  & = \sup_{\xm\in \Dd(\II^{X})} \inf_{\hm\in\HH^0_T} \Big\{2F(\xm) - \int_0^T\dot{\hm}_t \dot{\xm}_t\D t - \half\int_0^T\dot{\xm}_t^2\D t\Big\}\\
  & = \sup_{\xm\in \Dd(\II^{X})} \Big\{2F(\xm)
  - \half\int_0^T\dot{\xm}_t^2\D t
- - \sup_{\hm\in\HH^0_T}\int_0^T\dot{\hm}_t \dot{\xm}_t\D t\Big\}.
+ - \sup_{\hm\in\HH^0_T}\int_0^T\dot{\hm}_t \dot{\xm}_t\D t\Big\}\,.
 \end{align*}
 Clearly, the path~$\hm$ can be multiplied by any arbitrarily large positive constant to increase the inner supremum, 
 and therefore the optimisation does not admit a maximiser.
@@ -264,8 +265,8 @@ We start with the small-noise approximation of~\eqref{eq:log_price_dyn}:
 \begin{equation}\label{eq:log_price_dynNoise}
 \left\{
 \begin{array}{rll}
-\D X_t^\eps & = \displaystyle  -\frac{1}{2}V_t^\eps \D t + \seps\sqrt{V_t^\eps} \D B_t, & X_0^\eps = 0,\\
-\D V_t^\eps & = \displaystyle   f(V_t^\eps)\D t + \seps g(V_t^\eps)\D W_t, & V_0^\eps = v_0.
+\D X_t^\eps & = \displaystyle  -\frac{1}{2}V_t^\eps \D t + \seps\sqrt{V_t^\eps} \D B_t\,, & X_0^\eps = 0\,,\\
+\D V_t^\eps & = \displaystyle   f(V_t^\eps)\D t + \seps g(V_t^\eps)\D W_t\,, & V_0^\eps = v_0\,.
 \end{array}
 \right.
 \end{equation}
@@ -312,8 +313,8 @@ Both~$f,g:\RR\to\RR$ have at most linear growth at infinity and~$f(0)>0$.
 Let~$V^{\eps}$ solve~\eqref{eq:log_price_dynNoise} on~$[0, T]$ with~$v_0>0$. Then under Assumptions~\ref{ass:SDE_coeffs} and~\ref{ass:Baldi} the process~$V^\eps$ satisfies an LDP with good rate function
 \[
 \IIV(\psi)= \begin{cases}
-\displaystyle \frac{1}{2} \int_{0}^{T} \dot{w}_t^2 \D t, 
-& \text{if } w\in\HH^0_T, \dot{\psi}_t = f(\psi_t) + g(\psi_t)\dot{w}_t, \psi_0 = v_0, \\ 
+\displaystyle \frac{1}{2} \int_{0}^{T} \dot{w}_t^2 \D t\,, 
+& \text{if } w\in\HH^0_T\,, \;\dot{\psi}_t = f(\psi_t) + g(\psi_t)\dot{w}_t\,, \;\psi_0 = v_0\,, \\ 
 +\infty, & \text{otherwise}.
 \end{cases}
 \]
@@ -324,7 +325,7 @@ we require the notion of \textit{uniform exponential tightness}.
 \begin{definition}[Definition~1.2 in \cite{Garcia2007AIntegrals}]\label{def:UET}
 Let~$\Uu$ denote the space of simple, real-valued, adapted processes~$H$ such that~$\sup _{t \geq 0}\left|H_{t}\right| \leq 1$. A sequence of semi-martingales~$\left\{M^{\eps}\right\}_{\eps > 0}$ is uniformly exponentially tight (UET) if, for every~$c, t>0$, there exists~$K_{c, t}>0$ such that
 \[
-\limsup _{\eps \downarrow 0} \eps \ln \left(\sup _{H \in \Uu} \PP\left[\sup _{s \leq t}\left|\int_{0}^{s} H_{u-} \D M_{u}^{\eps}\right| \geq K_{c, t}\right]\right) \leq-c .
+\limsup _{\eps \downarrow 0} \eps \ln \left(\sup _{H \in \Uu} \PP\left[\sup _{s \leq t}\left|\int_{0}^{s} H_{u-} \D M_{u}^{\eps}\right| \geq K_{c, t}\right]\right) \leq-c \,.
 \]
 \end{definition}
 \begin{theorem}[Theorem~1.2 in \cite{Garcia2007AIntegrals}]\label{thm:Garcia}
@@ -350,7 +351,7 @@ with
 Moreover, we also have
 $\{V^{\eps}, Y^{\eps}\}\sim\LDP\left(\II^{V,Y},\Cc\left([0,T]; \RR^2\right)\right)$, where
 $$
-\II^{V,Y}(\psi, \phi)=\inf \left\{\IIV(\psi) + \IIW(w): \phi = \int_{0}^{\cdot} \sqrt{\psi_{t}} \dot{w}_{t} \D t\right\}, %-\frac12\int_0^\cdot\psi_t\D t
+\II^{V,Y}(\psi, \phi)=\inf \left\{\IIV(\psi) + \IIW(w): \phi = \int_{0}^{\cdot} \sqrt{\psi_{t}} \dot{w}_{t} \D t\right\}\,, %-\frac12\int_0^\cdot\psi_t\D t
 $$
 with
 $\IIW(w) = \frac{1}{2} \int_{0}^{T} \dot{w}_{t}^{2} \D t$
@@ -385,7 +386,7 @@ and start with the former.\\
 \paragraph{\textit{Deterministic change of drift}}
 The drift is of the form
 $$ 
-\left.\frac{\D\QQ}{\D\PP}\right|_{\Ff_T} \defEqual \exp\left\{\dot{\hh}\cT \Wf^\top - \frac{1}{2}\|\dot{\hh}\|_{T}^2\right\},
+\left.\frac{\D\QQ}{\D\PP}\right|_{\Ff_T} \defEqual \exp\left\{\dot{\hh}\cT \Wf^\top - \frac{1}{2}\|\dot{\hh}\|_{T}^2\right\}\,,
 $$
 with~$\hh\in \HH_T^0$.
 %We let~$G\in\Cc_T$ a continuous payoff function and~$F=\ln|G|$. 
@@ -405,7 +406,7 @@ L(\hh) = \sup\limits_{\xx\in \HH_T^0}
 \Lf(\xx,\hh),
 \qquad\text{with}\qquad
 \Lf(\xx,\hh) \defEqual 2 F(\varphi_T(\xx)) - \dot{\hh}\cT \xx^\top
- + \half\left(\|\dot{\hh}\|_{T}^2 - \|\dot{\xx}\|_{T}^2\right),
+ + \half\left(\|\dot{\hh}\|_{T}^2 - \|\dot{\xx}\|_{T}^2\right)\,,
 ~$$
 where~$\varphi(\xx)$ is the unique solution on~$[0,T]$ to
 $$
@@ -419,20 +420,20 @@ To solve the dual problem~\eqref{eq:Dual}, the inner optimisation reads
 \inf_{\hh\in\HH_T^0}\Lf(\xx,\hh) &= \inf_{\hh\in\HH_T^0} \left\{2F(\varphi_T(\xx)) - \dot{\hh}\cT \xx^\top
  + \half\left(\|\dot{\hh}\|_{T}^2 - \|\dot{\xx}\|_{T}^2\right)\right\} \\
 &= 2F(\varphi_T(\xx)) + \inf_{\hh\in\HH_T^0}\left\{\frac{\|\dot{\hh}\|_{T}^2}{2} -\dot{\hh}\cT \xx^\top - \frac{\|\dot{\xx}\|_{T}^2}{2}\right\} \\
-&= 2F(\varphi_T(\xx)) - \|\dot{\xx}\|_{T}^2,
+&= 2F(\varphi_T(\xx)) - \|\dot{\xx}\|_{T}^2\,,
 \end{align*}
 % As shown in~\cite{Robertson2010SampleModels}, The dual problem~\eqref{eq:Dual}
 and can then be solved as 
 \begin{equation}\label{eq:detoptdrift_dual}
 \hh^* = \argmax\limits_{\xx\in \HH_T^0} 
-\left\{F(\varphi_T(\xx)) - \frac{\|\dot{\xx}\|_{T}^2}{2}\right\},
+\left\{F(\varphi_T(\xx)) - \frac{\|\dot{\xx}\|_{T}^2}{2}\right\}\,,
 \end{equation}
 which is an asymptotically optimal change of drift in the sense of Definition~\ref{def:asyoptdrift}.\\
 
 \paragraph{\textit{Stochastic change of drift}}
 We now consider the stochastic change of measure 
 $$
-\left.\frac{\D\QQ}{\D\PP}\right|_{\Ff_T} \defEqual \exp\left\{\left(\dot{\hh}\sqrt{V}\right)\cT \Wf^\top - \frac{1}{2}\left\|\dot{\hh}\sqrt{V}\right\|_{T}^2\right\},
+\left.\frac{\D\QQ}{\D\PP}\right|_{\Ff_T} \defEqual \exp\left\{\left(\dot{\hh}\sqrt{V}\right)\cT \Wf^\top - \frac{1}{2}\left\|\dot{\hh}\sqrt{V}\right\|_{T}^2\right\}\,,
 $$
 with~$\dot{\hh}$ a deterministic function of finite variation such that~$\EE[\frac{\D\QQ}{\D \PP}]=1$;
 this holds for example under the Novikov condition~$\EE\left [\exp(\frac{1}{2}\int_0^T \|\dot{\hh}(t)\|^2 V_t \D t)\right ]<\infty$. 
@@ -441,20 +442,20 @@ The minimisation problem~\eqref{eq:MinProblem} now reads
 \begin{align*}
 L(\hh) &=\limsup\limits_{\eps\downarrow 0}\eps
 \ln\EE\left[\exp\left\{\frac{1}{\eps}\left(2F(X^{\eps}) - (\dot{\hh}\sqrt{V^{\eps}}) \cT \Wf^{\eps\top} + \frac{1}{2}\|\dot{\hh}\sqrt{V^\eps}\|_{T}^2\right)\right\}\right]\\
-&= \limsup\limits_{\eps\downarrow 0}\eps\ln\EE\left[\exp\left\{\frac{1}{\eps}\left(2F(X^{\eps}) - \dot{\hh} \cT \Yf^{\eps\top} + \frac{1}{2}\|\dot{\hh}\sqrt{V^\eps}\|_{T}^2\right)\right\}\right].
+&= \limsup\limits_{\eps\downarrow 0}\eps\ln\EE\left[\exp\left\{\frac{1}{\eps}\left(2F(X^{\eps}) - \dot{\hh} \cT \Yf^{\eps\top} + \frac{1}{2}\|\dot{\hh}\sqrt{V^\eps}\|_{T}^2\right)\right\}\right]\,.
 \end{align*}
 Since~$F$ is continuous, the term inside the exponential is a continuous function of~$\{V^{\eps},\Yf^{\eps}\}$. 
 Varadhan's Lemma then yields
 $L(\hh) = \sup_{\xx\in \HH_T^0}\Lf(\xx,\hh)$,
 with 
 $$
-\Lf(\xx,\hh) = 2F(\varphi_T(\xx)) - \left(\dot{\hh}\sqrt{\psi(\xx)}\right)\cT \xx^\top + \frac{\|\dot{\hh}\sqrt{\psi(\xx)}\|_{T}^2}{2} - \frac{\|\dot{\hh}\|_{T}^2}{2},
+\Lf(\xx,\hh) = 2F(\varphi_T(\xx)) - \left(\dot{\hh}\sqrt{\psi(\xx)}\right)\cT \xx^\top + \frac{\|\dot{\hh}\sqrt{\psi(\xx)}\|_{T}^2}{2} - \frac{\|\dot{\hh}\|_{T}^2}{2}\,,
 $$
 where~$\xx = (x_1 \; x_2)^\top$ and~$\{\varphi(\xx),\psi(\xx)\}$ are unique solutions on~$[0,T]$ to
 $$
 \dot{\varphi}_t(\xx) = -\frac{1}{2}\psi_t(\xx) + \sqrt{\psi_t(\xx)} \vrho\dot{\xx}(t)^\top,
 \qquad\text{with}\qquad
-\dot{\psi}_t(\xx) = f(\psi_t(\xx)) + g(\psi_t(\xx)) \dot{x}_1(t),
+\dot{\psi}_t(\xx) = f(\psi_t(\xx)) + g(\psi_t(\xx)) \dot{x}_1(t)\,,
 $$
 with initial conditions~$(\varphi_0,\psi_0) = (0,v_0)$. 
 For  the dual problem, we search for a change of measure with~$\hh$ such that:
@@ -465,7 +466,7 @@ For  the dual problem, we search for a change of measure with~$\hh$ such that:
 \left\{F(\varphi_T(\xx)) - \frac{\|\dot{\xx}\|_{T}^2}{2}\right\},\\
 \dot{\varphi}_t(\xx) & = \displaystyle -\frac{1}{2}\psi_t(\xx) + \sqrt{\psi_t(\xx)} \vrho \dot{\xx}(t)^\top, & \varphi_0 = 0,\\
 \dot{\psi}_t(\xx) & = \displaystyle f(\psi_t(\xx)) + g(\psi_t(\xx)) \dot{x}_1(t), & \psi_0 = v_0,\\
-\hh^* & = \displaystyle \int_{0}^{\cdot}\frac{\dot{\xx}^*(t)}{\sqrt{\psi_t(\xx)}}\D t.
+\hh^* & = \displaystyle \int_{0}^{\cdot}\frac{\dot{\xx}^*(t)}{\sqrt{\psi_t(\xx)}}\D t\,.
 \end{array}
 \right.
 \end{equation}
@@ -485,7 +486,7 @@ namely the optimisation problem~\eqref{eq:detoptdrift_dual} since the solutions 
 \hh^* & = \displaystyle \argmax\limits_{\xx\in \HH_T^0} 
 \left\{F\left(\int_0^T\vartheta_t \dot{\varphi}_t(\xx) \D t\right) - \frac{\|\dot{\xx}\|_{T}^2}{2}\right\},\\
 \dot{\varphi}_t(\xx) & = \displaystyle -\frac{1}{2}\psi_t(\xx) + \sqrt{\psi_t(\xx)}\vrho \dot{\xx}(t)^\top, & \varphi_0 = 0,\\
-\dot{\psi}_t(\xx) & = \displaystyle f(\psi_t(\xx)) + g(\psi_t(\xx)) \dot{x}_1(t), & \psi_0 = v_0.
+\dot{\psi}_t(\xx) & = \displaystyle f(\psi_t(\xx)) + g(\psi_t(\xx)) \dot{x}_1(t), & \psi_0 = v_0\,.
 \end{array}
 \right.
 \end{equation*}
@@ -495,7 +496,7 @@ Let~$\xx\in \HH_T^0 \times \HH_T^0$. The function~$\mathfrak{K}:\HH_T^0 \times \
 $$
 \dot{\varphi}_t(\xx)  = -\frac{1}{2}\psi_t(\xx) + \sqrt{\psi_t(\xx)}\vrho \dot{\xx}(t)^\top,
 \qquad\text{with}\qquad
-\dot{\psi}_t(\xx) = f(\psi_t(\xx)) + g(\psi_t(\xx)) \dot{x}_1(t),
+\dot{\psi}_t(\xx) = f(\psi_t(\xx)) + g(\psi_t(\xx)) \dot{x}_1(t)\,,
 $$
 with initial conditions~$\varphi_0 = 0$ and~$\psi_0 = v_0$, is well defined and is a bijection.
 \end{lemma}
@@ -525,7 +526,7 @@ Using Lemma~\ref{lem:Simplify}, we can substantially simplify the optimisation p
 \begin{equation}\label{eq:transformation_UZ}
 U(\psi) = \frac{\dot{\psi} - f(\psi)}{g(\psi)}
 \qquad\text{and}\qquad
-Z(\varphi,\psi) = \frac{\dot{\varphi} + \frac{1}{2}\psi}{\sqrt{\psi}},
+Z(\varphi,\psi) = \frac{\dot{\varphi} + \frac{1}{2}\psi}{\sqrt{\psi}}\,,
 \end{equation}
 which stems from the two components of~$\mathfrak{K}(\xx)$. The optimisation problem becomes
 \begin{equation*}
@@ -533,7 +534,7 @@ which stems from the two components of~$\mathfrak{K}(\xx)$. The optimisation pro
 \begin{array}{rl}
 \varphi^{*},\psi^{*} &= \argmax\limits_{\{\varphi,\psi\} \in \HH_T^0\times \HH_T^{v_0,+}} \left\{F\left(\int_0^T\vartheta_t \dot{\varphi}_t \D t\right) - \frac{1}{2}\int_0^T \left\{U(\psi_t)^2 + \left(\frac{Z(\varphi_t,\psi_t) - \rho U(\psi_t)}{\brho}\right)^2\right\}\D t\right\}\,,\\
 \dot{h}_1^{*} &= U(\psi^{*}), \\
-\dot{h}_2^{*} &= \displaystyle \frac{Z(\varphi^{*},\psi^{*}) - \rho U(\psi^{*})}{\brho}.
+\dot{h}_2^{*} &= \displaystyle \frac{Z(\varphi^{*},\psi^{*}) - \rho U(\psi^{*})}{\brho}\,.
 \end{array}
 \right.
 \end{equation*}
@@ -544,11 +545,11 @@ This allows us to apply Euler-Lagrange to the problem seen as an optimisation ov
 \displaystyle \frac{\D}{\D t}\left\{
 \frac{Z - \rho U}{\vartheta \brho^2\sqrt{\psi}} \right\} &= 0, \\[10pt]
 \displaystyle \frac{\D}{\D t}\left\{ \frac{U}{g(\psi)} - \frac{\rho}{\brho^2}\frac{(Z - \rho U)}{g(\psi)} \right\}
-&= \displaystyle - \frac{U}{g^2(\psi)}\zeta + \frac{Z-\rho U}{\brho^2}\left\{ \frac{1}{2\sqrt{\psi}} - \frac{Z}{2\psi} + \frac{\rho}{g^2(\psi)}\zeta \right\},
+&= \displaystyle - \frac{U}{g^2(\psi)}\zeta + \frac{Z-\rho U}{\brho^2}\left\{ \frac{1}{2\sqrt{\psi}} - \frac{Z}{2\psi} + \frac{\rho}{g^2(\psi)}\zeta \right\}\,,
 \end{array}
 \right.
 \end{equation}
-where~$\zeta \defEqual f'(\psi)g(\psi) + (\dot{\psi}-f(\psi))g'(\psi)$. This system of equations is still hard to solve for general~$f$ and~$g$, 
+where~$\zeta \defEqual f'(\psi)g(\psi) + (\dot{\psi}-f(\psi))g'(\psi)$. This system of equations is still hard to solve for general~$f$ and~$g$ 
 but can be solved for the Heston model,
 as done in Section~\ref{sec:Heston} below.
 
@@ -557,9 +558,9 @@ as done in Section~\ref{sec:Heston} below.
 Applying the mapping~$t\mapsto \eps t$ to~\eqref{eq:log_price_dyn} yields
 \begin{equation}\label{eq:log_price_dynSmallTime}
 \begin{array}{rll}
-\D X_t^\eps & = \displaystyle  -\frac{1}{2}\eps V_t^\eps \D t + \seps\sqrt{V_t^\eps} \D B_t,
- & X_0^\eps = 0,\\
-\D V_t^\eps & = \displaystyle \eps f(V_t^\eps)\D t + \sqrt{\eps}g(V_t^\eps) \D W_t, & V_0 = v_0.
+\D X_t^\eps & = \displaystyle  -\frac{1}{2}\eps V_t^\eps \D t + \seps\sqrt{V_t^\eps} \D B_t\,,
+ & X_0^\eps = 0\,,\\
+\D V_t^\eps & = \displaystyle \eps f(V_t^\eps)\D t + \sqrt{\eps}g(V_t^\eps) \D W_t\,, & V_0 = v_0\,.
 \end{array}
 \end{equation}
 %with~$\Wf^{\eps} = \sqrt{\eps}\Wf$, and~$B^{\eps} = \vrho\cdot\Wf^\eps^\top$. 
@@ -572,23 +573,23 @@ The process~$\eps\int_0^\cdot f(V_t^\eps) \D t$ is exponentially equivalent to z
 \begin{proof}
 Markov's inequality implies that, for any~$\delta>0$,
 \[
-\PP\left[ \int_0^T f(V_s^\eps)\D s > \frac{2\delta}{\eps} \right] \leq \exp\left\{ -\frac{2\delta}{\eps^2}\right\}\EE\left[ \exp\left\{ \frac 1\eps \int_0^T f(V_s^\eps)\D s \right\} \right],
+\PP\left[ \int_0^T f(V_s^\eps)\D s > \frac{2\delta}{\eps} \right] \leq \exp\left\{ -\frac{2\delta}{\eps^2}\right\}\EE\left[ \exp\left\{ \frac 1\eps \int_0^T f(V_s^\eps)\D s \right\} \right]\,,
 \]
 and we are therefore left to show that 
 $\limsup_{\eps\downarrow 0}\eps\ln\EE\left[ \exp\left\{ \frac 1\eps \int_0^T f(V_s^\eps)\D s \right\} \right]$
 is finite.
 To that end, we apply the integral Jensen inequality
 \[
-\EE\left[ \exp\left\{ \frac 1\eps \int_0^T f(V_s^\eps)\D s \right\} \right] \leq \frac{1}{T} \int_0^T \EE\left[ \exp\left\{ \frac{T}\eps f(V_s^\eps) \right\} \right] \D s,
+\EE\left[ \exp\left\{ \frac 1\eps \int_0^T f(V_s^\eps)\D s \right\} \right] \leq \frac{1}{T} \int_0^T \EE\left[ \exp\left\{ \frac{T}\eps f(V_s^\eps) \right\} \right] \D s\,,
 \]
 and the linear growth condition from the global Lipschitz condition in Assumption~\ref{ass:SDE_coeffs}:
 \begin{align*}
 \frac{1}{T} \int_0^T \EE\left[ \exp\left\{ \frac{T}\eps f(V_s^\eps) \right\} \right] \D s &\leq \frac{1}{T} \int_0^T \EE\left[ \exp\left\{ \frac{T}\eps\left(1 + |V_s^\eps| \right) \right\} \right] \D s \\
-&= \frac{1}{T}\E^{\frac{T}{\eps}} \int_0^T \EE\left[ \exp\left\{ \frac{T}\eps |V_s^\eps| \right\} \right] \D s.
+&= \frac{1}{T}\E^{\frac{T}{\eps}} \int_0^T \EE\left[ \exp\left\{ \frac{T}\eps |V_s^\eps| \right\} \right] \D s\,.
 \end{align*}
 Next, by the properties of the logarithm and the supremum
 \begin{align*}
-& \limsup_{\eps\downarrow 0}\eps\ln\EE\left[ \exp\left\{ \frac 1\eps \int_0^T f(V_s^\eps)\D s \right\} \right] \\ & \qquad \qquad \leq \limsup_{\eps\downarrow 0}\left\{\eps\ln\frac1T\right\} + T + \limsup_{\eps\downarrow 0}\eps\ln\left\{\int_0^T  \EE\left[ \exp\left\{ \frac{T}\eps |V_s^\eps| \right\} \right] \D s\right\}.
+& \limsup_{\eps\downarrow 0}\eps\ln\EE\left[ \exp\left\{ \frac 1\eps \int_0^T f(V_s^\eps)\D s \right\} \right] \\ & \qquad \qquad \leq \limsup_{\eps\downarrow 0}\left\{\eps\ln\frac1T\right\} + T + \limsup_{\eps\downarrow 0}\eps\ln\left\{\int_0^T  \EE\left[ \exp\left\{ \frac{T}\eps |V_s^\eps| \right\} \right] \D s\right\}\,.
 \end{align*}
 We can now apply Gronwall's Lemma to the last term, which yields for some~$C>0$,
 \begin{align*}
@@ -611,7 +612,7 @@ Under Assumption~\ref{ass:small_time_LDP},
 the solution~$V^\eps$ to~\eqref{eq:log_price_dynNoise}
 satisfies~$\left\{V^{\eps}\right\}\sim\LDP(\IIV, \Cc([0, T]; \RR^{+}))$ with
 $$
-\IIV(\varphi)=\frac{1}{2 \xi^{2}} \int_{0}^{T}\left(\frac{\dot{\varphi}_{t} - K\varphi_{t}}{\varphi_{t}^{\gamma}}\right)^{2} \ind_{\left\{\varphi_{t} \neq 0\right\}} \D t.
+\IIV(\varphi)=\frac{1}{2 \xi^{2}} \int_{0}^{T}\left(\frac{\dot{\varphi}_{t} - K\varphi_{t}}{\varphi_{t}^{\gamma}}\right)^{2} \ind_{\left\{\varphi_{t} \neq 0\right\}} \D t\,.
 $$
 \end{theorem}
 Therefore by setting~$K=0$, we can use the methodology from the previous section since the LDPs are the same. Similarly, as before, we only consider the deterministic change of drift, since the stochastic case is very similar.
@@ -625,8 +626,8 @@ where~$\varphi_t(\xx)$ is the unique solution on~$[0,T]$ to
 \begin{equation*}
 \left\{
 \begin{array}{rll}
-\varphi_t(\xx) & = \displaystyle \sqrt{\psi_t(\xx)}\vrho \dot{\xx}(t)^\top, & \varphi_0(\xx) = 0,\\
-\dot{\psi}_t(\xx) & =  \displaystyle g(\psi_t(\xx)) \dot{x}_1(t), & \psi_0 = v_0.
+\varphi_t(\xx) & = \displaystyle \sqrt{\psi_t(\xx)}\vrho \dot{\xx}(t)^\top\,, & \varphi_0(\xx) = 0\,,\\
+\dot{\psi}_t(\xx) & =  \displaystyle g(\psi_t(\xx)) \dot{x}_1(t)\,, & \psi_0 = v_0\,.
 \end{array}
 \right.
 \end{equation*}
@@ -684,7 +685,7 @@ ${\overline{X}_t = -\frac{1}{2}\int_0^t\bar\psi_s\D s}$,
 so that the approximation~\eqref{eq:MDPSmallNoiseGeneral}
 reads, for any~$t\in [0,T]$,
 \begin{equation}\label{eq:MDPSmallNoiseX}
-\widetilde{X}^\eps_t = -\frac{1}{2} \int_0^t\bar\psi_s \D s + \eps^{-\alpha}\left(X^{\eps}_t + \frac{1}{2} \int_0^t\bar\psi_s \D s\right).
+\widetilde{X}^\eps_t = -\frac{1}{2} \int_0^t\bar\psi_s \D s + \eps^{-\alpha}\left(X^{\eps}_t + \frac{1}{2} \int_0^t\bar\psi_s \D s\right)\,.
 \end{equation}
 
 \subsection{Small-noise moderate deviations}\label{sec:SmallNoiseMDP}
@@ -697,12 +698,12 @@ For the small-noise approximation~\eqref{eq:log_price_dynNoise}, the process~$\w
 + \eps^{-\alpha}\left(-\frac{1}{2}V_t^\eps \D t + \seps\sqrt{V_t^\eps} \D B_t\right)\\
  & = \displaystyle
  -\frac{1}{2}\bar\psi_t\D t - \frac{1}{2}\eps^{-\alpha}\left( V_t^\eps - \bar\psi_t\right) \D t + 
-\eps^{\half-\alpha}\sqrt{V_t^\eps} \D B_t,
+\eps^{\half-\alpha}\sqrt{V_t^\eps} \D B_t\,,
 \end{align*}
 starting at~$\widetilde{X}^{\eps}_0 = 0$, where the small-noise approximation~\eqref{eq:log_price_dynNoise} of the variance reads
 $$
-\D V_t^{\eps} = \displaystyle  f(V_t^{\eps})\D t + \seps g(V_t^{\eps})\D W_t, 
-\qquad V_0^{\eps} = v_0.
+\D V_t^{\eps} = \displaystyle  f(V_t^{\eps})\D t + \seps g(V_t^{\eps})\D W_t\,, 
+\qquad V_0^{\eps} = v_0\,.
 $$
 This transformation creates a discrepancy between the decreasing speeds of~$\widetilde{X}^{\eps}$ and that of~$V^{\eps}$ (speed of convergence to zero of the diffusion part of the volatility process i.e.~$\eps^{\frac{1}{2} - \alpha}$ versus~$\eps^{\frac{1}{2}}$). Since~$\widetilde{X}^{\eps}$ is our reference, %by Lemma~\ref{degenerate}, looking at the processes according to LDPs with speed~$\eps^{1 -2\alpha}$,~$V^\eps$ is exponentially equivalent to~$\bar\psi$. Let us also note that moderate deviations of~$V^\eps$ are central to obtaining large deviations for~$\widetilde{X}^\eps$. \\
 we adjust the speed of the LDP via~$\eps^{\frac{1 - 2\alpha}{2}}\mapsto \seps$. With 
@@ -713,8 +714,8 @@ we obtain the system
 \begin{array}{rll}
 \D \widetilde{X}^\eps_t & = \displaystyle -\frac{1}{2}\bar\psi_t \D t -\frac{1}{2}\eta^\eps_t \D t + \sqrt{\eps}\sqrt{V_t^\eps} \D B_t, 
 & \widetilde{X}_0^\eps = 0,\\
-\D \eta_{t}^\eps & = \displaystyle \eps^{-\beta}(f(V_t^\eps)-f(\bar\psi_t))\D t + \sqrt{\eps}g(V_t^\eps)\D W_t, & \eta_{0}^\eps = 0,\\
-\D V_t^{\eps,\beta} & = \displaystyle  f(V_t^{\eps,\beta})\D t + \eps^{\frac{1}{2} + \beta}g(V_t^{\eps,\beta})\D W_t, & V_0^{\eps,\beta} = v_0,
+\D \eta_{t}^\eps & = \displaystyle \eps^{-\beta}(f(V_t^\eps)-f(\bar\psi_t))\D t + \sqrt{\eps}g(V_t^\eps)\D W_t\,, & \eta_{0}^\eps = 0\,,\\
+\D V_t^{\eps,\beta} & = \displaystyle  f(V_t^{\eps,\beta})\D t + \eps^{\frac{1}{2} + \beta}g(V_t^{\eps,\beta})\D W_t\,, & V_0^{\eps,\beta} = v_0\,,
 \end{array}
 \end{equation}
 where the notation~$V^{\eps,\beta}$ was used to emphasise the change of speed to~$\eps^{\frac12+\beta}$. 
@@ -753,8 +754,8 @@ then for all~$\beta > 1$,~$Z^{\eps^\beta}$ satisfies an LDP with the good rate f
 \[ 
 \II(x)=
 \begin{cases} 
-      0, & \text{ for } x=x_0, \\
-      +\infty, & \text{ elsewhere.}
+      0, & \text{ for } x=x_0\,, \\
+      +\infty\,, & \text{ elsewhere.}
 \end{cases}
 \]
 If for~$\beta > 1$,~$Z^{\eps}$ satisfies an LDP with speed~$\eps^{\beta}$ and the good rate function~$\II$, then~$Z^{\eps}$ is exponentially equivalent to~$x_0$ with speed~$\eps$.
@@ -784,8 +785,8 @@ $\{V^{\eps,\beta}, \eta^\eps,W^\eps\}$ satisfies an LDP with speed~$\eps$ and th
 \displaystyle 
 w \in \HH_T^0,\;
 v = \bar\psi,\;
-\dot{\eta} = \dot{f}(\bar\psi)\eta + g(\bar\psi)\dot{w},\\
-+\infty, & \text{otherwise}.
+\dot{\eta} = \dot{f}(\bar\psi)\eta + g(\bar\psi)\dot{w}\,,\\
++\infty, & \text{otherwise}\,.
 \end{array}
 \right.
 \end{equation*}
@@ -805,7 +806,7 @@ First, we apply Theorem~\ref{thm:mdp-small-noise}, which in turn allows us the u
 \frac{1}{2}\|\dot{\ww}\|_{T}^2, & \text{if }
 \displaystyle 
 \ww \in \HH_T^0,\; \begin{array}{cc}
-    \eta = \int_0^\cdot\left\{\dot{f}(\bar\psi_s)\eta_s + g(\bar\psi_s)\dot{w}_1(s)\right\}\D s, \\
+    \eta = \int_0^\cdot\left\{\dot{f}(\bar\psi_s)\eta_s + g(\bar\psi_s)\dot{w}_1(s)\right\}\D s\,, \\
      \yy = \sqrt{\bar\psi}\circ \ww,
 \end{array}
 \\
@@ -823,30 +824,30 @@ Recall that we are interested in finding a measure change minimising~$\EE\left[\
 \paragraph{\textit{Deterministic change of drift}}
 We first consider a deterministic change of drift, via 
 \[
-\left.\frac{\D\QQ}{\D\PP}\right\vert_{\Ff_T} = \exp\left\{-\frac{1}{2}\|\dot{\hh}\|_{T}^2 + \dot{\hh}\cT \Wf^\top\right\},
+\left.\frac{\D\QQ}{\D\PP}\right\vert_{\Ff_T} = \exp\left\{-\frac{1}{2}\|\dot{\hh}\|_{T}^2 + \dot{\hh}\cT \Wf^\top\right\}\,,
 \]
 for~$\hh \in \HH_T^0$ with~$\dot{\hh}$ of finite variation. 
 In the spirit of moderate deviations, we use the approximation 
 \[
-\left.\frac{\D\QQ}{\D\PP}\right\vert_{\Ff_T} \approx \exp\left\{-\frac{1}{2}\|\dot{\hh}\|_{T}^2 + \dot{\hh}\cT \Wf^{\eps\top}\right\},
+\left.\frac{\D\QQ}{\D\PP}\right\vert_{\Ff_T} \approx \exp\left\{-\frac{1}{2}\|\dot{\hh}\|_{T}^2 + \dot{\hh}\cT \Wf^{\eps\top}\right\}\,,
 \]
 and thus aim at minimising
 \[
 L(\hh) = \limsup\limits_{\eps \downarrow 0} \eps\ln\EE\left[\exp\left\{\frac{1}{\eps}\left(
-2F(\widetilde{X}^\eps) + \frac{1}{2}\|\dot{\hh}\|_{T}^2 - \dot{\hh}\cT \Wf^{\eps\top}\right)\right\}\right].
+2F(\widetilde{X}^\eps) + \frac{1}{2}\|\dot{\hh}\|_{T}^2 - \dot{\hh}\cT \Wf^{\eps\top}\right)\right\}\right]\,.
 \]
 Under the conditions of Varadhan's lemma~\ref{thm:varadhan_modified} 
 (for example, if~$F$ is bounded), then
 $L(\hh) =\nobreak \sup_{\xx \in \HH_T^0} \Lf(\xx,\hh)$ where
 $$
 \Lf(\xx,\hh)
- = 2 F\left(-\frac{1}{2}\int_0^.(\bar\psi_t + \eta_t(\xx))\D t + \vrho\Yf^\top(\xx) \right) - \dot{\hh}\cT\xx^\top + \frac{\|\dot{\hh}\|_{T}^2}{2} - \frac{\|\dot{\xx}\|_{T}^2}{2},
+ = 2 F\left(-\frac{1}{2}\int_0^.(\bar\psi_t + \eta_t(\xx))\D t + \vrho\Yf^\top(\xx) \right) - \dot{\hh}\cT\xx^\top + \frac{\|\dot{\hh}\|_{T}^2}{2} - \frac{\|\dot{\xx}\|_{T}^2}{2}\,,
 ~$$
 with~$\vrho \defEqual \left(\rho \;\; \brho\right)^\top$,
 \begin{equation}\label{eq:etaY1Y2}
 \eta(\xx) = \int_0^\cdot\left\{\dot{f}(\bar\psi_s)\eta_s(\xx) + g(\bar\psi_s)\dot{x}_1(s)\right\}\D s
 \qquad\text{and}\qquad
-\Yf(\xx) = \sqrt{\bar\psi}\circ \xx.
+\Yf(\xx) = \sqrt{\bar\psi}\circ \xx\,.
 \end{equation}
 Minimising~$L(\hh)$ is far from trivial, 
 and hence, as before, we define the optimal change of drift~$\hh^{*}$ as a solution to the dual problem
@@ -855,9 +856,9 @@ so that, with~$\eta$ as in~\eqref{eq:etaY1Y2},
 \begin{equation}\label{eq:optidetdrift}
 \begin{cases}
 &\displaystyle \Yf(\xx) = \sqrt{\bar\psi}\circ \xx, \\
-&\displaystyle \bar\psi_t = v_0 + \int_0^t f(\bar\psi_s)\D s, \\
-&\displaystyle \eta_t(\xx) = \int_0^t\left\{\dot{f}(\bar\psi_s)\eta_s(\xx) + g(\bar\psi_s)\dot{x}_1(s)\right\}\D s, \\
-&\displaystyle \hh^{*} = \argmax\limits_{\xx \in \HH_T^0} \left\{F\left(-\frac{1}{2}\int_0^\cdot(\bar\psi_t + \eta_t(\xx))\D t + \vrho\Yf^\top(\xx)\right)- \frac{\|\dot{\xx}\|_{T}^2}{2}\right\}.
+&\displaystyle \bar\psi_t = v_0 + \int_0^t f(\bar\psi_s)\D s\,, \\
+&\displaystyle \eta_t(\xx) = \int_0^t\left\{\dot{f}(\bar\psi_s)\eta_s(\xx) + g(\bar\psi_s)\dot{x}_1(s)\right\}\D s\,, \\
+&\displaystyle \hh^{*} = \argmax\limits_{\xx \in \HH_T^0} \left\{F\left(-\frac{1}{2}\int_0^\cdot(\bar\psi_t + \eta_t(\xx))\D t + \vrho\Yf^\top(\xx)\right)- \frac{\|\dot{\xx}\|_{T}^2}{2}\right\}\,.
 \end{cases}
 \end{equation}
 % \begin{remark}
@@ -866,7 +867,7 @@ so that, with~$\eta$ as in~\eqref{eq:etaY1Y2},
 \paragraph{\textit{Stochastic change of drift}}
 We now consider instead a stochastic change of drift in the form
 $
-\left.\frac{\D\QQ}{\D\PP}\right\vert_{\Ff_T} =\nobreak \exp\left\{-\frac{1}{2}\|\dot{\hh}\sqrt{V}\|_{T}^2 + (\dot{\hh}\sqrt{V})\cT\Wf^\top\right\},
+\left.\frac{\D\QQ}{\D\PP}\right\vert_{\Ff_T} =\nobreak \exp\left\{-\frac{1}{2}\|\dot{\hh}\sqrt{V}\|_{T}^2 + (\dot{\hh}\sqrt{V})\cT\Wf^\top\right\}\,,
 $
 for~${\hh \in \HH_T^0}$,~$\dot{\hh}$ of finite variation and with~$\EE\left[\frac{\D\QQ}{\D\PP}\right]=1$. 
 Again, we use the approximation
@@ -876,14 +877,14 @@ Again, we use the approximation
 and aim at minimising
 \[
 L(\hh) = \limsup\limits_{\eps \downarrow 0} \eps\ln\EE\left[\exp\frac{1}{\eps}\left\{
-2F(\widetilde{X}^\eps) +\frac{1}{2}\|\dot{\hh}\sqrt{V^{\eps,\beta}}\|^2_T - \left (\dot{\hh}\sqrt{V^{\eps,\beta}}\right )\cT \Wf^{\eps\top}\right\}\right].
+2F(\widetilde{X}^\eps) +\frac{1}{2}\|\dot{\hh}\sqrt{V^{\eps,\beta}}\|^2_T - \left (\dot{\hh}\sqrt{V^{\eps,\beta}}\right )\cT \Wf^{\eps\top}\right\}\right]\,.
 \]
 If Varadhan's lemma conditions hold, then again
 $L(\hh) = \sup_{\xx \in \HH_T^0}\Lf(\xx,\hh)$
 where
 $$
 \Lf(\xx,\hh) = 2F\left(-\frac{1}{2}\int_0^\cdot(\bar\psi_t + \eta_t(\xx))\D t + \vrho \Yf^\top(\xx)\right) - \left (\dot{\hh}\sqrt{\bar\psi}\right )\cT \xx^\top + \frac{\|\dot{\hh}\sqrt{\bar\psi}\|_{T}^2}{2}
-- \frac{\|\dot{\xx}\|_{T}^2}{2},
+- \frac{\|\dot{\xx}\|_{T}^2}{2}\,,
 $$
 with~$\eta$ defined as in~\eqref{eq:etaY1Y2}. As minimising~$L(\hh)$ is \textit{a priori} complicated, we define our optimal change of drift~$\hh^{*}$ as a solution to the dual problem
 \[
@@ -893,8 +894,8 @@ F\left(-\frac{1}{2}\int_0^\cdot \left(\bar\psi_t + \eta_t(\xx)\right)\D t - \vrh
 - \frac{\left\|\dot{\xx}\right\|_{T}^2}{2}
 \right\},\\
 &\displaystyle \bar\psi_t = v_0 + \int_0^t f(\bar\psi_s)\D s, \\
-&\displaystyle \eta_t(\xx) = \int_0^t\left\{\dot{f}(\bar\psi_s)\eta_s(\xx) + g(\bar\psi_s)\dot{x}_1(s)\right\}\D s, \\
-&\displaystyle  \hh^{*} = \int_0^\cdot\frac{\dot{\xx}^{*}(t)}{\sqrt{\bar\psi_t}}\D t.
+&\displaystyle \eta_t(\xx) = \int_0^t\left\{\dot{f}(\bar\psi_s)\eta_s(\xx) + g(\bar\psi_s)\dot{x}_1(s)\right\}\D s\,, \\
+&\displaystyle  \hh^{*} = \int_0^\cdot\frac{\dot{\xx}^{*}(t)}{\sqrt{\bar\psi_t}}\D t\,.
 \end{cases}
 \]
 
@@ -954,7 +955,7 @@ The payoff is then a continuous function of the path. Now let~$F = \ln|G|$ and~$
 \paragraph{\textit{Deterministic change of drift}}
 We proceed in a similar fashion as in Section~\ref{sec:LDP_IS} and consider the  transformations
 $$
-\dot{\varphi} = \sqrt{\bar\psi}\left( \rho\dot{x}_1 + \brho\dot{x}_2 \right) - \frac{\eta}{2} \qquad \text{and} \qquad \dot{\eta} = \dot{f}(\bar\psi)\eta + g(\bar\psi)\dot{x}_1,
+\dot{\varphi} = \sqrt{\bar\psi}\left( \rho\dot{x}_1 + \brho\dot{x}_2 \right) - \frac{\eta}{2} \qquad \text{and} \qquad \dot{\eta} = \dot{f}(\bar\psi)\eta + g(\bar\psi)\dot{x}_1\,,
 $$
 so that the optimisation problem~\eqref{eq:optidetdrift} for a path-dependent payoff can then be written as
 \begin{equation}\label{eq:optidetdriftapplication}
@@ -963,7 +964,7 @@ so that the optimisation problem~\eqref{eq:optidetdrift} for a path-dependent pa
 \varphi^{*}, \eta^{*} = & \displaystyle  \argmax\limits_{\varphi,\eta \in \HH_T^0} \left\{ \overline{F}\left(\int_0^T \vartheta_t \dot{\varphi}_t \D t \right) 
 - \half\int_0^T \left\{U(\eta)^2 + \left|\frac{Z(\varphi,\eta) - \rho U(\eta)}{\brho}\right|^2\right \}\D t \right\},\\
 \dot{\hh}^{*}  = & \displaystyle 
-\left(U(\eta^{*}),  \frac{1}{\brho}\left(Z(\varphi^{*}, \eta^{*}) - \rho U(\eta^{*})\right)\right),
+\left(U(\eta^{*}),  \frac{1}{\brho}\left(Z(\varphi^{*}, \eta^{*}) - \rho U(\eta^{*})\right)\right)\,,
 \end{array}
 \right.
 \end{equation}
@@ -971,14 +972,14 @@ with
 $$
 U(\eta) = \frac{\dot{\eta} - \dot{f}(\bar\psi)\eta}{g(\bar\psi)}
 \qquad\text{and}\qquad
-Z(\varphi, \eta) = \frac{\dot{\varphi} + \frac{1}{2}\eta}{\sqrt{\bar\psi}}. 
+Z(\varphi, \eta) = \frac{\dot{\varphi} + \frac{1}{2}\eta}{\sqrt{\bar\psi}}\,. 
 $$
 Then, by applying Euler-Lagrange to the problem seen as an optimisation over~$\left \{\int_0^\cdot \vartheta_t\dot{\varphi}_t\D t,\eta\right \}$, we obtain the system of ODEs
 \begin{equation*}
 \left\{
 \begin{array}{rcl}
 Z - \rho U &=& \displaystyle \frac{1}{2}\lambda\brho^2\vartheta \sqrt{\bar\psi},\\
-\displaystyle \frac{\D}{\D t}\left\{\frac{2U}{g(\bar\psi)} - \lambda \rho \vartheta \frac{\sqrt{\bar\psi}}{g(\bar\psi)}\right\} &=& \displaystyle \lambda \vartheta \sqrt{\bar\psi} \left(\frac{1}{2\sqrt{\bar\psi}} + \rho \frac{\dot{f}(\bar\psi)}{g(\bar\psi)} \right) -2U\frac{\dot{f}(\bar\psi)}{g(\bar\psi)},
+\displaystyle \frac{\D}{\D t}\left\{\frac{2U}{g(\bar\psi)} - \lambda \rho \vartheta \frac{\sqrt{\bar\psi}}{g(\bar\psi)}\right\} &=& \displaystyle \lambda \vartheta \sqrt{\bar\psi} \left(\frac{1}{2\sqrt{\bar\psi}} + \rho \frac{\dot{f}(\bar\psi)}{g(\bar\psi)} \right) -2U\frac{\dot{f}(\bar\psi)}{g(\bar\psi)}\,,
 \end{array}
 \right.
 \end{equation*}
@@ -997,7 +998,7 @@ We can now solve for~$U$ and~$Z$:
 \begin{align*}
 U = \lambda\left( u + \frac{1}{2}\rho\vartheta\sqrt{\bar\psi} \right)
 \qquad \text{and} \qquad
-Z = \lambda\left ( \rho u + \frac{1}{2}\vartheta\sqrt{\bar\psi} \right),
+Z = \lambda\left ( \rho u + \frac{1}{2}\vartheta\sqrt{\bar\psi} \right)\,,
 \end{align*}
 with~$u = \frac{1}{4}g(\bar\psi)\E^{-B}(\gamma-\gamma_T)$. Our optimisation problem was posed over~$\left \{\int_0^\cdot \vartheta_t \dot{\varphi}_t \D t, \eta\right \}$ so we require the solution in terms of this couple, and therefore
 \begin{enumerate}[(i)]
@@ -1008,7 +1009,7 @@ where
 $$
 \dot{\varphi}^1 = \left(u+ \frac{1}{2}\vartheta \sqrt{\bar\psi}\right)\sqrt{\bar\psi}
 \qquad\text{and}\qquad
-\dot{\varphi}^2 = \E^B \int_0^\cdot \E^{-B_s}\left( u_s + \frac{1}{2}\vartheta_s\sqrt{\bar\psi_s} \right )g(\bar\psi_s)\D s;
+\dot{\varphi}^2 = \E^B \int_0^\cdot \E^{-B_s}\left( u_s + \frac{1}{2}\vartheta_s\sqrt{\bar\psi_s} \right )g(\bar\psi_s)\D s\,;
 $$
 \item 
 $\displaystyle \eta_t = \lambda \E^{B_t} \int_0^t \E^{-B_s}\left( u_s + \frac{1}{2}\rho\vartheta_s\sqrt{\bar\psi_s} \right )g(\bar\psi_s)\D s + \eta_0 \E^{B_t}$.
@@ -1017,7 +1018,7 @@ Here,~$\lambda,\eta_0\in\RR$ are parameters over which we perform our optimisati
 Thus the original optimisation objective~\eqref{eq:optidetdriftapplication} becomes 
 \begin{align*}
 \lambda^{*}, \eta_0^{*} = \argmax_{\lambda,\eta_0\in\RR}
-\left\{\overline{F}\left( \lambda\int_0^t \vartheta_s \left \{ \dot{\varphi}^1_s - \frac{1}{2}\dot{\varphi}^2_s \right \}\D s + \eta_0 T \E^{B_T} \right ) - \frac{\lambda^2}{2}\int_0^T\left\{ \big| \dot{\varphi}^2_t \big|^2 + \frac{\brho^2}{4}\vartheta_t^2\bar\psi_t \right\}\D t\right\}.
+\left\{\overline{F}\left( \lambda\int_0^t \vartheta_s \left \{ \dot{\varphi}^1_s - \frac{1}{2}\dot{\varphi}^2_s \right \}\D s + \eta_0 T \E^{B_T} \right ) - \frac{\lambda^2}{2}\int_0^T\left\{ \big| \dot{\varphi}^2_t \big|^2 + \frac{\brho^2}{4}\vartheta_t^2\bar\psi_t \right\}\D t\right\}\,.
 \end{align*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1089,9 +1090,9 @@ ${\widetilde{X}^\eps \defEqual \eps^{-\alpha} X^{\eps}}$, so that
 \begin{equation*}
 \begin{array}{rll}
 \D\widetilde{X}^\eps_t
-&= \displaystyle -\frac{1}{2}\eps^{1-\alpha} V_t^{\eps} \D t + \eps^{\frac{1}{2}-\alpha}\sqrt{V_t^\eps}\D B_t, 
-& \widetilde{X}_0^\eps = 0, \\
-\D V_t^\eps &= \displaystyle\eps f(V_t^\eps)\D t + \sqrt{\eps}g(V_t^\eps)\D W_t,  & V_0^\eps = v_0.
+&= \displaystyle -\frac{1}{2}\eps^{1-\alpha} V_t^{\eps} \D t + \eps^{\frac{1}{2}-\alpha}\sqrt{V_t^\eps}\D B_t\,, 
+& \widetilde{X}_0^\eps = 0\,, \\
+\D V_t^\eps &= \displaystyle\eps f(V_t^\eps)\D t + \sqrt{\eps}g(V_t^\eps)\D W_t\,,  & V_0^\eps = v_0\,.
 \end{array}
 \end{equation*}
 As a consequence of Theorem~\ref{mdp-small-time} the results remain the same as in the case of small-noise moderate deviations of the previous section with~$f = 0$ and~$\bar\psi = v_0$. This being the case, we do not repeat them here. Let us nevertheless note that in the case of change of measure with deterministic drift, the problem is similar to the one, where~$V$ is constant equal to~$v_0$.
@@ -1118,8 +1119,8 @@ $\{V^{\eps,\beta}, \eta^\eps,W^\eps\}$ satisfies an LDP with speed~$\eps$ and th
 \displaystyle 
 w \in \HH_T^0,\;
 v = \bar\psi,\;
-\dot{\eta} =  g(\bar\psi)\dot{w},\\
-+\infty, & \text{otherwise}.
+\dot{\eta} =  g(\bar\psi)\dot{w}\,,\\
++\infty, & \text{otherwise}\,.
 \end{array}
 \right.
 \end{equation*}
@@ -1135,10 +1136,10 @@ defined as~$V_t^\eps = V_{\frac{t}{\eps}}$ and~$X_t^\eps = \eps X_{\frac{t}{\eps
 \begin{equation}\label{eq:large_time_MD_dynamics}
 \left\{
 \begin{array}{rll}
-\D X^\eps_t &= \displaystyle -\frac{1}{2}V_t^\eps \D t + \sqrt{\eps}\sqrt{V_t^\eps}\D B_t, 
-& X_0^\eps = 0,\\
-\D V_t^\eps &= \displaystyle \frac{1}{\eps}f(V_t^\eps)\D t + \frac{1}{\sqrt{\eps}}g(V_t^\eps)\D W_t, 
-& V_0^\eps = v_0>0,
+\D X^\eps_t &= \displaystyle -\frac{1}{2}V_t^\eps \D t + \sqrt{\eps}\sqrt{V_t^\eps}\D B_t\,, 
+& X_0^\eps = 0\,, \\
+\D V_t^\eps &= \displaystyle \frac{1}{\eps}f(V_t^\eps)\D t + \frac{1}{\sqrt{\eps}}g(V_t^\eps)\D W_t\,, 
+& V_0^\eps = v_0>0\,,
 \end{array}
 \right.\end{equation}
 which leads to Regime 2 in the slow-fast setting of~\cite[Theorem 2.1]{Morse2017ModerateDiffusions}, 
@@ -1172,8 +1173,8 @@ Under Assumption~\ref{ass:SDE_coeffs} and Assumption~\ref{ass:SDE_largetime_MDP}
     % \item The processes~$\sqrt{\eps}\int_0^\cdot\sqrt{V^\eps_t}\D W_t$ and~$\sqrt{\eps}\int_0^\cdot\sqrt{V^\eps_t}\D W^\perp_t$ converge to zero in probability;
     \item There exists a unique solution~$\varsigma$ with at most polynomial growth to the Poisson equation
     \[
-    \Ll_V(\varsigma)(y) = \frac{y - \bar{v}}{2}, 
-    \qquad \text{with} \qquad \int_0^\infty \varsigma(y)\mu(dy)=0.
+    \Ll_V(\varsigma)(y) = \frac{y - \bar{v}}{2}\,, 
+    \qquad \text{with} \qquad \int_0^\infty \varsigma(y)\mu(dy)=0\,.
     \]
 \end{enumerate}
 Furthermore, denote 
@@ -1198,7 +1199,7 @@ Then the triple~$\{X^{\eps},\sqrt{\eps}W,\sqrt{\eps}\Wp\}$ follows an MDP with g
 where
 $$
 \II_{\Qbold}(\phi) \defEqual 
-\inf \left\{\frac{1}{2}\int_0^T u_s^\top u_s\D s: u\in L^2\left([0,T]; \RR^3\right), \, \dot{\phi}^\top \Qbold^{-1} \dot{\phi} = u^\top u \right\},
+\inf \left\{\frac{1}{2}\int_0^T u_s^\top u_s\D s: u\in L^2\left([0,T]; \RR^3\right), \, \dot{\phi}^\top \Qbold^{-1} \dot{\phi} = u^\top u \right\}\,,
 $$
 if~$\phi\in\mathcal{AC}$ and infinite otherwise.
 \end{theorem}
@@ -1215,7 +1216,7 @@ Let~$Y$ a random variable with distribution~$\mu$, the invariant measure. Then
 &= \EE_\mu\left[ \left| \rho\sqrt{Y} + \dot{\varsigma}(Y)g(Y)\right|^2 \right ] - \EE_\mu\left[ \rho\sqrt{Y} + \dot{\varsigma}(Y)g(Y) \right ]^2 + \brho^2
 \left\{\EE_\mu[Y]
 - \EE_\mu\left[\sqrt{Y}\right ]^2\right\}
-\geq 0,
+\geq 0\,,
 \end{align*}
 by Cauchy-Schwarz, where equality would imply that~$V$ is constant~$\mu$-almost surely. This implies~$f(\overline{v})=g(v)=0$, which is not possible due to Assumption~\ref{ass:SDE_coeffs} on~$f$ and~$g$. 
 % Next the second statement is immediate since
@@ -1238,27 +1239,27 @@ $\underline{\xx}\defEqual \begin{pmatrix}x_2 &  x_3\end{pmatrix}^\top$.
 By considering a deterministic change of drift in a similar way as before, our problem becomes 
 \[
 L(\hh) = \limsup\limits_{\eps \downarrow 0} \eps\ln\EE\Big[\exp\frac{1}{\eps}\Big\{
-2F(X^\eps) +\frac{1}{2}\|\dot{\hh}\|^2_T - \dot{\hh}\cT({\Wf^\eps})^\top\Big\}\Big].
+2F(X^\eps) +\frac{1}{2}\|\dot{\hh}\|^2_T - \dot{\hh}\cT({\Wf^\eps})^\top\Big\}\Big]\,.
 \]
 Applying the modified Varadhan lemma gives us the 
 target functional
 $$
-\Lf(\xx,\hh) = 2F(x_1) + \frac{1}{2}\|\dot{\hh}\|^2_T - \dot{\hh}\circ\underline{\xx}^\top - \frac{1}{2}\int_0^T\dot{\xx}^\top \Qbold^{-1} \dot{\xx} \D t.
+\Lf(\xx,\hh) = 2F(x_1) + \frac{1}{2}\|\dot{\hh}\|^2_T - \dot{\hh}\circ\underline{\xx}^\top - \frac{1}{2}\int_0^T\dot{\xx}^\top \Qbold^{-1} \dot{\xx} \D t\,.
 $$
 Using the diagonal operator~$\operatorname{diag}(x_1,\dots,x_n)=\sum_{i=1}^n x_i e_i e_i^\top$, where~$n\in\NN$ and~$\{e_i\}_{i=1}^n$ canonical basis of~$\RR^n$, we now write the problem in terms of~$\widetilde{\xx}\defEqual\dot{\xx}\,$,
 $$
 \begin{cases}
 & \displaystyle \widetilde{\xx}^{*}  =  \argmax\limits_{\widetilde{\xx} \in L^2([0,T]; \RR^3)}
 \left\{F\left(\int_0^\cdot \widetilde x_1(t) \D t\right) - \frac{1}{4}\int_0^T \widetilde{\xx}^\top(t) 
-\Abold\widetilde{\xx}(t) \D t\right\}, \\
-& \displaystyle \dot{\hh} = \widetilde{\underline{\xx}}^{*},
+\Abold\widetilde{\xx}(t) \D t\right\}\,, \\
+& \displaystyle \dot{\hh} = \widetilde{\underline{\xx}}^{*}\,,
 \end{cases}
 $$
 where 
 $\Abold := \Qbold^{-1} + \operatorname{diag}(0,1,1)$, 
 which is equivalent to
 \begin{equation}\label{eq:SupInfInt}
-\sup\limits_{x_1\in L^2([0,T]; \RR)}\left \{F\left(\int_0^\cdot x_1(t) \D t\right) - \frac{1}{4}\int_0^T \inf_{\underline{\xx}\in L^2([0,T]; \RR^2)} \xx^\top(t) \Abold\xx(t) \D t \right \}.
+\sup\limits_{x_1\in L^2([0,T]; \RR)}\left \{F\left(\int_0^\cdot x_1(t) \D t\right) - \frac{1}{4}\int_0^T \inf_{\underline{\xx}\in L^2([0,T]; \RR^2)} \xx^\top(t) \Abold\xx(t) \D t \right \}\,.
 \end{equation}
 This substantially simplifies the main optimisation problem, which can now be solved explicitly, since 
 $
@@ -1271,18 +1272,18 @@ with~$a_{11} \in\RR$,~$\abold_{21}\in\RR^{2}$,~$\Abold_{22}\in\RR^{2\times 2}$, 
 \begin{equation}\label{eq:ConstPDP}
 \begin{array}{rl}
 \nu = & \displaystyle 
-\EE_\mu\left[ \left| \rho\sqrt{Y} + \dot{\varsigma}(Y)g(Y)\right|^2 \right ] + \brho^2\EE_\mu[Y] - \frac{\EE_\mu\left[ \rho\sqrt{Y} + \dot{\varsigma}(Y)g(Y)\right]^2}{2} - \frac{\brho\EE_\mu[\sqrt{Y}]^2}{2},\\
+\EE_\mu\left[ \left| \rho\sqrt{Y} + \dot{\varsigma}(Y)g(Y)\right|^2 \right ] + \brho^2\EE_\mu[Y] - \frac{\EE_\mu\left[ \rho\sqrt{Y} + \dot{\varsigma}(Y)g(Y)\right]^2}{2} - \frac{\brho\EE_\mu[\sqrt{Y}]^2}{2}\,, \\
 \Bbold = & \displaystyle -\frac{1}{2}\begin{pmatrix}
-\EE_\mu[\rho\sqrt{Y}+\dot{\varsigma}(Y)g(Y)]\\
-\brho\EE_\mu[\sqrt{Y}],
-\end{pmatrix},
+\EE_\mu[\rho\sqrt{Y}+\dot{\varsigma}(Y)g(Y)] \\
+\brho\EE_\mu[\sqrt{Y}]\,,
+\end{pmatrix}\,,
 \end{array}
 \end{equation}
 are obtained from the definition of~$\Qbold$. Finally, we have
 \begin{equation}\label{pb-deterministic-large}
 \begin{cases}
 &\displaystyle x_1^{*}=\argmax\limits_{x_1 \in L^2([0,T],\RR)}
-\left\{F\left(\int_0^\cdot x_1\D t\right) - \frac{\nu}{4}\int_0^T x_1^2 \D t\right\},
+\left\{F\left(\int_0^\cdot x_1\D t\right) - \frac{\nu}{4}\int_0^T x_1^2 \D t\right\}\,,
 \\
 &\dot{\hh}^{*}
 = \Bbold x_1^{*}.
@@ -1314,7 +1315,7 @@ and give special attention to the Heston model~\cite{Heston1993AOptions}, the fo
 We first consider the Black-Scholes model with
 time-dependent deterministic volatility, namely
 $$
-\D X_t = -\frac{1}{2}\sigma^2(t) \D t + \sigma(t) \D W_t, \qquad X_0 = 0,
+\D X_t = -\frac{1}{2}\sigma^2(t) \D t + \sigma(t) \D W_t\,, \qquad X_0 = 0\,,
 $$
 where~$\sigma\in \Cc_T$ is a deterministic function adhering to Assumption~\ref{ass:SDE_coeffs}. 
 We provide full details of this specific case, 
@@ -1328,7 +1329,7 @@ Our objective is to find an almost surely positive random variable~$Z$ with~$\EE
 \subsubsection{Small-noise}
 The small-noise approximation~\eqref{eq:small_noise} reads
 $$
-\D X_t^{\eps} = -\frac{1}{2}\sigma^2(t)\D t + \sqrt{\eps}\sigma(t) \D W_t, \qquad X_0 ^{\eps} = 0.
+\D X_t^{\eps} = -\frac{1}{2}\sigma^2(t)\D t + \sqrt{\eps}\sigma(t) \D W_t\,, \qquad X_0 ^{\eps} = 0\,.
 $$
 
 \paragraph{\textit{Deterministic change of drift}}
@@ -1339,12 +1340,12 @@ $$
 $$
 with~$h\in\HH_T^0$, we can write
 $$
-L(h)\defEqual\limsup\limits_{\eps\downarrow 0} \eps \ln\EE\left[\exp\frac{1}{\eps}\left\{{2F(X^{\eps}) +\frac{1}{2}\int_0^T\dot{h}_t^2 \D t  - \dot{h}\cT W^{\eps}}\right\}\right].
+L(h)\defEqual\limsup\limits_{\eps\downarrow 0} \eps \ln\EE\left[\exp\frac{1}{\eps}\left\{{2F(X^{\eps}) +\frac{1}{2}\int_0^T\dot{h}_t^2 \D t  - \dot{h}\cT W^{\eps}}\right\}\right]\,.
 $$
 To apply Varadhan's lemma and estimate~$L(h)$, we assume there exists~$\gamma >1$ such that 
 \begin{equation}\label{eq:BSAssume}
 \limsup\limits_{\eps\downarrow 0} \eps\ln\EE\left[
-\exp\left\{4\gamma \frac{F(X^{\eps})}{\eps}\right\}\right] <\infty.
+\exp\left\{4\gamma \frac{F(X^{\eps})}{\eps}\right\}\right] <\infty\,.
 \end{equation}
 This condition is satisfied if, for example, the following assumption holds (for details see the proof of~\cite[Theorem~3.6]{Guasoni2007OptimalTime}):
 \begin{assumption}\label{ass:payoffGuassoni}
@@ -1364,20 +1365,20 @@ $$
 \limsup\limits_{\eps\downarrow 0} \eps \ln\EE\left[\exp\left\{\frac{\gamma}{\eps}\left(\frac{1}{2}\int_0^T \dot{h}_t^2\D t
 - \dot{h}\cT W^{\eps}\right)\right\}\right]
 \quad
-\text{exists in~$\RR$.}
+\text{exists in~$\RR$\,.}
 $$
 \end{lemma}
 \begin{proof}
 If~$\dot{h}$ is of finite variation and~$x$ is continuous with~$x(0)=0$, 
 then~$\int_0^\cdot\dot{h}_t\D x_t$ is well defined as a Riemann-Stieltjes integral and 
 $$
-\left|\dot{h}\cT x\right| = \left|\dot{h}(T)x(T) - x\cT \dot{h}\right| \leq \|x\|_\infty\left(|\dot{h}(T)| + \mathrm{TV}(\dot{h})\right ),
+\left|\dot{h}\cT x\right| = \left|\dot{h}(T)x(T) - x\cT \dot{h}\right| \leq \|x\|_\infty\left(|\dot{h}(T)| + \mathrm{TV}(\dot{h})\right)\,,
 $$
 where~$\mathrm{TV}(\cdot)$ denotes the total variation. 
 Similarly,~$\int_0^\cdot\sigma(t)\D x_t$ is well defined and
 $$
 \left|\sigma(\cdot)\ct x\right| \leq \|x\|_\infty\left(\|\sigma\|_\infty + \mathrm{TV}(\sigma)\right),
-\qquad\text{for all }t \in [0,T].
+\qquad\text{for all }t \in [0,T]\,.
 $$
 Since~$F$ is continuous, the first statement on existence and continuity holds.
 The second one follows from the computation of exponential Gaussian moments: 
@@ -1385,7 +1386,7 @@ for every~$\gamma >0$,
 $$
 \eps  \ln\EE\left[\exp\frac{\gamma}{\eps}\left\{\frac{1}{2}\int_0^T \dot{h}_t^2\D t
 - \dot{h}\cT W^{\eps}\right\}\right]
-= \frac{\gamma(1+\gamma)}{2}\int_0^T\dot{h}_t^2\D t.
+= \frac{\gamma(1+\gamma)}{2}\int_0^T\dot{h}_t^2\D t\,.
 $$
 \end{proof}
 \begin{lemma}
@@ -1396,7 +1397,7 @@ $L(h) = \sup_{x \in \HH_T^0}\Lf(x;h)$.
 Let~$\gamma>1$ such that~\eqref{eq:BSAssume} holds. Then by Cauchy-Schwarz and Lemma~\ref{lem:BSVaradhanCond},
 \begin{align*}
 \limsup\limits_{\eps\downarrow 0} \eps \ln\EE&\bigg[\exp\frac{\gamma}{\eps}\bigg\{2F\left(-\frac{1}{2}\int_0^\cdot \sigma^2(t)\D t + \int_0^\cdot \sigma(t) \D W_t^\eps\right) \\
-&+ \frac{1}{2}\int_0^T \dot{h}_t^2\D t - \int_0^T \dot{h}_t \D W_t^{\eps} \bigg\}\bigg] <\infty,
+&+ \frac{1}{2}\int_0^T \dot{h}_t^2\D t - \int_0^T \dot{h}_t \D W_t^{\eps} \bigg\}\bigg] <\infty\,,
 \end{align*}
 so that the conditions of Theorem~\ref{thm:varadhan} are verified.
 The continuity has already been shown.
@@ -1412,13 +1413,13 @@ The minimum is then attained  for~$h=x$ and equal to
 \end{equation}
 Furthermore, it immediately follows from~\cite[Theorem~3.6]{Guasoni2007OptimalTime} that, if~$h^*\in \HH_T^0$ is of finite variation and is a solution to~\eqref{pb-1}, then it is asymptotically optimal if
 $$
-L(h^{*}) = 2F\left(-\frac{1}{2}\int_0^\cdot \sigma^2(t)\D t + \int_0^\cdot \sigma(t) \dot{h}^{*}_t \D t\right) - \int_0^T |\dot{h}^{*}_t|^2 \D t.
+L(h^{*}) = 2F\left(-\frac{1}{2}\int_0^\cdot \sigma^2(t)\D t + \int_0^\cdot \sigma(t) \dot{h}^{*}_t \D t\right) - \int_0^T |\dot{h}^{*}_t|^2 \D t\,.
 $$
 
 Therefore, in order to derive a change of measure, we search for~$h^{*} \in \HH_T^0$ such that
 $$
 h^{*} = \argmax\limits_{x \in \HH_T^0}F\left(-\frac{1}{2}\int_0^\cdot \sigma^2(t)\D t + \int_0^\cdot \sigma(t) \dot{x}_t \D t\right)
- - \frac{1}{2}\int_0^T \dot{x}_t^2 \D t.
+ - \frac{1}{2}\int_0^T \dot{x}_t^2 \D t\,.
 $$
 
 \paragraph{\textit{Simplified deterministic change of drift}}
@@ -1427,7 +1428,7 @@ since~$\eps\int_0^\cdot\sigma^2(t)\D t$ is exponentially equivalent to~$0$, the 
 when replacing~$F(-\half\int_0^\cdot \sigma^2(t)\D t + \int_0^\cdot \sigma(t) \dot{x}_t \D t)$ with~$F(\int_0^\cdot \sigma(t) \dot{x}_t \D t)$. 
 The problem then becomes
 $$
-h^{*} = \argmax\limits_{x \in \HH_T^0} F\left(\int_0^\cdot \sigma(t) \dot{x}_t \D t\right) - \frac{1}{2}\int_0^T \dot{x}_t^2 \D t.
+h^{*} = \argmax\limits_{x \in \HH_T^0} F\left(\int_0^\cdot \sigma(t) \dot{x}_t \D t\right) - \frac{1}{2}\int_0^T \dot{x}_t^2 \D t\,.
 $$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1437,7 +1438,7 @@ Consider the payoff~$G(\vartheta\cT\nobreak X)$ with~$G:\RR^+ \to \RR^+$ differe
 a positive continuous function of finite variation. 
 The optimisation problem reads
 $$
-h^{*} = \argmax\limits_{x \in \HH_T^0} F\left(\int_0^T \vartheta_t \sigma(t) \dot{x}_t \D t\right) - \frac{1}{2}\int_0^T \dot{x}_t^2 \D t,
+h^{*} = \argmax\limits_{x \in \HH_T^0} F\left(\int_0^T \vartheta_t \sigma(t) \dot{x}_t \D t\right) - \frac{1}{2}\int_0^T \dot{x}_t^2 \D t\,,
 $$
 with %$F = \ln|G|$ in the price small-noise approximation and 
 $F = \ln|G(\cdot - \frac{1}{2}\int_0^T\vartheta_t \sigma^2(t) \D t)|$ in the log-price small-noise approximation. 
@@ -1452,8 +1453,8 @@ The optimisation problem becomes
 \[
 \begin{cases}
 \lambda^{*} &= \displaystyle \argmax\limits_{\lambda \in\RR}
-\left\{F\left(\lambda \int_0^T |\vartheta_t \sigma(t)|^2 \D t\right)  - \frac{1}{2}\lambda^2 \int_0^T |\vartheta_t \sigma(t)|^2 \D t\right\},\\
-h^{*} &= \displaystyle \lambda^{*} \int_0^\cdot \vartheta_t \sigma(t) \D t.
+\left\{F\left(\lambda \int_0^T |\vartheta_t \sigma(t)|^2 \D t\right)  - \frac{1}{2}\lambda^2 \int_0^T |\vartheta_t \sigma(t)|^2 \D t\right\}\,, \\
+h^{*} &= \displaystyle \lambda^{*} \int_0^\cdot \vartheta_t \sigma(t) \D t\,.
 \end{cases}
 \]
 For example, if~$F(x) = \ln(\E^x - \E^c)^+$ for~$x,c \in\RR$,~$\widetilde{\lambda}$ will be the unique solution on~$(1,\infty)$ of
@@ -1488,8 +1489,8 @@ Lognormal-based stochastic volatility models,
 such as~\cite{Sepp2012BetaModel}, read
 \begin{equation}\label{eq:LogNormalVol}
 \begin{aligned}
-    \D X_t &= -\frac12 V_t + \sqrt{V_t}\D B_t, & X_0 &= 0,\\
-    \D V_t &= \kappa (\theta - V_t)\D t + \xi V_t\D W_t, & V_0 &= v_0 > 0.
+    \D X_t &= -\frac12 V_t + \sqrt{V_t}\D B_t\,, & X_0 &= 0\,,\\
+    \D V_t &= \kappa (\theta - V_t)\D t + \xi V_t\D W_t\,, & V_0 &= v_0 > 0\,.
 \end{aligned}
 \end{equation}
 This model clearly satisfies all the assumptions in the previous sections (linear drift and diffusion)
@@ -1509,8 +1510,8 @@ We however leave this model-specific analysis to future endeavours.
 The Heston model is one of the most widely used stochastic volatility models in Finance, first proposed in~\cite{Heston1993AOptions}, in which the log stock price process satisfies
 \begin{equation}\label{eq:Heston}
 \begin{aligned}
-    \D X_t &= -\frac12 V_t + \sqrt{V_t}\D B_t, & X_0 &= 0,\\
-    \D V_t &= \kappa (\theta - V_t)\D t + \xi \sqrt{V_t}\D W_t, & V_0 &= v_0 > 0,
+    \D X_t &= -\frac12 V_t + \sqrt{V_t}\D B_t\,, & X_0 &= 0\,,\\
+    \D V_t &= \kappa (\theta - V_t)\D t + \xi \sqrt{V_t}\D W_t\,, & V_0 &= v_0 > 0\,,
 \end{aligned}
 \end{equation}
 for two Brownian motions~$B$ and~$W$
@@ -1536,11 +1537,11 @@ In the Heston model, the system~\eqref{eq:LDPLargeTimeGeneral} becomes
 \begin{equation*}
 \left\{
 \begin{array}{rl}
-\displaystyle \frac{\D}{\D t}\left\{\frac{Z - \rho U}{\vartheta\brho^2\sqrt{\psi}}\right\} &= 0,\\
+\displaystyle \frac{\D}{\D t}\left\{\frac{Z - \rho U}{\vartheta\brho^2\sqrt{\psi}}\right\} &= 0\,,\\
 \displaystyle \frac{\D}{\D t}\left\{
 \frac{U}{\xi \sqrt{\psi}} - \frac{\rho}{\brho^2}\frac{(Z - \rho U)}{\xi\sqrt{\psi}} \right\}
 &= \displaystyle U\left(-\frac{U}{2\psi} + \frac{\kappa}{\xi \sqrt{\psi}}\right)
-+ \frac{Z - \rho U}{\brho^2}\left(-\frac{Z-\rho U}{2\psi} + \frac{\frac{1}{2} - \rho \frac{\kappa}{\xi}}{\sqrt{\psi}}\right).
++ \frac{Z - \rho U}{\brho^2}\left(-\frac{Z-\rho U}{2\psi} + \frac{\frac{1}{2} - \rho \frac{\kappa}{\xi}}{\sqrt{\psi}}\right)\,.
 \end{array}
 \right.
 \end{equation*}
@@ -1549,9 +1550,9 @@ Solving the first ODE and plugging it into the second one gives for all~$t\in[0,
 \left\{
 \begin{array}{rl}
 \displaystyle \frac{Z_t - \rho U_t}{\brho^2}
-&= \displaystyle \frac{1}{2} \lambda \vartheta_t \psi_t,\\
+&= \displaystyle \frac{1}{2} \lambda \vartheta_t \psi_t\,,\\
 \displaystyle \dot{A}_t &= 
-\displaystyle -\frac{1}{2}\xi A_t^2 + \kappa A_t + \frac{1}{2}\xi \lambda \vartheta_t \left(\frac{1}{2} - \frac{1}{4}\brho^2\lambda\vartheta_t - \rho\frac{\kappa}{\xi} \right) + \frac{1}{2}\rho\lambda\dot{\vartheta}_t,
+\displaystyle -\frac{1}{2}\xi A_t^2 + \kappa A_t + \frac{1}{2}\xi \lambda \vartheta_t \left(\frac{1}{2} - \frac{1}{4}\brho^2\lambda\vartheta_t - \rho\frac{\kappa}{\xi} \right) + \frac{1}{2}\rho\lambda\dot{\vartheta}_t\,,
 \end{array}
 \right.
 \end{equation}
@@ -1559,7 +1560,7 @@ where~$\lambda>0$ is an arbitrary constant and~$A_t = \frac{U_t}{\sqrt{\psi_t}}$
 \[
 \lambda = - \frac{2F_T'}{\sqrt{\psi_T}} 
 \qquad \text{and} \qquad 
-A_T = -\frac{\rho}{\xi}F_T'\vartheta_T,
+A_T = -\frac{\rho}{\xi}F_T'\vartheta_T\,,
 \]
 with~$F_T=F\left(\smallint_0^T\vartheta_t\left(Z\sqrt\psi-\frac12\psi\right) \D t\right)$. 
 Since both conditions include the same optimising variable, 
@@ -1570,7 +1571,7 @@ After solving for~$A_t$ for all~$t\in[0, T]$, we then solve for~$(\varphi,\psi)$
 \begin{example}\label{ex:HestonSmallNoiseLDP}
 In the case~$\vartheta_t=\vartheta>0$, let~${C(\lambda)\defEqual \frac12\xi\lambda\vartheta\left(\frac12-\frac14\brho^2\lambda\vartheta-\rho\frac\kappa\xi\right)}$ so that the Riccati equation~\eqref{eq:RiccatiA} reads
 \[
-\frac{\D A_t}{\D t} = -\frac\xi 2 A^2_t + \kappa A_t + C(\lambda),
+\frac{\D A_t}{\D t} = -\frac\xi 2 A^2_t + \kappa A_t + C(\lambda)\,,
 \]
 %The solution is described by the following integral
 %\[
@@ -1579,16 +1580,16 @@ In the case~$\vartheta_t=\vartheta>0$, let~${C(\lambda)\defEqual \frac12\xi\lamb
 %which can be easily solved and the solution expression becomes
 the solution to which is
 $$
-A_t = \frac1\xi\left\{\sqrt{2\xi C(\lambda)-\kappa^2}\tan\left(-\frac12\frac{t-D(A_0, \lambda)}{\sqrt{2\xi C(\lambda)-\kappa^2}}\right)+\kappa\right\},
+A_t = \frac1\xi\left\{\sqrt{2\xi C(\lambda)-\kappa^2}\tan\left(-\frac12\frac{t-D(A_0, \lambda)}{\sqrt{2\xi C(\lambda)-\kappa^2}}\right)+\kappa\right\}\,,
 $$
 where the form of~$D\in\RR$ is determined from the initial condition on~$A$. Since~${A_t=\tfrac{U_t}{\sqrt{\psi_t}}=\tfrac{\dot\psi_t-\kappa(\theta-\psi_t)}{\psi_t}}$, we are to solve
-$\dot\psi_t + (\kappa - A_t)\psi_t = \kappa\theta$,
+$\dot\psi_t + (\kappa - A_t)\psi_t = \kappa\theta$\,,
 for~$t \in[0,T]$,
 which is just a non-homogeneous linear ODE with the solution
 $$
 \psi_t = \left(\kappa\theta\int_0^t 
 \exp\left\{\int_0^s (\kappa-A_u)\D u\right\}\D s + v_0\right)
-\exp\left\{-\int_0^t (\kappa-A_s)\D s\right\}.
+\exp\left\{-\int_0^t (\kappa-A_s)\D s\right\}\,.
 $$
 Then the optimisation problem for~$\hh$ reduces to
 \begin{equation*}
@@ -1599,7 +1600,7 @@ h_1(t)
  & = \displaystyle \min_{A_0, \lambda>0} \frac{\dot \psi_t(A_0, \lambda)-\kappa(\theta-\psi_t(A_0, \lambda))}{\psi_t(A_0, \lambda)} \\
 h_2(t)
 & = & \displaystyle \frac{Z(\varphi^{*}, \psi^{*})-\rho U(\psi^{*})}{\brho}
-& = \displaystyle \frac{\vartheta}{2}\min_{A_0, \lambda>0} \lambda\psi_t(A_0, \lambda),
+& = \displaystyle \frac{\vartheta}{2}\min_{A_0, \lambda>0} \lambda\psi_t(A_0, \lambda)\,,
 \end{array}
 \right.
 \end{equation*}
@@ -1616,9 +1617,9 @@ In the deterministic case, we have
 \left\{
 \begin{array}{rl}
 \varphi^{*},\psi^{*}
-& = \argmax\limits_{(\varphi,\psi) \in \HH_T^0\times \HH_T^{v_0,+}} \left\{F\left(\int_0^T\vartheta_t \dot{\varphi}_t \D t\right) - \frac{1}{2}\int_0^T \left\{U(\psi_t)^2 + \left|\frac{Z(\varphi_t,\psi_t) - \rho U(\psi_t)}{\brho}\right|^2\right\}\D t\right\},\\
+& = \argmax\limits_{(\varphi,\psi) \in \HH_T^0\times \HH_T^{v_0,+}} \left\{F\left(\int_0^T\vartheta_t \dot{\varphi}_t \D t\right) - \frac{1}{2}\int_0^T \left\{U(\psi_t)^2 + \left|\frac{Z(\varphi_t,\psi_t) - \rho U(\psi_t)}{\brho}\right|^2\right\}\D t\right\}\,, \\
 \dot{\hh}^{*} & = \displaystyle 
-\left(U(\psi^{*}),  \frac{Z(\varphi^{*},\psi^{*}) - \rho U(\psi^{*})}{\brho}\right),
+\left(U(\psi^{*}),  \frac{Z(\varphi^{*},\psi^{*}) - \rho U(\psi^{*})}{\brho}\right)\,,
 \end{array}
 \right.
 \end{equation*}
@@ -1633,7 +1634,7 @@ with~$A_t = \frac{U_t}{\sqrt{\psi_t}}$,
 \begin{array}{rl}
 \displaystyle Z_t - \rho U_t &= \displaystyle \frac{1}{2} \brho^2 \lambda \vartheta_t \psi_t,\\
 \displaystyle \dot{A}_t
-&= \displaystyle -\frac{1}{2}\xi A_t^2 + \frac{1}{2}\xi \lambda \vartheta_t \left(\frac{1}{2} - \frac{1}{4}\brho^2\lambda\vartheta_t \right) + \frac{1}{2}\rho\lambda\dot{\vartheta}_t,
+&= \displaystyle -\frac{1}{2}\xi A_t^2 + \frac{1}{2}\xi \lambda \vartheta_t \left(\frac{1}{2} - \frac{1}{4}\brho^2\lambda\vartheta_t \right) + \frac{1}{2}\rho\lambda\dot{\vartheta}_t\,,
 \end{array}
 \right.
 \end{equation*}
@@ -1657,7 +1658,7 @@ $$
 \EE_\mu[Y] = \theta
 \qquad\text{and}\qquad
 \EE_\mu\left[\sqrt{Y}\right]
-=\frac{\Gamma\left( \frac{2\kappa}{\xi^2}\theta + \frac{1}{2} \right )}{\Gamma\left( \frac{2\kappa\theta}{\xi^2} \right )} \frac{\xi}{\sqrt{2\kappa}}.
+=\frac{\Gamma\left( \frac{2\kappa}{\xi^2}\theta + \frac{1}{2} \right )}{\Gamma\left( \frac{2\kappa\theta}{\xi^2} \right )} \frac{\xi}{\sqrt{2\kappa}}\,.
 $$
 From this, noting that~$\dot{\varsigma}(y)g(y) = -\xi\sqrt{y}/(2\kappa)$ we can calculate the constants~\eqref{eq:ConstPDP}:
 \begin{align*}
@@ -1667,7 +1668,7 @@ B = -\frac{1}{2}
 \begin{pmatrix}
 \rho - \frac{\xi}{2\kappa}\\
 \brho\\
-\end{pmatrix}\EE_\mu\left[\sqrt{Y}\right].
+\end{pmatrix}\EE_\mu\left[\sqrt{Y}\right]\,.
 \end{align*}
 
 \subsubsection{Other}
@@ -1677,7 +1678,7 @@ Results in Heston which are not mentioned in this section follow directly from t
 \section{Numerical results}\label{sec:Num_results}
 In all the different settings we studied, the final form of the optimisation problem is
 $$
-\sup_{(\varphi, \phi)\in \HH_T^0\times \HH_T^{v_0}}F(\varphi) - \frac{1}{2}\int_0^T\ell(\varphi_t,\phi_t)\D t,
+\sup_{(\varphi, \phi)\in \HH_T^0\times \HH_T^{v_0}}F(\varphi) - \frac{1}{2}\int_0^T\ell(\varphi_t,\phi_t)\D t\,,
 $$
 where~$F$ was linked to the payoff,~$\ell$ to the rate function of the (log-)price process and~$\varphi$ and~$\phi$ are absolutely continuous paths that arise from Varadhan's lemma of the (log-)price and volatility processes respectively.
 In the tables below, we summarise all problems considered so far. As one can see, in the deterministic drift setting, the MDP problem is usually as simple as solving the problem under the Black-Scholes (BS) model or at least by approximating the model with a Black-Scholes model. Furthermore, the variance reduction for geometric Asian options is also similar under the MDP with deterministic drift change, meaning the advantage over a simple BS model is not significant. However, when it comes to the stochastic change of drift of the form~$\int_0^\cdot\dot{h}_t\sqrt{V_t}\D t$, the MDP problems are slightly harder than in BS approximation and the variance reduction results are in fact significantly better. We study the stochastic change of drift in all cases except in the MDP large-time case, where the invariant distribution of~$\int_0^\cdot \dot{h}_{t}\sqrt{V_t}dt$ is not immediate and would require a careful study, which is outside the scope of this work.
@@ -1801,13 +1802,13 @@ We consider the following model parameters
 (realistic on Equity markets)
 for the Heston model recalled in Section~\ref{sec:Heston}:
 $$
-S_0 = 50; \quad
-r = 0.05; \quad
-v_0 = 0.04; \quad
-\rho = -0.5; \quad 
-\kappa = 2; \quad
-\theta = 0.09; \quad 
-\xi = 0.2.
+S_0 = 50\,; \quad
+r = 0.05\,; \quad
+v_0 = 0.04\,; \quad
+\rho = -0.5\,; \quad 
+\kappa = 2\,; \quad
+\theta = 0.09\,; \quad 
+\xi = 0.2\,.
 $$
 To simulate the paths~$(X,V)$ on~$[0,T]$, 
 we use a standard Euler-Maruyama scheme for~$X$, but use the scheme~\cite{Lord2009AModels} for the CIR process in the volatility, 
@@ -1816,9 +1817,9 @@ Since the objective of this chapter is not to study the effects of different sch
 \begin{equation*}
 \left\{
 \begin{array}{rcl}
-\widetilde{V}_{0}^n & = & v_0>0,\\
-\widetilde{V}_{i+1}^n & = & \widetilde{V}_{i}^n + \kappa \left(\theta - \widetilde{V}_{i}^{n,+}\right)\Delta + \xi \sqrt{\widetilde{V}_{i}^{n,+}}\Delta W_{i}^n, \quad \text{for all} \quad i\in\{0,\dots,n-1\},\\
-V_{i}^n & = & \widetilde{V}_{i}^{n,+}.
+\widetilde{V}_{0}^n & = & v_0>0\,, \\
+\widetilde{V}_{i+1}^n & = & \widetilde{V}_{i}^n + \kappa \left(\theta - \widetilde{V}_{i}^{n,+}\right)\Delta + \xi \sqrt{\widetilde{V}_{i}^{n,+}}\Delta W_{i}^n, \quad \text{for all} \quad i\in\{0,\dots,n-1\}\,, \\
+V_{i}^n & = & \widetilde{V}_{i}^{n,+}\,.
 \end{array}
 \right.
 \end{equation*}
@@ -1829,7 +1830,7 @@ Furthermore, since LDP-based deterministic changes of drift in the BS setting (o
 $$
 h_t=\sum_{i=1}^{n} h^i_t \, \ind_{[(i-1)\Delta, i\Delta]}(t),
 $$
-where~$h^i_t$ is the best deterministic change of drift up to the~$i$-th discretisation step.\footnote{Fully adaptive schemes are  computationally very heavy, therefore we only consider it in the Black-Scholes setting. 
+where~$h^i_t$ is the best deterministic change of drift up to the~$i$-th discretisation step.\footnote{Fully adaptive schemes are computationally very heavy, therefore we only consider it in the Black-Scholes setting. 
 The change of law is computed~$n \times N_{\text{MC}}$ times ($252 \times 5\mathrm{E}5 = 1.26\mathrm{E}8$ in our case).} %not sure I understand what the fully adaptive estimator is. Is it computed on each path up to each discretisation step? So~$$h_t=\sum_{i=1}^{n} h^i_t \, \ind_{[(i-1)\Delta, i\Delta)}(t),$$
 We shall refer to \textit{deterministic} schemes
 to mean changes of law with deterministic changes of drift and to \textit{adaptive} changes of drift 

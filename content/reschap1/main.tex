@@ -8,7 +8,7 @@ Until recently, these models were mostly conceived in a three-step fashion:
 Indeed, model complexity was undesirable, amongst other reasons, for increasing the computational effort required to perform calibration but, in particular, also pricing and risk calculations.
 With greater uptake of machine learning methods and greater computational power, more complex models can now be used. 
 This is due to the fact that arguably the most complicated and computationally expensive step of calibration has been addressed. 
-Indeed, the seminal paper~\cite{Hernandez2016ModelNetworks} used neural networks to learn the calibration map from market data directly to model parameters. Subsequently, many papers followed \cite{Liu2019ACalibration,Ruf2019NeuralReview,Benth2020AccuracyCurves,Gambara2020ConsistentCalibration,Sardroudi2019PolynomialCalibration,Horvath2020DeepModels,Bayer2019OnModels,Bayer2018DeepModels,Vidales2018UnbiasedPDEs}. 
+Indeed, the seminal paper~\cite{Hernandez2016ModelNetworks} used neural networks to learn the calibration map from market data directly to model parameters. Subsequently, many papers followed \cite{Liu2019ACalibration,Ruf2020NeuralReview,Benth2020AccuracyCurves,Gambara2020ConsistentCalibration,Sardroudi2019PolynomialCalibration,Horvath2020DeepModels,Bayer2019OnModels,Bayer2018DeepModels,Vidales2018UnbiasedPDEs}. 
 However, these approaches focused on the calibration of a fixed parametric model but did not address perhaps even more important issues -- model selection and model uncertainty. 
 
 The approach taken in this work is fundamentally different in the sense that we let the data dictate the model, however, we impose a strong prior on the model form.

@@ -69,7 +69,7 @@ $$
 
 A sufficient condition for the above condition to be satisfied is that $\mathfrak{f} \in L^{1}\left(\mathbb{R}^{q}\right)$
 has an integrable Fourier transform and belongs to the Sobolev space $\Ww^{2,2}\left(\mathbb{R}^{q}\right)$ (see e.g. \cite[Theorem~6.1]{Folland1995IntroductionEquations}). 
-In our case, $q=1$, under assumption $\mathfrak{f}\in \Ww^{3,2}(\RR^1)$ as enforced by Assumption~\ref{ass:RWNNscheme}~i), we have by \cite[Theorem~9.17]{Folland2013RealApplications} that $\|\widehat{(\Dr^{\boldsymbol\alpha} \mathfrak{f})}\|_{(1)} \leq C \|\mathfrak{f}\|_{(3)}$ for all multi-indices $|\boldsymbol\alpha|\leq 2$ and $\|\mathfrak f\|_{(s)}=[\int|\widehat{\mathfrak f}(\xi)|^2\left(1+|\xi|^2\right)^s \D \xi]^{1 / 2}$ for~$s\in\RR$ denotes the Sobolev norm. Thus, we have by \cite[Corollary~2.52]{Folland2013RealApplications} that $\widehat{ \mathfrak{f}} \in L^1(\RR^1)$.
+In our case, i.e., for $q=1$ and under assumption $\mathfrak{f}\in \Ww^{3,2}(\RR^1)$ as enforced by Assumption~\ref{ass:RWNNscheme}~i), we have by~\cite[Theorem~9.17]{Folland2013RealApplications} that $\|\widehat{(\Dr^{\boldsymbol\alpha} \mathfrak{f})}\|_{(1)} \leq C \|\mathfrak{f}\|_{(3)}$ for all multi-indices $|\boldsymbol\alpha|\leq 2$ and $\|\mathfrak f\|_{(s)}=[\int|\widehat{\mathfrak f}(\xi)|^2\left(1+|\xi|^2\right)^s \D \xi]^{1 / 2}$ for~$s\in\RR$ denotes the Sobolev norm. Thus, we have by \cite[Corollary~2.52]{Folland2013RealApplications} that $\widehat{ \mathfrak{f}} \in L^1(\RR^1)$.
 \end{proof}
 
 
@@ -77,7 +77,7 @@ In our case, $q=1$, under assumption $\mathfrak{f}\in \Ww^{3,2}(\RR^1)$ as enfor
 \label{apx:technical_proofs}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 We prove the theorem in three steps. 
-First, we derive an estimate for the $L^2$-distance of~$\widehat{\Vv}_{t_i}$ to the discretised~$Y_{t_i}$. Next, we use this to prove the estimate for the $Y$-component and finally for the $Z$-components. 
+First, we derive an estimate for the $L^2$\nobreakdash-distance of~$\widehat{\Vv}_{t_i}$ to the discretised~$Y_{t_i}$. Next, we use this to prove the estimate for the $Y$\nobreakdash-component and finally for the $Z$\nobreakdash-components. 
 In the first part, for convenience, we do not explicitly denote the conditionality of expectation on the realisation of random bases of the corresponding RWNNs, but remark that the expectation should be understood as such whenever this is the case. For convenience, we introduce the error notations:
 \begin{equation}\label{eq:ErrorNotations}
 \begin{array}{rll}
@@ -92,34 +92,40 @@ $f_{t} \coloneqq  f\left(t, X_t, Y_t, Z^1_t, Z^2_t\right)$
 and note that the constant $C>0$ might change from line to line.
 
 \paragraph{\textbf{Part I}} We start by showing for each $i\in\{0, \dots, N-1\}$,
+\begin{small}
 \begin{equation}\label{eq:convergence_part1_result}
 \ErrYiVhat
 \leq (1+C|\pi|) \ErrYiUfip
  +C|\pi| \EE\left[\int_{t_i}^{t_{i+1}}f_{t}^2 \D t\right] 
  + C \sum_{k=1}^{2}\ErrIntZkibar + C |\pi|\omega(|\pi|),
 \end{equation}
+\end{small}%
 where $\omega$ is the modulus function from Assumption~\ref{ass:RWNNscheme}. 
 By writing the SPDE as the corresponding BSPDE as in~\eqref{eq:BSDEGeneral} and using~\eqref{eq:auxilaryProcesses}, we obtain
-\[
+\begin{small}
+\begin{equation}
 Y_{t_i}-\widehat{\Vv}_{t_i} = 
-\EE_i\left[Y_{t_{i+1}}-\widehat{\Uf}_{i+1}\right]+\EE_i\left[\int_{t_i}^{t_{i+1}} f\left(t, \E^{X_t}, Y_t, Z^1_t, Z^2_t\right)-f\left(t_i, \E^{X^\pi_{t_i}}, \widehat{\Vv}_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \D t\right].
-\]
+\EE_i\left[Y_{t_{i+1}}-\widehat{\Uf}_{i+1}\right]+\EE_i\left[\int_{t_i}^{t_{i+1}} f\left(t, \E^{X_t}, Y_t, Z^1_t, Z^2_t\right)-f\left(t_i, \E^{X^\pi_{t_i}}, \widehat{\Vv}_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \D t\right]\,.
+\end{equation}
+\end{small}%
 Then, Young's inequality~\eqref{eq:Young} with $\chi = \gamma\Deli$ gives
+\begin{small}
 \begin{equation}
 \begin{aligned}
 &\ErrYiVhat \\
 & \leq \EE\left\{\left(1+\gamma \Deli \right)
 \ErriYiUfip^{2}
  + \left(1+\frac{1}{\gamma \Deli }\right)\EE_i\left[\int_{t_i}^{t_{i+1}}\left\{
-f_{t}-f\left(t_i, \E^{X^\pi_{t_i}}, \widehat{\Vv}_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right)\right\} \D t\right]^2\right\}.
+f_{t}-f\left(t_i, \E^{X^\pi_{t_i}}, \widehat{\Vv}_{t_i}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right)\right\} \D t\right]^2\right\}\,.
 \end{aligned}
 \end{equation}
+\end{small}%
 Then Cauchy-Schwarz, Assumption~\ref{ass:RWNNscheme} and~\eqref{eq:fwd_process_estimation} imply
 \begin{align}\label{eq:convergence_part1_0}
 \begin{split}
 \ErrYiVhat &\leq \left(1+\gamma \Deli \right) \EE\left[\ErriYiUfip^2\right] \\ 
 & + 5\left(1+\frac{1}{\gamma \Deli }\right) L_f^2 \Deli \Bigg\{C |\pi| \omega(|\pi|)
-+ \ErrIntYtVihat + \sum_{k=1}^{2}\ErrIntZkihat\Bigg\}.
++ \ErrIntYtVihat + \sum_{k=1}^{2}\ErrIntZkihat\Bigg\}\,.
 \end{split}
 \end{align}
 The standard inequality $(a+b)^2\leq 2(|a|^2+|b|^2)$ and the $L^2$-regularity of~$Y$ in~\eqref{eq:L2regularity} yield
@@ -129,7 +135,7 @@ The standard inequality $(a+b)^2\leq 2(|a|^2+|b|^2)$ and the $L^2$-regularity of
   & \leq 2 \EE\left[\int_{t_i}^{t_{i+1}}
 \left\{|Y_t-Y_{t_i}|^2 + \left|Y_{t_i}-\widehat\Vv_{t_i}\right|^2\right\} \D t\right] \\
  & \leq 2|\pi|^2 + 2\Deli\EE\left[|Y_{t_i}-\widehat\Vv_{t_i}|^2\right]
- = 2|\pi|^2 + 2\Deli\ErrYiVhat,
+ = 2|\pi|^2 + 2\Deli\ErrYiVhat\,,
 \end{align*}
 so that after rearranging the constant term $\left(1+\frac{1}{\gamma\Deli}\right)L_f^2\Deli=(1+\gamma\Deli)\frac{L_f^2}\gamma$,
 we obtain
@@ -138,7 +144,7 @@ we obtain
 \ErrYiVhat &\leq \left(1+\gamma \Deli \right) \EE\left[\ErriYiUfip^{2}\right] \\
  & \qquad + 5\left(1+\gamma \Deli \right) \frac{L_f^2}{\gamma}\left\{
 C |\pi| \omega(|\pi|) + \Deli  \ErrYiVhat
-+ \sum_{k=1}^{2}\ErrIntZkihat\right\}.
++ \sum_{k=1}^{2}\ErrIntZkihat\right\}\,.
 \end{aligned}
 \end{equation}
 Since $\overline{Z}^k$ are defined as $L^2$-projections of $Z$ (see \eqref{eq:Z_error}), the last term reads
@@ -146,16 +152,17 @@ Since $\overline{Z}^k$ are defined as $L^2$-projections of $Z$ (see \eqref{eq:Z_
 \begin{split}
 & \ErrYiVhat \leq\left(1+\gamma \Deli \right) \EE\left[\ErriYiUfip^2\right] \\
  & \qquad + 5\left(1+\gamma \Deli \right) \frac{L_f^2}{\gamma}\Bigg\{C |\pi| \omega(|\pi|) + 2 \Deli  \ErrYiVhat 
-+ \sum_{k=1}^2\left(\ErrIntZkibar + \Deli \ErrZkibarhat \right)\Bigg\}.
++ \sum_{k=1}^2\left(\ErrIntZkibar + \Deli \ErrZkibarhat \right)\Bigg\}\,.
 \end{split}
 \end{align}
 The rightmost term can be further expanded:
 integrating the BSDE~\eqref{eq:BSDEGeneral} over $[t_i, t_{i+1}]$, multiplying it by $\Delta^{W^k}_{i}$ for $k\in\{1,2\}$ separately and using the definitions in~\eqref{eq:auxilaryProcesses} give
 \begin{align}
 \Deli \left[\overline{Z}^k_{t_i}-\Zowk_{t_{i}}\right] &= \EE_i\left[\Delta^{W^k}_{i}\left\{Y_{t_{i+1}}-\widehat{\Uf}_{i+1}-\EE_i\left[Y_{t_{i+1}}-\widehat{\Uf}_{i+1}\right]\right\}\right] 
-+ \EE_i\left[\Delta^{W^k}_{i} \int_{t_i}^{t_{i+1}} f_{t}\D t\right].
++ \EE_i\left[\Delta^{W^k}_{i} \int_{t_i}^{t_{i+1}} f_{t}\D t\right]\,.
 \end{align}
 Next, taking the expectation of the square and using the H{\"o}lder inequality yield
+\begin{small}
 \begin{align*}
     & \frac{\Deli^2}{2}
     \EE_i\left[\left|\overline{Z}^k_{t_i} - \Zowk_{t_{i}}\right|^2\right] \\
@@ -163,8 +170,9 @@ Next, taking the expectation of the square and using the H{\"o}lder inequality y
     &\leq \EE_i\left[\left|\Delta^{W^k}_{i}\right|^2\right] \EE_i\left[\left| Y_{t_{i+1}}-\widehat{\Uf}_{i+1} - \EE_i\left[Y_{t_{i+1}} - \widehat{\Uf}_{i+1}\right]\right|^2\right] + \EE_i\left[ \left|\Delta^{W^k}_{i}\right|^2\right]\EE_i\left[ \left|\int_{t_i}^{t_{i+1}} f_{t}\D t\right|^2\right] \\
     &= \Deli \Bigg\{\EE_i\left[\left| Y_{t_{i+1}}-\widehat{\Uf}_{i+1}\right|^2\right] -2\EE_i\left[\left(Y_{t_{i+1}}-\widehat{\Uf}_{i+1}\right)\EE_i\left[Y_{t_{i+1}}-\widehat{\Uf}_{i+1}\right]\right] + \left|\EE_i\left[ Y_{t_{i+1}}-\widehat{\Uf}_{i+1}\right]\right|^2 \\
     & \qquad + \EE_i\left[ \left|\int_{t_i}^{t_{i+1}} f_{t}\D t\right|^2\right]\Bigg\} \\
-    &\leq \Deli \left\{\EE_i\left[\left| Y_{t_{i+1}}-\widehat{\Uf}_{i+1}\right|^2\right] - \left|\EE_i\left[ Y_{t_{i+1}}-\widehat{\Uf}_{i+1}\right]\right|^2 + \EE_i\left[\int_{t_i}^{t_{i+1}}\D t  \int_{t_i}^{t_{i+1}} \left| f_{t}\right|^2\D t\right]\right\}.
+    &\leq \Deli \left\{\EE_i\left[\left| Y_{t_{i+1}}-\widehat{\Uf}_{i+1}\right|^2\right] - \left|\EE_i\left[ Y_{t_{i+1}}-\widehat{\Uf}_{i+1}\right]\right|^2 + \EE_i\left[\int_{t_i}^{t_{i+1}}\D t  \int_{t_i}^{t_{i+1}} \left| f_{t}\right|^2\D t\right]\right\}\,.
 \end{align*}
+\end{small}%
 Finally, by the law of iterated conditional expectations
 \begin{equation}\label{eq:convergence_part1_2}
 \frac{\Deli}{2}
@@ -172,9 +180,10 @@ Finally, by the law of iterated conditional expectations
 \leq \ErrYiUfip
 - \EE\left[\ErriYiUfip^{2}\right]
  + \Deli  \EE\left[\int_{t_i}^{t_{i+1}}
-f_{t}^2 \D t\right],
+f_{t}^2 \D t\right]\,,
 \end{equation}
 which can then be used in~\eqref{eq:convergence_part1} to obtain
+\begin{small}
 \begin{align}
 \begin{split}
 & \ErrYiVhat \\
@@ -183,22 +192,23 @@ which can then be used in~\eqref{eq:convergence_part1} to obtain
 &\qquad +\sum_{k=1}^2\ErrIntZkibar + 4\left(\ErrYiUfip - \EE\left[\ErriYiUfip^{2}\right]\right)
  + 4 \Deli  \EE\left[\int_{t_i}^{t_{i+1}}f_{t}^2 \D t\right]\Bigg\} \\
 & \leq \left(1+20 L_f^2 \Deli \right) \ErrYiUfip \\
-& \qquad + C \left\{|\pi| \omega(|\pi|) + \Deli \ErrYiVhat + \sum_{k=1}^{2}\ErrIntZkibar  + \Deli  \EE\left[\int_{t_i}^{t_{i+1}}f_{t}^2 \D t\right]\right\},
+& \qquad + C \left\{|\pi| \omega(|\pi|) + \Deli \ErrYiVhat + \sum_{k=1}^{2}\ErrIntZkibar  + \Deli  \EE\left[\int_{t_i}^{t_{i+1}}f_{t}^2 \D t\right]\right\}\,,
 \end{split}
 \end{align}
+\end{small}%
 with $\gamma = 20 L_f^2$ in the second inequality, concluding Part~I by letting~$|\pi|$ sufficiently small.
 
 \paragraph{\textbf{Part II}} 
 We now prove an estimate for the $Y$-component and show that
 \begin{align}\label{eq:convergence_part2_result}
 \max_{i\in\{0,\dots,N-1\}} 
-\ErrYiUfi \leq C\Bigg\{\omega(|\pi|) + \EE\left[\left|g(X_T)-g(X^\pi_T)\right|^2\right]+\sum_{k=1}^2\eps^{Z^k}(\pi)+\frac{C^{*}}{K}N + M|\pi|^2\Bigg\}.
+\ErrYiUfi \leq C\Bigg\{\omega(|\pi|) + \EE\left[\left|g(X_T)-g(X^\pi_T)\right|^2\right]+\sum_{k=1}^2\eps^{Z^k}(\pi)+\frac{C^{*}}{K}N + M|\pi|^2\Bigg\}\,.
 \end{align}
 With Young's inequality of the form $(a+b)^2\geq (1-|\pi|)a^2 - \frac1{|\pi|} b^2$,
 we have
 \begin{equation}
 \ErrYiVhat = \EE\left[\left|Y_{t_i} - \widehat{\Uf}_i + \widehat{\Uf}_i - \widehat{\Vv}_{t_i}\right|^2\right] 
-\geq (1-|\pi|)\ErrYiUfi - \frac1{|\pi|} \ErrVhatiUfi.
+\geq (1-|\pi|)\ErrYiUfi - \frac1{|\pi|} \ErrVhatiUfi\,.
 \end{equation}
 Since $\frac1{|\pi|}\leq \frac{N}{T}=CN$,
 taking small enough~$|\pi|$, 
@@ -211,14 +221,14 @@ and combining~\eqref{eq:convergence_part1_result} from Part~I with~\eqref{eq:con
 \begin{align*}
  \ErrYiUfi & \leq (1+C|\pi|) \ErrYiUfip \\
  & + C\left\{|\pi| \EE\left[\int_{t_i}^{t_{i+1}}f_{t}^2 \D t\right] + \sum_{k=1}^{2}\ErrIntZkibar + |\pi|\omega(|\pi|) + N\ErrVhatiUfi
-  \right\}.
+  \right\}\,.
 \end{align*}
 After noting that $Y_{t_N}= g(X_T)$ and $\widehat{\Uf}_N= g(X^\pi_T)$, recalling the definition of $\eps^{Z^k}(\pi)$ from~\eqref{eq:Z_error} and the $L^2$-integrability of $f$ in~\eqref{eq:L2int_f}, 
 straightforward induction implies
 \begin{align*}
 &\max_{i\in\{0, \dots, N-1\}}\ErrYiUfi \\
 &\qquad\leq C\Bigg\{\omega(|\pi|) + |\pi| + \EE\left[\left|g(X_t)-g(X^\pi_T)\right|^2\right] + \sum_{k=1}^2\eps^{Z_k}(\pi)
- + N\sum_{i=0}^{N-1}\ErrVhatiUfi\Bigg\}.
+ + N\sum_{i=0}^{N-1}\ErrVhatiUfi\Bigg\}\,.
 \end{align*}
 Finally, this in conjunction with Lemma~\ref{lem:step_RWWN_bound}, safely ignoring the $Z$-component on the left-hand side, since it is positive, gives the desired result~\eqref{eq:convergence_part2_result}.
 
@@ -227,7 +237,7 @@ Finally, we prove the following bound on the~$Z$ components:
 \begin{align}\label{eq:convergence_part3_result}
 \begin{split}
  &\EE\left[\sum_{i=0}^{N-1} \int_{t_i}^{t_{i+1}}\sum_{k=1}^2\left|Z_t^k-\widehat{\mathcal{Z}}^k_i\left(X^\pi_{t_i}\right)\right|^2 \D t\right] \\
- &\qquad\leq C\Bigg\{\omega(|\pi|) + \EE\left[\left|g(X_T)-g(X^\pi_T)\right|^2\right]+\sum_{k=1}^2\eps^{Z^k}(\pi)+\frac{C^{*}}{K}N + M|\pi|^2\Bigg\}.
+ &\qquad\leq C\Bigg\{\omega(|\pi|) + \EE\left[\left|g(X_T)-g(X^\pi_T)\right|^2\right]+\sum_{k=1}^2\eps^{Z^k}(\pi)+\frac{C^{*}}{K}N + M|\pi|^2\Bigg\}\,.
  \end{split}
 \end{align}
 Since~$\overline{Z}^k$ are $L^2$-projections of~$Z$,
@@ -241,23 +251,25 @@ Since~$\overline{Z}^k$ are $L^2$-projections of~$Z$,
  \left|Z^k_t - \overline{Z}^{k}_{t_{i}}\right|
  \right\}\D t \right]\\
  &= \ErrIntZkibar + \Deli \ErrZkibarhat \\
- &\qquad + 2\EE\left[\left|\overline{Z}^{k}_{t_{i}} - \Zowk_{t_{i}}\right| \int_{t_i}^{t_{i+1}}\left|Z^k_t - \frac{1}{\Deli} \EE_{i}\left[\int_{t_{i}}^{t_{i+1}} Z^k_{s} \D s\right]\right| \D t \right],
+ &\qquad + 2\EE\left[\left|\overline{Z}^{k}_{t_{i}} - \Zowk_{t_{i}}\right| \int_{t_i}^{t_{i+1}}\left|Z^k_t - \frac{1}{\Deli} \EE_{i}\left[\int_{t_{i}}^{t_{i+1}} Z^k_{s} \D s\right]\right| \D t \right]\,,
 \end{align*}
 and the mixed term cancels by the tower property. 
 Using~\eqref{eq:convergence_part1_2} below yields
+\begin{small}
 \begin{align*}
 \ErrIntZkihat
 & =\ErrIntZkibar + \Deli \ErrZkibarhat \\
 &\leq \ErrIntZkibar +  2 \left\{\ErrYiUfip
  - \EE\left[\ErriYiUfip\right]\right\}
- + 2 |\pi| \EE\left[\int_{t_i}^{t_{i+1}}f_{t}^2 \D t\right],
+ + 2 |\pi| \EE\left[\int_{t_i}^{t_{i+1}}f_{t}^2 \D t\right]\,,
 \end{align*}
+\end{small}%
 for $k\in\{1,2\}$. 
 Summing over $i\in\{0,\dots,N-1\}$ together with~\eqref{eq:L2int_f} implies
 \begin{equation}\label{eq:convergence_part3_0}
 \begin{aligned}
 \ErrIntZkihat &\leq \eps^{Z^k}(\pi) + 2\EE\left[\left|g(X_T)-g(X^\pi_T)\right|^2\right] \\
-& \qquad + 2\sum_{i=0}^{N-1}\left\{\ErrYiUfi - \EE\left[\ErriYiUfip^{2}\right]\right\} + C|\pi|.
+& \qquad + 2\sum_{i=0}^{N-1}\left\{\ErrYiUfi - \EE\left[\ErriYiUfip^{2}\right]\right\} + C|\pi|\,.
 \end{aligned}
 \end{equation}
 The summation index was changed in the first term in the curly braces to apply the terminal conditions $Y_{t_N}\coloneqq g(X_T)$ and $\widehat{\Uf}_N(X^\pi_{t_N})\coloneqq g(X^\pi_T)$.
@@ -266,7 +278,7 @@ Combining~\eqref{eq:convergence_part1_0} and~\eqref{eq:convergence_part1_3},
 \begin{aligned}
 & 2\left\{\ErrYiUfi - \EE\left[\ErriYiUfip\right]\right\} \\
 & \qquad\leq \frac{3 \ErrVhatiUfi}{|\pi|(1-|\pi|)} + \frac{2}{1-|\pi|}\Bigg\{\left(1+\gamma |\pi|\right) \EE\left[\ErriYiUfip^{2}\right] \\ 
-& \qquad + \frac{5\left(1+\gamma |\pi|\right) L_f^2}{\gamma}\left[C |\pi|\omega(|\pi|) +2|\pi| \ErrYiVhat + \sum_{k=1}^{2}\ErrIntZkihat\right]\Bigg\}.
+& \qquad + \frac{5\left(1+\gamma |\pi|\right) L_f^2}{\gamma}\left[C |\pi|\omega(|\pi|) +2|\pi| \ErrYiVhat + \sum_{k=1}^{2}\ErrIntZkihat\right]\Bigg\}\,.
 \end{aligned}
 \end{equation}
 Plugging this back into~\eqref{eq:convergence_part3_0} gives
@@ -275,14 +287,15 @@ Plugging this back into~\eqref{eq:convergence_part3_0} gives
 &\ErrIntZkihat \leq \eps^{Z^k}(\pi) + 2\EE\left[\left|g(X_T)-g(X^\pi_T)\right|^2\right] \\ 
 & \qquad + \sum_{i=0}^{N-1} \frac{3}{|\pi|(1-|\pi|)} \ErrVhatiUfi +
 \sum_{i=0}^{N-1}\Bigg\{2\frac{1+\gamma |\pi|}{1-|\pi|} \EE\left[\ErriYiUfip\right] \\ 
-& \qquad + \frac{\left(1+\gamma |\pi|\right)}{1-|\pi|} \frac{10 L_f^2}{\gamma}\left(C \omega(|\pi|)|\pi| +2|\pi| \ErrYiVhat + \sum_{k=1}^{2}\ErrIntZkihat\right)\Bigg\} + C|\pi|.
+& \qquad + \frac{\left(1+\gamma |\pi|\right)}{1-|\pi|} \frac{10 L_f^2}{\gamma}\left(C \omega(|\pi|)|\pi| +2|\pi| \ErrYiVhat + \sum_{k=1}^{2}\ErrIntZkihat\right)\Bigg\} + C|\pi|\,.
 \end{aligned}
 \end{equation}
 Furthermore, choose $\gamma=50L_f^2$ so that $\frac{\left(1+\gamma |\pi|\right)}{1-|\pi|} \frac{10 L_f^2}{\gamma}\leq\frac14$ for small $|\pi|$, which in conjunction with $L^2$-integrability $f$ in~\eqref{eq:L2int_f}, Lemma~\ref{lem:step_RWWN_bound}, Part~I~\eqref{eq:convergence_part1_result}, Part~II~\eqref{eq:convergence_part2_result} gives
+\begin{small}
 \begin{equation}
 \begin{aligned}
 \frac{1}{2} \sum_{k=1}^2 \ErrIntZkihat
-& \leq \sum_{k=1}^2\eps^{Z^k}(\pi) + C \Bigg\{\max _{i\in\{0, \dots, N\}} \ErrYiUfi + \omega(|\pi|) + \EE\left[\left|g\left(X_T\right)-g\left(X^\pi_T\right)\right|^2\right]\\
+& \leq \sum_{k=1}^2\eps^{Z^k}(\pi) + C \Bigg\{\max _{i\in\{0, \dots, N\}} \ErrYiUfi + \omega(|\pi|) + \EE\left[\left|g\left(X_T\right)-g\left(X^\pi_T\right)\right|^2\right] \\
 & \qquad + |\pi| \sum_{i=0}^{N-1} \ErrYiVhat
 + N \sum_{i=0}^{N-1} \ErrVhatiUfi + |\pi| \Bigg\}
 \\
@@ -290,11 +303,12 @@ Furthermore, choose $\gamma=50L_f^2$ so that $\frac{\left(1+\gamma |\pi|\right)}
 & \qquad + |\pi| \sum_{i=0}^{N-1}\bigg\{C|\pi|\omega(|\pi|) + C \sum_{k=1}^2\ErrIntZkibar \\
 & \qquad + (1+C|\pi|) \ErrYiUfip + |\pi| \EE\left[\int_{t_i}^{t_{i+1}}f_{t}^2 \D t\right]\bigg\}
  + N \sum_{i=0}^{N-1} \ErrVhatiUfi \Bigg\} \\
-&\leq C\left\{\sum_{k=1}^2\eps^{Z^k}(\pi) + \omega(|\pi|)+|\pi|+\EE\left[\left|g\left(X_T\right)-g\left(X^\pi_T\right)\right|^2\right] + \frac{C^{*}}{K}N + M|\pi|^2\right\}.\label{eq:convergence_part3_1}
+&\leq C\left\{\sum_{k=1}^2\eps^{Z^k}(\pi) + \omega(|\pi|)+|\pi|+\EE\left[\left|g\left(X_T\right)-g\left(X^\pi_T\right)\right|^2\right] + \frac{C^{*}}{K}N + M|\pi|^2\right\}\,.\label{eq:convergence_part3_1}
 \end{aligned}
 \end{equation}
+\end{small}%
 Ultimately, since~$\overline{Z}$ is an $L^2$-projection, we have the relation, for $k\in\{1,2\}$,
 \begin{equation}
-\EE\left[ \int_{t_i}^{t_{i+1}}\left|Z_t^k-\widehat{\mathcal{Z}}^k_i\left(X^\pi_{t_i}\right)\right|^2 \D t\right] \leq 2\ErrIntZkihat + 2\Deli  \EE\left[ \int_{t_i}^{t_{i+1}}\left|\Zowk_{t_{i}}-\widehat{\mathcal{Z}}^k_i\left(X^\pi_{t_i}\right)\right|^2 \D t\right].
+\EE\left[ \int_{t_i}^{t_{i+1}}\left|Z_t^k-\widehat{\mathcal{Z}}^k_i\left(X^\pi_{t_i}\right)\right|^2 \D t\right] \leq 2\ErrIntZkihat + 2\Deli  \EE\left[ \int_{t_i}^{t_{i+1}}\left|\Zowk_{t_{i}}-\widehat{\mathcal{Z}}^k_i\left(X^\pi_{t_i}\right)\right|^2 \D t\right]\,.
 \end{equation}
 Then Lemma~\ref{lem:step_RWWN_bound} applied over~$\Qq$ and summing over $i\in\{0,\dots,N-1\}$ yield Part~III.

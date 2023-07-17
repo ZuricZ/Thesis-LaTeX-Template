@@ -24,14 +24,14 @@
 % where $\mathrm{TV}(\dot{\hh})$ denotes the total variation of $\dot{\hh}$. Thus, continuity follows from the finite variation assumption.
 % \end{proof}
 \subsection{Proof of Lemma~\ref{lem:degenerate}}\label{sec:lem:degenerate_Proof}
-Let $\beta > 1$, $(\Xx, \D)$ be a metric space and the random variable $Z^\eps:\Omega\rightarrow \Xx$. We first show that $Z^{\eps^\beta}$ is exponentially equivalent to $x_0\in \Xx$. For $\delta > 0$, let $\Gamma_{\delta} \defEqual \{x \in \Xx : \, \mathrm{d}(x,x_0)>\delta \, \}$ and note that $\{\omega \in \Omega : \, Z^{\eps^\beta}(\omega)\in\Gamma_\delta\}$ is measurable since $\Gamma_\delta$ is an open set. 
+Let $\beta > 1$, $(\Xx, \D)$ be a metric space and the random variable ${Z^\eps:\Omega\rightarrow \Xx}$. We first show that $Z^{\eps^\beta}$ is exponentially equivalent to $x_0\in \Xx$. For $\delta > 0$, let~${\Gamma_{\delta} \defEqual \{x \in \Xx : \, \mathrm{d}(x,x_0)>\delta \, \}}$ and note that $\{\omega \in \Omega : \, Z^{\eps^\beta}(\omega)\in\Gamma_\delta\}$ is measurable since $\Gamma_\delta$ is an open set. 
 Since~$\tilde\II$ is  a good rate function and hence lower semi-continuous, it achieves the infimum over a closed set. 
 It thus follows that $\inf_{x\in\overline{\Gamma}_\delta} \tilde\II(x) > 0$, since $\tilde\II(x)=0$ if and only if $x=x_0$. Recall also that $Z^\eps$ satisfies an LDP with the good rate function~$\tilde\II$, then $\limsup_{\eps\downarrow 0}\eps^\beta\log\PP[ Z^{\eps^\beta} \in \Gamma_\delta] \leq - \inf_{x\in\overline{\Gamma}_\delta}\tilde\II(x)$ and therefore
 \begin{align}\label{eq:ProofExpEquiv}
 \limsup_{\eps\downarrow 0} \eps \log \PP \left[ Z^{\eps^\beta} \in \Gamma_\delta \right] &= \limsup_{\eps\downarrow 0} \eps^{1-\beta}\left(\eps^\beta \log \PP \left[ Z^{\eps^\beta} \in \Gamma_\delta \right]\right) \\
-&\leq -\bigg\{ \inf_{x\in\overline{\Gamma}_\delta} \tilde\II(x)\bigg\} \limsup_{\eps\downarrow 0}\eps^{1-\beta} = -\infty.\nonumber
+&\leq -\bigg\{ \inf_{x\in\overline{\Gamma}_\delta} \tilde\II(x)\bigg\} \limsup_{\eps\downarrow 0}\eps^{1-\beta} = -\infty\,.\nonumber
 \end{align}
-Thus proving the exponential equivalence. Next, we show that $x_0\in\Xx$ satisfies an LDP with the good rate function~$\II$. Let $\Gamma_{\delta}\subset\Xx$ such that $x_0\notin\Gamma_{\delta}$, then $\limsup_{\eps\downarrow 0} \eps \log \PP[x_0\in\Gamma]=-\infty$ for the upper bound and thus $-\inf_{x\in\Gamma^\circ}=-\infty$. Now let $\Gamma_{x_0}\subset\Xx$ be such that $x_0\in\Xx$, then $-\inf_{x\in\Gamma_{\delta}} \II(x)=0$ for the upper bound and $\liminf_{\eps\downarrow 0}\eps \log \PP[x_0\in\Gamma_{x_0}]=0$ for the lower bound. By the exponential equivalence the stated result follows.
+Thus proving the exponential equivalence. Next, we show that $x_0\in\Xx$ satisfies an LDP with the good rate function~$\II$. Let $\Gamma_{\delta}\subset\Xx$ such that $x_0\notin\Gamma_{\delta}$, then $\limsup_{\eps\downarrow 0} \eps \log \PP[x_0\in\Gamma]=-\infty$ for the upper bound and thus $-\inf_{x\in\Gamma^\circ}=-\infty$. Now let $\Gamma_{x_0}\subset\Xx$ be such that $x_0\in\Xx$, then $-\inf_{x\in\Gamma_{\delta}} \II(x)=0$ for the upper bound and $\liminf_{\eps\downarrow 0}\eps \log \PP[x_0\in\Gamma_{x_0}]=0$ for the lower bound. By the exponential equivalence, the stated result follows.
 The second statement is immediate:
 for any $\delta>0$, 
 the inequality~\eqref{eq:ProofExpEquiv}
@@ -48,7 +48,7 @@ by the large deviations assumption with $\beta>1$, used in the inequality.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Proof of Lemma~\ref{lem:expct_convg}}\label{sec:lem:expct_convg_Proof}
-Let $(\Xx, \mathrm{d})$ be a metric space, $Z^\eps:\Omega\rightarrow \Xx$ and $M>0$ and let $B_M \defEqual \left \{ x\in\Xx: \, |x| \leq M \, \right \}$. 
+Let $(\Xx, \mathrm{d})$ be a metric space, $Z^\eps:\Omega\rightarrow \Xx$ and $M>0$ and let ${B_M \defEqual \left \{ x\in\Xx: \, |x| \leq M \, \right \}}$. 
 Since $Z^\eps$ is uniformly integrable, there exists $\delta>0$ such that
 \[
 \sup_{\eps>0}\EE\left[ \left\vert Z^\eps \right\vert \ind_{\left\{ Z^\eps \notin B_M \right\}} \right] < \delta,
@@ -56,25 +56,28 @@ Since $Z^\eps$ is uniformly integrable, there exists $\delta>0$ such that
 and hence 
 $$
 \sup_{\eps>0}\EE\left[ \left\vert Z^\eps \right\vert \right] \leq \sup_{\eps>0}\EE\left[ \left\vert Z^\eps \right\vert \ind_{\left\{ Z^\eps \in B_M \right\}} \right] + \sup_{\eps>0}\EE\left[ \left\vert Z^\eps \right\vert \ind_{\left\{ Z^\eps \notin B_M \right\}} \right]
-\leq M + \delta.
+\leq M + \delta\,.
 $$
 Since~$x_0$ is the (unique) zero of the rate function, then $\{Z^{\eps}\}_{\eps>0}$ clearly converges in probability to~$x_0$,
 and so $\{|Z^{\eps}|\}_{\eps>0}$ converges to~$|x_0|$ by continuity. There exists then a subsequence $\{Z^{\vartheta_{\eps}}\}_{\eps>0}$ such that $\{|Z^{\vartheta_{\eps}}|\}_{\eps>0}$
 converges almost surely to~$|x_0|$.
 Fatou's lemma then implies
 $$
-|x_0| = \EE[|x_0|] \leq \liminf_{\eps\downarrow 0} \EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \right] < \sup_{\eps>0} \left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \right].
+|x_0| = \EE[|x_0|] \leq \liminf_{\eps\downarrow 0} \EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \right] < \sup_{\eps>0} \left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \right]\,.
 $$
 On the other hand, for ${\Gamma_{\delta} \defEqual \{x \in \Xx: \, \mathrm{d}(x,x_0)>\delta \, \}}$ it holds by Bonferroni's (in)equality
 \begin{align*}
-\EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \right] &= \EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \ind_{\left \{ (Z^{\vartheta_{\eps}} \in \Gamma_\delta) \cap (Z^{\vartheta_{\eps}} \notin B_M) \right \}} \right] + \EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \ind_{\left \{ (Z^{\vartheta_{\eps}} \in \Gamma_\delta) \cap (Z^{\vartheta_{\eps}} \in B_M) \right \}} \right] + \EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \ind_{\left \{ Z^{\vartheta_{\eps}} \notin \Gamma_\delta \right \}} \right].
+\EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \right] 
+&= \EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \ind_{\left \{ (Z^{\vartheta_{\eps}} \in \Gamma_\delta) \cap (Z^{\vartheta_{\eps}} \notin B_M) \right \}} \right] \\
+&+ \EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \ind_{\left \{ (Z^{\vartheta_{\eps}} \in \Gamma_\delta) \cap (Z^{\vartheta_{\eps}} \in B_M) \right \}} \right] \\
+&+ \EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \ind_{\left \{ Z^{\vartheta_{\eps}} \notin \Gamma_\delta \right \}} \right]\,.
 \end{align*}
 Since 
-\[\left\vert Z^{\vartheta_{\eps}} \right\vert \ind_{\left \{ Z^{\vartheta_{\eps}} \notin \Gamma_\delta \right \}}\leq \left ( \D\left(Z^{\vartheta_{\eps}}, x_0\right) + |x_0| \right ) \ind_{\left \{ Z^{\vartheta_{\eps}} \notin \Gamma_\delta \right \}},
+\[\left\vert Z^{\vartheta_{\eps}} \right\vert \ind_{\left \{ Z^{\vartheta_{\eps}} \notin \Gamma_\delta \right \}}\leq \left ( \D\left(Z^{\vartheta_{\eps}}, x_0\right) + |x_0| \right ) \ind_{\left \{ Z^{\vartheta_{\eps}} \notin \Gamma_\delta \right \}}\,,
 \]
 then $\EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \right]\ind_{\left \{ Z^{\vartheta_{\eps}} \notin \Gamma_\delta \right \}} \leq \delta + |x_0|$ and finally
 \begin{align*}
-\limsup_{\eps\downarrow 0} \EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \right]  &\leq \limsup_{{\vartheta_{\eps}}\downarrow 0}\EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \ind_{\left \{Z^{\vartheta_{\eps}} \notin B_M \right \}} \right] + M\lim_{\eps\downarrow 0} \PP\left[ Z^{\vartheta_{\eps}} \in \Gamma_\delta \right ] + \delta + |x_0|.
+\limsup_{\eps\downarrow 0} \EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \right]  &\leq \limsup_{{\vartheta_{\eps}}\downarrow 0}\EE\left[ \left\vert Z^{\vartheta_{\eps}} \right\vert \ind_{\left \{Z^{\vartheta_{\eps}} \notin B_M \right \}} \right] + M\lim_{\eps\downarrow 0} \PP\left[ Z^{\vartheta_{\eps}} \in \Gamma_\delta \right ] + \delta + |x_0|\,.
 \end{align*}
 Since $Z^{\vartheta_{\eps}}$ follows an LDP with rate function $\II$ %we can find such $C=\mathcal O(\eps)$ that $\lim_{\eps\downarrow 0} \PP\left[ Z^\eps \in \Gamma_\delta \right ] = \lim_{\eps\downarrow 0} C \E^{-\frac{\II(\Gamma_\delta)}{\eps}}$.
 and $\II(\Gamma_\delta)>0$ by assumption, then $\lim_{\eps\downarrow 0} \PP\left[ Z^{\vartheta_{\eps}} \in \Gamma_\delta \right ] = 0$. This, together with $Z^{\vartheta_{\eps}}$ being uniformly integrable, gives the result by taking $M$ to infinity.
@@ -83,9 +86,9 @@ and $\II(\Gamma_\delta)>0$ by assumption, then $\lim_{\eps\downarrow 0} \PP\left
 
 \subsection{Proof of Lemma~\ref{lem:degenerate-limit}}\label{sec:lem:degenerate-limit_Proof}
 A key step in proving Lemma~\ref{lem:degenerate-limit}
-is the tightness of the rescaled variance process with an unique strong solution
+is the tightness of the rescaled variance process with a unique strong solution
 \[
-\D V_t^\eps = f(V_t^\eps)\D t + h(\eps)g(V_t^\eps)\D W_t,
+\D V_t^\eps = f(V_t^\eps)\D t + h(\eps)g(V_t^\eps)\D W_t\,,
 \]
 adhering to Assumption~\ref{ass:SDE_coeffs}, where $h$ is such as defined in the beginning of Section~\ref{sec:MDP_IS}, i.e., $h(\eps)$ tends to infinity and $\sqrt\eps h(\eps)$ to zero as $\eps$ goes to zero.
 \begin{lemma}\label{lem:tightness}
@@ -95,18 +98,18 @@ The family of random variables $\{V^\eps\}_{\eps>0}$ in~\eqref{eq:eps_MDP__eta_V
 \begin{proof}[Proof of Lemma~\ref{lem:tightness}]
 By Kolmogorov-Chentsov~\cite[Theorem 21.42]{Klenke2014ProbabilityTheory} we need to show there exist $\alpha, \beta, M > 0$ such that for every $\eps >0$ and $0\leq s < t \leq T$
 \[
-\EE\left[\left\vert V_t^\eps - V_s^\eps\right\vert^\alpha\right] \leq M \left\vert t - s\right\vert^{1+\beta},
+\EE\left[\left\vert V_t^\eps - V_s^\eps\right\vert^\alpha\right] \leq M \left\vert t - s\right\vert^{1+\beta}\,,
 \]
 therefore using the obvious inequality 
 $|a+b|^{\alpha} \leq 2^{\alpha-1}\left(|a|^{\alpha}+|b|^{\alpha}\right)$ for $\alpha\geq1$ we have
 \begin{align*}
-\EE\left[ \left\vert \int_0^t f(V_u^\eps)\D u - \int_0^s f(V_u^\eps)\D u + \int_0^t g(V_u^\eps)\D W_u - \int_0^s g(V_u^\eps)\D W_u \right \vert^\alpha \right ] \\ \leq 2^{\alpha-1} \left( \EE\left[ \left\vert  \int_s^t f(V_u^\eps) \D u \right\vert^\alpha \right ] + \EE\left[ \left\vert  \int_s^t g(V_u ^\eps) \D W_u \right\vert^\alpha \right] \right).
+\EE\left[ \left\vert \int_0^t f(V_u^\eps)\D u - \int_0^s f(V_u^\eps)\D u + \int_0^t g(V_u^\eps)\D W_u - \int_0^s g(V_u^\eps)\D W_u \right \vert^\alpha \right ] \\ \leq 2^{\alpha-1} \left( \EE\left[ \left\vert  \int_s^t f(V_u^\eps) \D u \right\vert^\alpha \right ] + \EE\left[ \left\vert  \int_s^t g(V_u ^\eps) \D W_u \right\vert^\alpha \right] \right)\,.
 \end{align*}
 Consider for now only the drift term
 $$
 \EE\left[ \left\vert  \int_s^t f(V_u^\eps) \D u \right\vert^\alpha \right ]
 \leq (t-s)^{\alpha-1}\EE\left[ \int_s^t \left\vert f(V_u^\eps)\right\vert^\alpha \D u  \right ]
-\leq K_1^\alpha(t-s)^{\alpha-1}\int_s^t \EE\left[ 1 + \left\vert V_u^\eps\right\vert^\alpha \right]\D u,
+\leq K_1^\alpha(t-s)^{\alpha-1}\int_s^t \EE\left[ 1 + \left\vert V_u^\eps\right\vert^\alpha \right]\D u\,,
 $$
 where we used Jensen's inequality for the first inequality. 
 The second follows from the linear growth condition in Assumption~\ref{ass:SDE_coeffs}. For the diffusion term
@@ -115,7 +118,7 @@ The second follows from the linear growth condition in Assumption~\ref{ass:SDE_c
 &\leq \left\{\frac{\alpha(\alpha-1)}{2}\right\}^{\frac{\alpha}{2}} \EE\left[ \left\vert  \int_s^t \left\vert g(V_u ^\eps)\right\vert^{2} \D u \right\vert^{\frac{\alpha}{2}} \right]\\
 &\leq \left\{\frac{\alpha(\alpha-1)}{2}\right\}^{\frac{\alpha}{2}} (t-s)^{\frac{\alpha}{2}-1} \EE\left[\int_s^t \left\vert g(V_u ^\eps)\right\vert^{\alpha} \D u  \right] & %(\text{Jensen's ineq.})
 \\
-&\leq K_2^\alpha \left\{\frac{\alpha(\alpha-1)}{2}\right\}^{\frac{\alpha}{2}} (t-s)^{\frac{\alpha}{2}-1} \int_s^t \EE\left[1 +  \left\vert V_u^\eps\right\vert^{\alpha H} \right] \D u,
+&\leq K_2^\alpha \left\{\frac{\alpha(\alpha-1)}{2}\right\}^{\frac{\alpha}{2}} (t-s)^{\frac{\alpha}{2}-1} \int_s^t \EE\left[1 +  \left\vert V_u^\eps\right\vert^{\alpha H} \right] \D u\,,
 \end{align*}
 where the first line follows from the Burkholder-Davis-Gundy inequality (with $\alpha\geq 2$) and the last one from the 
 $H$-polynomial growth ($H\geq \half$) condition on the diffusion. 
@@ -127,7 +130,7 @@ Adding both terms together and applying the Gronwall lemma to the integrands yie
 &\leq 2^{\alpha-1}\Big(K_1^\alpha(t-s)^{\alpha-1}\int_s^t 2^{\frac{\alpha}{2}-1}(1 + v_0^\alpha)\E^{2\alpha(u-s)} \D u \\ & ~\quad \quad \:\; + K_2^\alpha \left\{\frac{\alpha(\alpha-1)}{2}\right\}^{\frac{\alpha}{2}} (t-s)^{\frac{\alpha}{2}-1} \int_s^t 2^{\frac{\alpha}{2}-1}(1 + v_0^\alpha)\E^{2\alpha(u-s)} \D u\Big)\\
 &\leq 2^{\alpha-1} \Big(2^{\frac{\alpha}{2}-1} K_1^{\alpha} (1+v_0^\alpha)\E^{2\alpha H T} (t-s)^\alpha +  2^{\frac{\alpha H}{2}-1} K_2^{\alpha} (1+v_0^{\alpha H})\E^{2\alpha H T} (t-s)^{\frac{\alpha}{2}} \Big) \\
 &\leq 2^{\alpha-1}\left(C_1 T^{\frac{\alpha}{2}} + C_2\right)(t-s)^{\frac{\alpha}{2}}
-= M \left\vert t - s\right\vert^{\frac{\alpha}{2}},
+= M \left\vert t - s\right\vert^{\frac{\alpha}{2}}\,,
 \end{align*}
 where the constants are 
 $$
@@ -143,20 +146,20 @@ Choosing any $\alpha > 2$ and $\beta = \frac{\alpha}{2}-1$ completes the proof.
 
 Similarly as in~\cite{Chiarini2014OnProcesses}, define the bounded map $\Phi_t:\Cc_T\rightarrow \RR$ for each $t\in[0,T]$ as 
 $$
-\Phi_t(\psi) = \left \vert \psi_t - v_0 - \int_0^t f(\psi_t)\D s \right \vert \land 1.
+\Phi_t(\psi) = \left \vert \psi_t - v_0 - \int_0^t f(\psi_t)\D s \right \vert \land 1\,.
 $$
 It is also continuous. 
 Indeed, let $\psi^n \rightarrow \psi$ in $\Cc_T$, then we have by the second triangle inequality 
 $$
-\left \vert \Phi_t(\psi^n) - \Phi_t(\psi) \right \vert \leq  \left \vert \psi^n - \psi \right \vert + \int_0^t \left \vert f(\psi^n) - f(\psi) \right \vert\D s.
+\left \vert \Phi_t(\psi^n) - \Phi_t(\psi) \right \vert \leq  \left \vert \psi^n - \psi \right \vert + \int_0^t \left \vert f(\psi^n) - f(\psi) \right \vert\D s\,.
 $$
 Since $\Aa\defEqual \{\psi^n\in\Cc_T: n\in\NN\}\cup \{\psi\}$ is a compact subset of $\Cc_T$ and $f$ is Lipschitz continuous on~$\Aa$ by Assumption~\ref{ass:SDE_coeffs}, there exists a Lipschitz constant $L$, such that
 \[
-\left\vert f(\varphi_t) - f(\phi_t) \right\vert \leq L \sup_{t\in[0,T]} |\varphi_t - \phi_t|,
+\left\vert f(\varphi_t) - f(\phi_t) \right\vert \leq L \sup_{t\in[0,T]} |\varphi_t - \phi_t|\,,
 \]
 for all $t\in[0,T]$ and $\varphi, \phi\in\Aa$. Therefore, since
 \[
-\left \vert \Phi_t(\psi^n) - \Phi_t(\psi) \right \vert \leq \sup_{t\in[0,T]} \left \vert\psi_t^n - \psi_t\right \vert + t L \sup_{t\in[0,T]} \left \vert\psi_t^n - \psi_t\right \vert,
+\left \vert \Phi_t(\psi^n) - \Phi_t(\psi) \right \vert \leq \sup_{t\in[0,T]} \left \vert\psi_t^n - \psi_t\right \vert + t L \sup_{t\in[0,T]} \left \vert\psi_t^n - \psi_t\right \vert\,,
 \]
 then~$\Phi_t$ is continuous. Since $\{V^\eps\}_{\eps>0}$ is tight as a family of random variables by Lemma~\ref{lem:tightness}, we know that by taking a subsequence, $\{V^\eps\}_{\eps>0}$ converges in distribution to some random variable, call it $\bar\psi$, on the same probability space. 
 Then, observing that~$\Phi_t$ is continuous and bounded, we have by the Continuous mapping theorem that $\lim_{\eps\downarrow 0} \EE[\Phi_t(V^\eps)]=\EE\left[\Phi\left(\bar\psi\right)\right]$. Next, by definition of~$\Phi_t$, $\bar{\psi}=v_0 + \int_0^\cdot f\left(\bar{\psi}_s\right)\D s$ will be the limiting function if we are able to show the above limit is zero for that particular choice of~$\bar\psi$. Indeed, by H{\"o}lder's inequality % and It{\^o} isometry
@@ -165,7 +168,7 @@ Then, observing that~$\Phi_t$ is continuous and bounded, we have by the Continuo
  = \EE\left[\left\vert h(\eps) \int_0^t g(V_s^\eps) \D W_s \right\vert\right]
   & \leq \left( |h(\eps)|^2 \; \EE\left[\left\vert \int_0^t g(V_s^\eps) \D W_s \right\vert^2\right] \right)^{\frac{1}{2}} %\\
   %&= \left( \eps \; \EE\left[ \int_0^t \left\vert g(V_s^\eps)\right\vert^2 \D s \right] \right)^{\frac{1}{2}}
-  \leq h(\eps) M,
+  \leq h(\eps) M\,,
 \end{align*}
 since the integral can be shown to bounded by $M>0$ by the same arguments as in the proof of Lemma~\ref{lem:tightness}. Therefore $\lim_{\eps\downarrow 0} \EE[\Phi_t(V^\eps)] = 0$ and the limiting function indeed solves the ODE $\bar{\psi}=v_0 + \int_0^\cdot f(\bar{\psi}_s)\D s$ almost surely for all $t\in[0,T]$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -189,18 +192,18 @@ since~$g$ is increasing. By integration,
 $$
 \int_a^tf(s)\D s \geq \int_a^t \frac{\dot{\vartheta}(s)}{g(M+\vartheta(s))}\D s 
 = \int_{M+\vartheta(a)}^{M+\vartheta(t)}\frac{\D u}{g(u)}
-=  \int_{M}^{\vartheta(t)+M}\frac{\D u}{g(u)},
+=  \int_{M}^{\vartheta(t)+M}\frac{\D u}{g(u)}\,,
 $$
 with $u\defEqual M+\vartheta(s)$, since $\vartheta(a)=0$ by definition. The function $G$ can be decomposed into:
 \[
 G(u) = \int_1^u g^{-1}(s)\D s = - \ind_{\{u\in(0,1)\}} \int_u^1 g^{-1}(s)\D s + \ind_{\{u\in[1,\infty)\}}\int_1^u g^{-1}(s)\D s.
 \]
-Second term is clearly increasing, since the inverse of an increasing function is an increasing function. Similarly, for the first term, since $g^{-1}$ is increasing and positive for $u>0$, the map $u\mapsto\int_u^1g^{-1}(s)\D s$ is decreasing and the term is increasing. Therefore, since $G$ is increasing, then, for any $t\in[a,b]$,
+The second term is clearly increasing since the inverse of an increasing function is an increasing function. Similarly, for the first term, since $g^{-1}$ is increasing and positive for $u>0$, the map $u\mapsto\int_u^1g^{-1}(s)\D s$ is decreasing and the term is increasing. Therefore, since $G$ is increasing, then, for any $t\in[a,b]$,
 $$
 G(\varphi(t)) \leq G(\vartheta(t) + M) 
 \leq \int_1^{M +\vartheta(z)}\frac{\D s}{g(s)}
 \leq \left(\int_{1}^{M}+ \int_{M}^{M+\vartheta(t)}\right)\frac{\D s}{g(s)}
-\leq G(M) + \int_a^t f(s)\D s.
+\leq G(M) + \int_a^t f(s)\D s\,.
 $$
 \end{proof}
 Let $Y^\eps=\int_0^\cdot g(V^\eps_t)\D W_t^{\eps}$.
@@ -212,11 +215,11 @@ Therefore, by Theorem~\ref{thm:garciaLDP}, the triple $\{V^\eps,W^{\eps},Y^\eps\
 $$
 \II^{V,W,Y}(v,w,y) = 
 \frac{1}{2}\int_0^T\dot{w}_t^2\D t,
-\qquad \text{if } w \in \HH_T^0,\dot{y} = g(\psi)\dot{w} \text{ and } v = \psi,
+\qquad \text{if } w \in \HH_T^0,\dot{y} = g(\psi)\dot{w} \text{ and } v = \psi\,,
 $$
 and is infinite otherwise. Now let 
 \begin{equation}\label{eq:etatilde}
-\widetilde{\eta}_\eps \defEqual \eta^{\eps} - \int_0^\cdot f'(\psi_t)\eta^\eps(t) \D t = \int_0^\cdot \left\{f(V^\eps_t) - f(\psi_t) - f'(\psi_t)(V^\eps_t - \psi_t)\right\}\eps^{-\beta}\D t + Y^\eps.
+\widetilde{\eta}_\eps \defEqual \eta^{\eps} - \int_0^\cdot f'(\psi_t)\eta^\eps(t) \D t = \int_0^\cdot \left\{f(V^\eps_t) - f(\psi_t) - f'(\psi_t)(V^\eps_t - \psi_t)\right\}\eps^{-\beta}\D t + Y^\eps\,.
 \end{equation}
 and suppose the first term is exponentially equivalent to~$0$. Then, by the Contraction principle~\cite[Theorem 4.2.1]{Dembo2010LargeApplications} 
 we deduce an LDP for $\{V^\eps, W^{\eps}, \widetilde{\eta}_\eps\}$. Moreover, since $\widetilde{\eta}^\eps \mapsto \eta^\eps$ is a continuous function\footnote{It is easy to show that $\eta^{\eps} =\E^{\int_0^\cdot f(\psi_s)\D s}\int_0^\cdot \E^{-\int_0^t f(\psi_s)\D s}\widetilde{\eta}_\eps(t) \D t $ solves the ODE in~\eqref{eq:etatilde}.}, the good rate function given in the statement is obtained using the Contraction principle once more. 
@@ -227,47 +230,47 @@ Therefore the rest of the proof relies on proving that
 is exponentially equivalent to $0$. %What remains is then to prove that $\{f(V^\eps) - f(\psi) - \dot{f}(\psi)(V^\eps -\psi)\}\eps^{-\beta} = \eps^\beta \eta^\eps^2 \int_0^1 (1-u)\ddot{f}(\psi + u (V^\eps - \psi))\D u $ is exponentially equivalent to $0$.
 We start by showing $\eta^\eps$ is bounded. To that end we consider a Taylor expansion of $\ell(u) \defEqual f(\psi+u(V^\eps - \psi))$ for $u\in\RR$ around zero evaluated at $u=1$:
 \[
-\ell(1)=\ell(0)+\ell'(0) + \int_0^1 \ell''(u)(1-u)\D u,
+\ell(1)=\ell(0)+\ell'(0) + \int_0^1 \ell''(u)(1-u)\D u\,,
 \]
 so that, since $\ell(0)=f(\psi)$ and $\ell(1)=f(V^\eps)$, we have 
 \[
 \Big\{f(V^\eps) - f(\psi) - f'(\psi)(V^\eps -\psi)\Big\}\eps^{-\beta}
-= \eps^\beta |\eta^\eps|^2 \int_0^1 (1-u)f''(\psi_u + u (V^\eps_u - \psi_u))\D u.
+= \eps^\beta |\eta^\eps|^2 \int_0^1 (1-u)f''(\psi_u + u (V^\eps_u - \psi_u))\D u\,.
 \]
 Now let $R>0$ and $\omega \in \Omega$ such that 
 \[
 \sup_{t \in [0,T]}|V_t^\eps(\omega) - \psi_t|\leq R
 \qquad\text{and}\qquad 
-\sup_{t \in [0,T]}|Y^\eps_t(\omega)| \leq \eps^{-\frac{\beta}{4}}.
+\sup_{t \in [0,T]}|Y^\eps_t(\omega)| \leq \eps^{-\frac{\beta}{4}}\,.
 \]
 Then for all $t\in[0,T]$ we have
 \begin{align*}
 \left|\eta_{t}^\eps(\omega)\right| &= \left\lvert \int_0^t\left\{f(V^\eps_s(\omega)) - \left(f(\psi_s) - f'(\psi_s)(V_s^\eps(\omega) -\psi_s)\right)\right\}\eps^{-\beta}\D s + Y^{\eps}_t(\omega)\right\rvert \\
 &= \left\lvert\int_0^t f'(\psi_s)\eta_{s}^\eps\D s + \int_0^t|\eta_{s}^\eps|^2\eps^{\beta} \int_0^1(1-u)f''(\psi_u + u(V^\eps_u(\omega) - \psi_u))\D u\,\D s + Y_t^\eps(\omega)\right\rvert \\
 &\leq \int_0^t\big|f'(\psi_s)\big| |\eta_{s}^\eps|\D s + \int_0^t|\eta_{s}^\eps|^2\eps^{\beta} \int_0^1(1-u)\left|f''\left(\psi_u + u(V^\eps_u - \psi_u)\right)\right|\D u\,\D s + \left|Y_t^\eps(\omega)\right|\\
-&\leq \alpha \int_0^t\left(|\eta_{s}^\eps| + |\eta_{s}^\eps|^2\eps^{\beta}\right) \D s + \eps^{-\frac{\beta}{4}},
+&\leq \alpha \int_0^t\left(|\eta_{s}^\eps| + |\eta_{s}^\eps|^2\eps^{\beta}\right) \D s + \eps^{-\frac{\beta}{4}}\,,
 \end{align*}
 where 
+\begin{align*}
+\alpha &\defEqual 1+\max\Big\{\sup_{x \in \Ii_\psi}\big|f'(x)\big|, \sup_{x\in \Ii_\psi}\big|f''(x)\big| \Big\} > 0\,, \\
+\Ii_\psi &\defEqual  \Big[-\sup_{u \in [0,1]}\left\{|\psi_u|+ R\right\},\sup_{u \in [0,1]}\left\{|\psi_u| + R\right\}\Big]\,.
+\end{align*}
+It is clear that $\alpha$ is finite, since continuous functions admit a maximiser on compact sets. Then by Lemma~\ref{lem:Gronwall-bis} $G(|\eta_{t}^\eps(\omega)|) \leq G(\eps^{-\frac{\beta}{4}}) + \alpha t$ for all $t \in [0,T]$ and $u>0$ with 
 $$
-\alpha \defEqual 1+\max\Big\{\sup_{x \in \Ii_\psi}\big|f'(x)\big|, \sup_{x\in \Ii_\psi}\big|f''(x)\big| \Big\}>0 
-\quad \text{and} \quad \Ii_\psi \defEqual  \Big[-\sup_{u \in [0,1]}\left\{|\psi_u|+ R\right\},\sup_{u \in [0,1]}\left\{|\psi_u| + R\right\}\Big].
-$$
-It is clear that $\alpha$ is finite, since continuous functions admit a maximizer on compact sets. Then by Lemma~\ref{lem:Gronwall-bis} $G(|\eta_{t}^\eps(\omega)|) \leq G(\eps^{-\frac{\beta}{4}}) + \alpha t$ for all $t \in [0,T]$ and $u>0$ with 
-$$
-G(u) = \int_1^u\frac{1}{x + \eps^\beta x^2}\D x = \log\left(u\frac{1+\eps^\beta}{1 + \eps^\beta u}\right),
+G(u) = \int_1^u\frac{1}{x + \eps^\beta x^2}\D x = \log\left(u\frac{1+\eps^\beta}{1 + \eps^\beta u}\right)\,,
 $$
 we have
 $$
 G(|\eta_{t}^\eps(\omega)|) 
 \leq \log\left(\eps^{\frac{-\beta}{4}}\frac{1+\eps^\beta}{1 + \eps^{\frac{3}{4}\beta}}\right) + \alpha T,
 \qquad\text{and}\qquad
-|\eta_{t}^\eps| \leq \eps^{-\beta}\left\{\frac{1}{1 - C(\eps)\frac{\eps^\beta}{1 + \eps^\beta}} - 1 \right\},
+|\eta_{t}^\eps| \leq \eps^{-\beta}\left\{\frac{1}{1 - C(\eps)\frac{\eps^\beta}{1 + \eps^\beta}} - 1 \right\}\,,
 $$
 where 
 $$
 C(\eps) = \E^{\alpha T}\eps^{\frac{-\beta}{4}}\frac{(1+\eps^\beta)}{1 + \eps^{\frac{3}{4}\beta}}
  <\E^{\alpha T}\eps^{\frac{-\beta}{4}}, 
-\quad \text{ for all } \quad 0<\eps<1.
+\quad \text{ for all } \quad 0<\eps<1\,.
 $$
 Therefore there exists $0<\eps_0<1$ such that
 \[
@@ -278,7 +281,7 @@ We now finally prove that $\eps^\beta |\eta^\eps|^2 \int_0^1 (1-u)f''(\psi + u (
 Let $\delta >0$ and $0<\eps<\eps_0$, and define
 \begin{align*}
 &\Gamma_\eps \defEqual \Big\{\omega\in\Omega : \sup_{t \in [0,T]}\eps^\beta |\eta_{t}^\eps|^2 \Big|\int_0^1 (1-u)f''(\psi_t + u\ (V^{\eps}_{t} - \psi_t))\D u\Big|\geq \delta\Big\}, \\
-&A_\eps \defEqual \Big\{\omega\in\Omega : \sup_{t \in [0,T]}|V^\eps_t - \psi_t|\leq  R \Big\},
+&A_\eps \defEqual \Big\{\omega\in\Omega : \sup_{t \in [0,T]}|V^\eps_t - \psi_t|\leq  R \Big\}\,,
 \qquad
 B_\eps \defEqual \Big\{\omega\in\Omega : \sup_{t\in[0,T]}|Y_t^\eps|\leq \eps^{-\frac{\beta}{4}}\Big\},
 \end{align*}
@@ -286,16 +289,16 @@ then
 \begin{align*}
 \eps\log\PP\Big[\Gamma_\eps\Big]
 &\leq \eps\log \Big\{ \PP\Big[\Gamma_\eps \cap A_\eps \cap B_\eps\Big] + \PP\Big[A_\eps^c \Big] + \PP\Big[B_\eps^c   \Big]\Big\} \\
-&\leq \eps\log3 + \max \Big \{ \eps\log \PP\Big[\Gamma_\eps \cap A_\eps \cap B_\eps\Big], \  \eps\log \PP\Big[A_\eps^c \Big], \  \eps\log \PP\Big[B_\eps^c \Big] \Big\}.
+&\leq \eps\log3 + \max \Big \{ \eps\log \PP\Big[\Gamma_\eps \cap A_\eps \cap B_\eps\Big], \  \eps\log \PP\Big[A_\eps^c \Big], \  \eps\log \PP\Big[B_\eps^c \Big] \Big\}\,.
 \end{align*}
 Using the previous bound on $\eta^\eps$, which holds under condition $\{A_\eps\cap B_\eps\}$, we have that
 \begin{align*}
 \eps\log \PP\Big[\Gamma_\eps \cap A_\eps \cap B_\eps\Big]
 &\leq \eps\log \PP\Big[\Big\{\omega\in\Omega : \sup_{t \in [0,T]}\eps^\beta |\eta_{t}^\eps|^2\geq \frac{1}{\alpha}\delta\Big\} \cap A_\eps \cap B_\eps\Big] \\
 &\leq \eps\log \PP\Big[\eps^{\frac{\beta}{2}}\geq \frac{1}{4\alpha}\E^{-2\alpha T}\delta \Big]
-\xrightarrow{\eps \downarrow 0}-\infty.
+\xrightarrow{\eps \downarrow 0}-\infty\,.
 \end{align*}
-Next, since $V^\eps$ is exponentially equivalent to $\psi$ with speed $\eps$, then $\lim_{\eps\downarrow 0}\eps\log \PP[A_\eps^c] = -\infty$. Finally, looking at the LDP with speed $\eps^{1 + \frac{\beta}{2}}$, $V^\eps$ is still  exponentially equivalent to $\psi$ by the same argument as before, thus similarly $\eps^{\frac{1}{2} + \frac{\beta}{4}}\int_0^\cdot g(V^\eps_t)\D W_t = \eps^{\frac{\beta}{4}}Y^\eps$ satisfies an LDP with good rate function having a unique minimum at zero and with speed $\eps^{1 + \frac{\beta}{2}}$. Therefore, $\eps^{\frac{\beta}{4}}Y^\eps$ is exponentially equivalent to zero and
+Next, since $V^\eps$ is exponentially equivalent to $\psi$ with speed $\eps$, then ${\lim_{\eps\downarrow 0}\eps\log \PP[A_\eps^c] = -\infty}$. Finally, looking at the LDP with speed $\eps^{1 + \frac{\beta}{2}}$, $V^\eps$ is still exponentially equivalent to $\psi$ by the same argument as before, thus similarly $\eps^{\frac{1}{2} + \frac{\beta}{4}}\int_0^\cdot g(V^\eps_t)\D W_t = \eps^{\frac{\beta}{4}}Y^\eps$ satisfies an LDP with good rate function having a unique minimum at zero and with speed $\eps^{1 + \frac{\beta}{2}}$. Therefore, $\eps^{\frac{\beta}{4}}Y^\eps$ is exponentially equivalent to zero and
 $\lim\limits_{\eps\downarrow 0}\eps \log \PP[B_\eps^c] = -\infty$, which completes the proof.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
