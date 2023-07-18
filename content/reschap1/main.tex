@@ -8,7 +8,7 @@ Until recently, these models were mostly conceived in a three-step fashion:
 Indeed, model complexity was undesirable, amongst other reasons, for increasing the computational effort required to perform calibration but, in particular, also pricing and risk calculations.
 With greater uptake of machine learning methods and greater computational power, more complex models can now be used. 
 This is due to the fact that arguably the most complicated and computationally expensive step of calibration has been addressed. 
-Indeed, the seminal paper~\cite{Hernandez2016ModelNetworks} used neural networks to learn the calibration map from market data directly to model parameters. Subsequently, many papers followed \cite{Liu2019ACalibration,Ruf2020NeuralReview,Benth2020AccuracyCurves,Gambara2020ConsistentCalibration,Sardroudi2019PolynomialCalibration,Horvath2020DeepModels,Bayer2019OnModels,Bayer2018DeepModels,Vidales2018UnbiasedPDEs}. 
+Indeed, the seminal paper~\cite{Hernandez2016ModelNetworks} used neural networks to learn the calibration map from market data directly to model parameters. Subsequently, many papers followed \cite{Liu2019ACalibration,Ruf2020NeuralReview,Benth2020AccuracyCurves,Gambara2020ConsistentCalibration,Sardroudi-Khosrawi2019PolynomialCalibration,Horvath2020DeepModels,Bayer2019OnModels,Bayer2018DeepModels,Vidales2018UnbiasedPDEs}. 
 However, these approaches focused on the calibration of a fixed parametric model but did not address perhaps even more important issues -- model selection and model uncertainty. 
 
 The approach taken in this work is fundamentally different in the sense that we let the data dictate the model, however, we impose a strong prior on the model form.
@@ -26,27 +26,27 @@ Hence, the ability to efficiently compute interval estimators, which algorithms 
 
 Non-parametric calibration of SDE coefficients dates back to at least~\cite{Avellaneda1997CalibratingMinimization}, where the functional form of the volatility parameter was obtained by minimising a cost functional given by the Kullback-Leibler divergence and involves solving a high-dimensional system of parabolic PDEs. Similar to our approach, their algorithm can be used to interpolate between implied volatilities of traded options in an arbitrage-free way.
 
-A more modern approach was considered in~\cite{Guo2017LocalTransport}, where time continuous martingale optimal transport was applied in order to interpolate between initial and final asset price distributions, with an aim to calibrate the local volatility function in a non-parametric way. 
-Similar idea was considered in~\cite{Guo2022CalibrationTransport}, where semi-martingale optimal transport was used instead. 
-The cost function given by the prices of European options was optimised to obtain the functional form of an LSV model. The resulting fully non-linear HJB equations stemming from the dual of the convex optimisation problem then had to be solved numerically. Following this, \cite{Guo2018PathDerivatives} consider calibration via semi-martingale optimal transport for path-dependent derivatives, such as barrier and lookback options, which  accordingly translate to solving a path-dependent PDE.
+A more modern approach was considered in~\cite{Guo2017LocalTransport}, where time continuous martingale optimal transport was applied to interpolate between initial and final asset price distributions, to calibrate the local volatility function in a non-parametric way. 
+A similar idea was considered in~\cite{Guo2022CalibrationTransport}, where semi-martingale optimal transport was used instead. 
+The cost function given by the prices of European options was optimised to obtain the functional form of an LSV model. The resulting fully non-linear HJB equations stemming from the dual of the convex optimisation problem then had to be solved numerically. Following this, \cite{Guo2018PathDerivatives} consider calibration via semi-martingale optimal transport for path-dependent derivatives, such as barrier and lookback options, which accordingly translate to solving a path-dependent PDE.
 
 In parallel to this work Cuchiero, Khosrawi, and Teichmann~\cite{Cuchiero2020AModels} considered local stochastic volatility models with the leverage function approximated with a neural network. Their model can be seen as an example of a neural SDE.
 
 \subsection{Problem overview}\label{sec problem overview}
 
-Let us now for a moment consider a filtered probability space~$(\Omega, \Ff, \FF,\PP)$, where ${\FF\defEqual \{\Ff_t\}_{t\in[0,T]}}$ and a random variable~$\Psi \in L^2(\Ff_T)$ that represents the discounted payoff of a derivative (typically illiquid and path-dependent). 
-The problem of calculating a market consistent price of a financial derivative can be seen as equivalent to finding a map that takes market data (e.g., prices of underlying assets, interest rates, prices of liquid options) and returns a no-arbitrage price of the derivative.
-Typically an It\^{o} process~$\{X_t^\theta\}_{{t}\in[0,T]}$, with parameters~$\theta \in \RR^q$ has been the main component used in constructing such a pricing function. 
+Let us now for a moment consider a filtered probability space~$(\Omega, \Ff, \FF,\PP)$, where ${\FF\defEqual \{\Ff_t\}_{t\in[0, T]}}$ and a random variable~$\Psi \in L^2(\Ff_T)$ that represents the discounted payoff of a derivative (typically illiquid and path-dependent). 
+The problem of calculating a market-consistent price of a financial derivative can be seen as equivalent to finding a map that takes market data (e.g., prices of underlying assets, interest rates, prices of liquid options) and returns a no-arbitrage price of the derivative.
+Typically an It\^{o} process~$\{X_t^\theta\}_{{t}\in[0, T]}$, with parameters~$\theta \in \RR^q$ has been the main component used in constructing such a pricing function. 
 Such a parametric model induces a martingale probability measure, denoted by~$\QQ(\theta)$, which is then used to compute no-arbitrage prices of derivatives.
 
 In our work, the market data (input data) is represented by payoffs~$\{\Phi_i\}_{i=1}^M$ of liquid derivatives, and their corresponding market prices~$\{\Pp(\Phi_i)\}_{i=1}^{M}$.
 We will assume throughout that this price set is free of arbitrage. 
 To make the model~$\QQ(\theta)$ consistent with market prices, one seeks parameters~$\theta^{*}$ such that 
 the difference between~$\Pp(\Phi_i)$ and~$\EE^{\QQ(\theta^*)}[\Phi_i]$ is minimised for all~$i\in\{1,\ldots,M\}$ with respect to some metric.
-If for all~$i\in\nobreak\{1,\ldots,M\}$  we have~$\Pp(\Phi_i) = \EE^{\QQ(\theta^*)}[\Phi_i]$, then we will say the model is consistent with the market data (perfectly calibrated).
+If for all~$i\in\nobreak\{1,\ldots, M\}$  we have~$\Pp(\Phi_i) = \EE^{\QQ(\theta^*)}[\Phi_i]$, then we will say the model is consistent with the market data (perfectly calibrated).
 %If the number of parameters~$p$ is greater than the number of inputs then, 
 There may be infinitely many models that are consistent with the market.
-This is called Knightian uncertainty~\cite{Watkins1922KnightsProfit,Cohen2018DataApproach}. 
+This is called Knightian uncertainty~\cite{Watkins1922KnightsProfit, Cohen2018DataApproach}. 
 
 
 
@@ -62,7 +62,7 @@ We consider the following parametric SDE
 \D X^{\theta}_t= b\left(t,X_t^{\theta}; \theta\right) \D t + \sigma\left(t,X_t^\theta;\theta \right)\D W_t\,,\,\,\, X^\theta_0 = x_0\,,\,\,\, t \in [0,T]\,.
 \end{equation}
  By imposing suitable conditions on the coefficients~$(b,\sigma)$, we know that the unique solution to~\eqref{eq:nsde} exists, \cite[Chapter 2]{Krylov1980ControlledProcesses}. 
-These conditions can be satisfied by neural networks, e.g. by using suitably regular activation functions and by applying weight clipping or by taking regular and uniformly bounded activation functions. Throughout the work, we assume that~\eqref{eq:nsde} has a unique strong solution.
+These conditions can be satisfied by neural networks (Definition~\ref{def:neuralnet}), e.g. by using suitably regular activation functions and by applying weight clipping or by taking regular and uniformly bounded activation functions. Throughout the work, we assume that~\eqref{eq:nsde} has a unique strong solution.
 We split~$X^\theta$, which is the entire stochastic model, into traded assets and non-tradable components. 
 Let~$X^\theta=(S^\theta, V^\theta)$, where~$S$ are the traded assets and~$V$ are the components that are not traded. 
 We will assume that for all~$t\in[0,T]$, $x=(s, v)\in\nobreak\RR^d$ and~$\theta \in \Theta$ that
@@ -93,8 +93,8 @@ X^\theta_t & = \left(S^\theta_t, V^\theta_t\right)	\,.
 Observe that~$\sigma^S$ and~$\sigma^V$, set to take values in the space of appropriately shaped matrices, encode arbitrary correlation structures between the traded assets and the non-tradable components.
 Moreover, we immediately see that~$\{\E^{-rt}S_t\}_{t\in[0, T]}$ is a (local) martingale and thus the model is free of arbitrage. 
 
-In a situation when~$(b,\sigma)$ are defined to be neural networks, we call the SDE~\eqref{eq:nsde} a neural SDE and we formally denote by~$\Mm^{\text{nsde}}(\theta)$ the class of all solutions to~\eqref{eq:nsde}. 
-Heuristically speaking, due to the universal approximation property of neural networks~\cite{Hornik1991ApproximationNetworks, Sontag1997CompleteNetworks, Cuchiero2019DeepODEs}, we can expect~$\Mm^{\text{nsde}}(\theta)$ to contain a large class of SDEs solutions.
+In a situation when~$(b,\sigma)$ are defined to be neural networks from Definition~\ref{def:neuralnet}, we call the SDE~\eqref{eq:nsde} a neural SDE and we formally denote by~$\Mm^{\text{nsde}}(\theta)$ the class of all solutions to~\eqref{eq:nsde}. 
+Heuristically speaking, due to the universal approximation property of neural networks (see Theorem~\ref{thm:UAT} or~\cite{Hornik1991ApproximationNetworks, Sontag1997CompleteNetworks, Cuchiero2019DeepODEs}), we can expect~$\Mm^{\text{nsde}}(\theta)$ to contain a large class of SDEs solutions.
 Furthermore, neural networks can be efficiently trained with stochastic gradient descent methods and hence one can seek calibrated models in~$\Mm^{\text{nsde}}(\theta)$. 
 Finally, neural SDE integrates black-box neural network-type models with known and well-studied SDE models. 
 One consequence of that is that one can: a)~consistently calibrate these under the risk-neutral measure as well as the real-world measure; b)~easily integrate additional market information, e.g. constraints on realised variance; c)~verify martingale property. We want to remark that for simplicity we work in a Markovian setting, but one could consider neural SDEs with path-dependent coefficients and/or consider more general noise processes.
@@ -165,16 +165,16 @@ But in fact, we can write
 Thus we see that in this framework there needs to be no distinction between a derivative price~$\Phi_i$ and a real-world statistic~$\EE^{\PP^{\textup{mkt}}}[\Sscr_i]$. 
 % since we can simply think of this as the derivative with risk-neutral payoff~$\tilde \Phi_i \frac{\D\PP(\theta)}{\D\QQ(\theta)}$.
 Hence, from now on we will write only about risk-neutral calibrations bearing in mind that methodologically this leads to no loss of generality. 
-An alternative approach recently introduced in~\cite{Cohen2021Arbitrage-freeModels},  avoids the calculation of the Radon-Nikodym derivative  by first learning the diffusion coefficient under~$\QQ(\theta)$ and then, with~$\sigma(t, X_t^\theta, \theta)$ fixed, the Neural SDE is viewed as a generative model and the drift coefficient is learned by fitting to~$\PP^{\textup{mkt}}$.
+An alternative approach recently introduced in~\cite{Cohen2021Arbitrage-freeModels},  avoids the calculation of the Radon-Nikodym derivative by first learning the diffusion coefficient under~$\QQ(\theta)$ and then, with~$\sigma(t, X_t^\theta, \theta)$ fixed, the Neural SDE is viewed as a generative model and the drift coefficient is learned by fitting to~$\PP^{\textup{mkt}}$.
 
-At this point, we can make a connection between neural SDEs and the concept of generative modelling~\cite{Goodfellow2020GenerativeNetworks,Kingma2013Auto-EncodingBayes}. Let~$\QQ^{\textup{mkt}} \in \Mm$ be the true martingale measure (so by definition all liquid derivatives are perfectly calibrated  under this measure, i.e.,~$\EE^{\QQ^{\textup{mkt}}}[\Phi_i] = \Pp(\Phi_i)$ for all~$i\in\{1,\ldots,M\}$).
+At this point, we can make a connection between neural SDEs and the concept of generative modelling~\cite{Goodfellow2020GenerativeNetworks, Kingma2013Auto-EncodingBayes}. Let~$\QQ^{\textup{mkt}} \in \Mm$ be the true martingale measure (so by definition all liquid derivatives are perfectly calibrated under this measure, i.e.,~$\EE^{\QQ^{\textup{mkt}}}[\Phi_i] = \Pp(\Phi_i)$ for all~$i\in\{1,\ldots, M\}$).
 %Indeed, in the special case of calibrating to vanilla derivatives we are given prices of Call and Put options,~$\{p(k,t)\}_{0\leq k \leq K, 0\leq t \leq T}$, for all strikes and maturities. 
-%Then Breeden-Litzenberger formula would give us marginal laws of the pricing measure for all maturities, \cite{breeden1978prices}. 
+%Then the Breeden-Litzenberger formula would give us marginal laws of the pricing measure for all maturities, \cite{breeden1978prices}. 
 %We denote this measure by~$\QQ^{\textup{mkt}}$. We do not know this measure but for each~$t^j$ we have access to its empirical approximation~$\QQ^{\textup{mkt}}_{t^j}=\frac{1}{M}\sum_{i=1}^M\delta_{\{k^i,t^j\}}$ through payoff of vanilla options. We stress that with methods developed herein, we can calibrate neural SDEs to path-dependent derivatives as well. 
 We know that when~\eqref{eq:nsde} admits a strong solution, then by~\cite[Corollary 3.23]{Karatzas2012BrownianCalculus} for any~$\theta \in \Theta$ there exists a measurable map~$G^\theta:\RR^d \times \Cc([0,T]; \RR^{n}) \to  \Cc([0,T];\RR^d)$ such that~$X^{\theta} = G^\theta(x_0, W)$. 
 Hence, one can view \eqref{eq:nsde} as a generative model that maps~$\mu$, the joint distribution of~$X_0$ on~$\RR^d$ and the Wiener measure on~$\Cc([0,T];\RR^n)$ into~$\QQ^{\theta} = (G^\theta_t)_{\#}\mu$. 
 %Let~$G^\theta_t$ be a time marginal projection of~$G^\theta$ such that~$G^\theta_t(\zeta, \{W_{s \wedge t}\}_{s\in[0,T]}) = X^{\theta}_t$. 
-We see that by construction~$G$ is a causal transport map, i.e., a transport map that is adapted to the filtration~$\{\Ff_t\}_{t\in [0,T]}$. For more details on this see also~\cite{Acciaio2020CausalOptimization, Lassalle2013CausalProblems}.
+We see that by construction~$G$ is a causal transport map, i.e., a transport map that is adapted to the filtration~$\{\Ff_t\}_{t\in [0, T]}$. For more details on this see also~\cite{Acciaio2020CausalOptimization, Lassalle2018CausalProblems}.
 
 One then seeks~$\theta^{\ast}$ such that~$G^{\theta^{\ast}}_{\#}\mu$ is a good approximation of~$\QQ^{\textup{mkt}}$ with respect to user specified metric. In this work, we work with 
 \[
@@ -187,7 +187,7 @@ Therefore, we compute price intervals for illiquid derivatives within the class 
 \inf_{\theta} \big\{ \EE^{ \QQ(\theta)}[\Psi] \, :\, D(G(\theta)_{\#}\mu_0,\QQ^{\textup{mkt}})=0 \big\} \,,\quad
 \sup_{\theta} \big\{ \EE^{\QQ(\theta)}[\Psi] \, :\, D(G(\theta)_{\#}\mu_0,\QQ^{\textup{mkt}})=0 \big\}\,,
 \]
-and solve the above-constrained optimisation problem by penalisation. For related ideas we refer the reader to~\cite{Eckstein2019ComputationNetworks}.
+and solve the above-constrained optimisation problem by penalisation. For related ideas, we refer the reader to~\cite{Eckstein2019ComputationNetworks}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -196,7 +196,7 @@ The results in this chapter presented in ensuing sections, lead to the following
 \begin{enumerate}[i)]
 \item Neural SDEs provide a systematic framework for model selection and produce robust estimates of the derivative prices. 
 The calibration and model selection are done simultaneously; thus, the model selection is data-driven. 
-\item With neural SDEs, the modelling choices one makes are: network architecture, the structure of a neural SDE (e.g. traded and non-traded assets), training methods and data. 
+\item With neural SDEs, the modelling choices one makes are network architecture, the structure of a neural SDE (e.g. traded and non-traded assets), training methods and data. 
 For classical handcrafted models, the choice of the algorithm for calibrating parameters has not been considered as a part of the modelling choice, but for machine learning, this is one of the key components. 
 Moreover, in Section~\ref{sec numerics}, where we show how the change in the initialisation of the stochastic gradient method used for training leads to different prices of illiquid options, thus providing one way of obtaining price bounds.
 % Furthermore, even for a basic local volatility model that is unique for a continuum of strikes and maturities, a neural SDE produces ranges of prices of illiquid derivatives when calibrated to finite data sets.  
@@ -384,7 +384,7 @@ Algorithms~\ref{alg LSV calibration vanilla},~\ref{alg LSV calibration vanilla l
      & \hskip0.5\textwidth  \times \EE^{\QQ^N} \left[\frac{\partial \phi}{\partial x}\left(X^{\pi, \theta}\right)\frac{\partial X^{\pi,\theta}}{\partial \theta}\right] \,.
 \end{align*}
 
-By excluding the calculation of the gradient of~$\bar{\Hf}$ from the algorithm we protect against the possibility of optimising~$\theta$ using an inaccurate approximation of the hedging strategy, and we additionally speed up the backpropagation in each  gradient descent step by making the computational graph smaller. 
+By excluding the calculation of the gradient of~$\bar{\Hf}$ from the algorithm we protect against the possibility of optimising~$\theta$ using an inaccurate approximation of the hedging strategy, and we additionally speed up the backpropagation in each gradient descent step by making the computational graph smaller. 
 
 
 In both Algorithms~\ref{alg LSV calibration vanilla} and~\ref{alg LSV calibration vanilla lb exotic} as well as in the numerical experiments, we use the squared error for the nested loss function:
@@ -513,9 +513,9 @@ and where~$\EE^{\QQ^N}$ denotes the empirical expected value calculated on the~$
 In Figure~\ref{fig:forwardpass}, we depict a forward pass of the Algorithm~\ref{alg LSV calibration vanilla} in a diagram. The scheme shows nothing else than a classical forward Euler-Maruyama, however, it gives some insight as to how the gradients are later back-propagated through the computational graph created by \texttt{PyTorch}~\nobreakdash---~not only through the neural networks~$b(\,\cdot\, ;\theta)$ and~$\sigma(\,\cdot\,; \theta)$, but also through the entire path along the time component.
 
 \begin{figure}[H]
-  \includestandalone[width=0.85\textwidth]{content/reschap1/Figures/Graphics/forward_pass}
-  \caption{Diagram of a forward pass of the training Algorithm~\ref{alg LSV calibration vanilla} for a payoff function~$\phi:\RR^d\to \RR$. Functions~$b=b(\,\cdot\,;\theta)$ and~$\sigma=\sigma(\,\cdot\,;\theta)$ are neural networks parametrized by~$\theta\in\Theta$.}
-  \label{fig:forwardpass}
+    \centering
+    \includestandalone[width=0.85\textwidth]{content/reschap1/Figures/Graphics/forward_pass}
+    \caption{Diagram of a forward pass of the training Algorithm~\ref{alg LSV calibration vanilla} for a payoff function~$\phi:\RR^d\to \RR$. Functions~$b=b(\,\cdot\,;\theta)$ and~$\sigma=\sigma(\,\cdot\,;\theta)$ are neural networks parametrized by~$\theta\in\Theta$.}\label{fig:forwardpass}
 \end{figure}
 
 \subsection{Algorithm for multiple maturities}\label{sec many maturities}
@@ -526,7 +526,7 @@ If the derivatives for which we have liquid market prices can be grouped by
 maturity, as is the case e.g. for Call or Put prices, we
 can use a more efficient algorithm to achieve calibration. 
  
-This follows the natural approach used e.g. in~\cite{Cuchiero2020AModels} and \cite{Vidales2018UnbiasedPDEs} in the context of learning PDEs, where the networks for~$b(t,X_t^{\theta},\theta)$ and 
+This follows the natural approach used e.g. in~\cite{Cuchiero2020AModels} and~\cite{Vidales2018UnbiasedPDEs} in the context of learning PDEs, where the networks for~$b(t,X_t^{\theta},\theta)$ and 
 $\sigma(t,X_t^{\theta},\theta)$ are split into different networks, one
 per maturity.
 Let~$\theta=(\theta_1,\ldots,\theta_{N_{m}})$, where~$N_m$ is the number of maturities. 
@@ -640,7 +640,7 @@ $\partial_{\theta}h(\theta)$, obtained by replacing $\QQ$ with $\QQ^N$, is given
 \partial_{\theta}h^{N}(\theta) \defEqual   \partial_x \ell\left(\EE^{\QQ^N}[\phi^{\textup{cv}}(X^{\theta})],\Pp(\Phi) \right) \EE^{\QQ^N}[\partial_\theta \phi(X^{\theta})]\,,
 \]
 is a biased estimator of $\partial_{\theta}h$. Nonetheless, the bias can be estimated in terms of the number of samples $N$ and the variance. The fact the bias is controlled by the variance, further justifies why it is important to reduce the variance when calibrating the models with a stochastic gradient algorithm. 
-An alternative perspective is to view $\partial_{\theta}h^{N}(\theta) $ as non-linear function of $\QQ^N$. For a general theory studying smoothness and corresponding expansions of such functions of measures we refer the reader to~\cite{Chassagneux2019WeakMeasures} for more details. 
+An alternative perspective is to view $\partial_{\theta}h^{N}(\theta) $ as non-linear function of $\QQ^N$. For a general theory studying smoothness and corresponding expansions of such functions of measures, we refer the reader to~\cite{Chassagneux2019WeakMeasures} for more details. 
 
 In Appendix~\ref{sec grad des bias} we provide a result on the bias for a general loss function. 
 For the square loss function, the bias is stated below. 
@@ -664,7 +664,7 @@ Hence, we see that by reducing the variance of the first term we are also reduci
 
 
 \section{Analysis of the randomised training}\label{sec random training}
-\subsection{Case of general cost function $\ell$}
+\subsection{Case of general cost function}
 
 While the idea of calibrating to one maturity at the time described in Section~\ref{sec many maturities} works well if our aim is only to calibrate to vanilla options, it cannot be directly applied to learn robust bounds for path-dependent derivatives, see~\eqref{eq LSV loss lb}. This is because the payoff of path-dependent derivatives, in general, is not an affine function of maturity. On the other hand, training all neural networks at every maturity all at once makes every step of the gradient algorithm used for training computationally heavy. 
 
@@ -677,7 +677,7 @@ b(t,X_t^{\theta};\theta) & \defEqual  \ind_{t\in[T_{i-1},T_i]}(t)b^i(t,X_t^{\the
 \sigma(t,X_t^{\theta};\theta) & \defEqual  \ind_{t\in[T_{i-1},T_i]}(t)\sigma^i(t,X_t^{\theta};\theta_i), \quad i\in\{1,\ldots,N_{m}\},	
 \end{split}
 \end{equation}
-where $N_m\in\NN$ is the number of subintervals in the partition of the time horizon $[0,T]$ and can coincide with the number of maturities. Let $U\sim \UU[1,\ldots,N_{m}]$ be a uniform random variable over the set $\{1,\ldots, N_{m}\}$ defined on a new probability space $( \Omega^{\UU}, \Ff^{\UU},\PP^{\UU})$. 
+where $N_m\in\NN$ is the number of subintervals in the partition of the time horizon $[0, T]$ and can coincide with the number of maturities. Let $U\sim \UU[1,\ldots,N_{m}]$ be a uniform random variable over the set $\{1,\ldots, N_{m}\}$ defined on a new probability space $( \Omega^{\UU}, \Ff^{\UU},\PP^{\UU})$. 
 Let $Z$ be given by 
 \begin{equation}
 \label{eq rand train Z}
@@ -772,7 +772,7 @@ which implies that $\EE^{\UU}[(\partial_\theta h)(\theta,U)] = (\partial_\theta 
 %%%%%%%%%%%%%%%%%%%%%
 
 
-\subsection{Case of square loss function $\ell$}\label{sec unbiased error}
+\subsection{Case of square loss function}\label{sec unbiased error}
 
 Here we show that in the special case when $\ell(x,y)= |x - y|^2$, randomised gradient as described in Section~\ref{sec random training} is an unbiased estimator of the full gradient even in the case when $\QQ$ is replaced by its empirical measure $\QQ^N$. Consequently, the standard theory of stochastic approximation applies. 
 Let $(\bar \Omega, \bar {\Ff}, \bar{\FF} ,\bar {\PP})$ 
@@ -836,7 +836,7 @@ As an example of an illiquid derivative for which we wish to find robust bounds,
 %\begin{equation}\label{NeuralLV}
 %\D S_t^\theta=rS_t^\theta\D t+\sigma(t,S_t^\theta, \theta)S_t^\theta \D W_t^{\QQ},\\
 %\end{equation}
-%where $S_t^\theta \geq 0$, $S_0^\theta=1$ and $\sigma:[0,T]\times \RR \times \RR^q \to \RR^+$ allows us to calibrate the model to observed market prices.
+%where $S_t^\theta \geq 0$, $S_0^\theta=1$ and $\sigma:[0, T]\times \RR \times \RR^q \to \RR^+$ allows us to calibrate the model to observed market prices.
 
 \subsection{Local stochastic volatility neural SDE model} \label{sec LSV}
 
@@ -872,12 +872,11 @@ S_t & \defEqual  \exp(Y_t), \quad S_0=s_0 \\
 
 In the SDE~\eqref{eq:LSV_SDE} the functions $\sigma^S$, $b^V$ and $\sigma^V$ are parametrised by one feed-forward neural 
 network per maturity (see Section~\ref{sec many maturities}) with $2$ hidden layers and $40$ neurons in each layer. 
-The non-linear activation
-function used in each of the hidden layers is the linear rectifier (ReLu). In addition, in $\sigma^S$ and $\sigma^V$
-after the output layer we apply the non-linear rectifier \texttt{SoftPlus}$(x)=\ln(1+\exp(x))$ to ensure a smooth positive output. 
+The non-linear activation function used in each of the hidden layers is the linear rectifier, i.e. \texttt{ReLu}$(x)\defEqual \max\{x, 0\}$. In addition, in $\sigma^S$ and $\sigma^V$
+after the output layer we apply the non-linear rectifier \texttt{SoftPlus}$(x)\defEqual\ln(1+\exp(x))$ to ensure a smooth positive output. 
 
 The parameterisation of the hedging strategy for the vanilla option prices is also a feed-forward
-linear network with 2 hidden layers, 20 neurons per hidden layer and \texttt{ReLu} activation functions. In order to get one hedging strategy per vanilla option 
+linear network with 2 hidden layers, 20 neurons per hidden layer and \texttt{ReLu} activation functions. To get one hedging strategy per vanilla option 
 considered in the market data, the output of $\Hf(t_k, s_{t_k, \theta}^{i}; \xi_{K_j})$ has as many neurons as strikes and maturities.
 
 Finally, the parameterisation of the hedging strategy for the exotic options price is an LSTM network \cite{Hochreiter1997LongMemory} with 20 neurons in the hidden layer with a linear transformation in the last layer to ensure the output is in $\RR$. The choice of this architecture is motivated by the fact that the recurrent neural networks (RNNs) are path dependent by construction, which is necessary for the parametrisation of the hedging strategy of an exotic option. 

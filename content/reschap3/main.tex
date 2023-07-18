@@ -1,6 +1,6 @@
-\subsection{Introduction}
+\section{Introduction}
 
-Monte Carlo simulation is the  standard (if not the only) technique for most numerical problems in stochastic modelling.
+Monte Carlo simulation is the standard (if not the only) technique for most numerical problems in stochastic modelling.
 It has a long history and has been successfully applied in many fields, such as biology~\cite{Manly2018RandomizationBiology}, statistical Physics~\cite{Binder2012MontePhysics}, Finance~\cite{Glasserman1997CounterexamplesProbabilities} among others.
 The default order of magnitude for the variance of the estimator is~$\Oo(N^{-1/2})$ with~$N$ the number of sample paths.
 It has long been recognised though that several tricks achieve lower variance with equivalent (hopefully zero) bias; among those antithetic variables and importance, sampling have become ubiquitous.
@@ -20,7 +20,7 @@ and to show how these yield closed-form formulae for an optimal change of measur
 
 In~\cite{Geha2023LargeModel} we propose, in particular, a specific form of adaptive drift, allowing for fast computation
 and increase in variance reduction.
-For  geometric Asian Call options in the Heston model, MDP-based estimators with deterministic changes of drift turn out to be no better than those computed with deterministic volatility approximation in the LDP approach. 
+For geometric Asian Call options in the Heston model, MDP-based estimators with deterministic changes of drift turn out to be no better than those computed with deterministic volatility approximation in the LDP approach. 
 However, MDP-based estimators with adaptive changes of drift perform much better than their LDP counterparts with deterministic volatility approximation, 
 and in fact, show a performance very close to the LDP-based estimators in Heston. 
 These adaptive MDP-based estimators, therefore, provide an efficient alternative in models where 
@@ -89,7 +89,7 @@ The computation of this expression is then further simplified by the use of Vara
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{General approach}
-%In all this paper, we deal with variance reduction for option pricing. 
+%In this paper, we deal with variance reduction for option pricing. 
 We consider an asset price~$S\defEqual \{S_t\}_{t\in[0,T]}$ and the corresponding log-price process~$X\defEqual\ln(S) \defEqual \{X_t\}_{t\in[0,T]}$, with dynamics
 \begin{equation}\label{eq:log_price_dyn}
 \begin{array}{rll}
@@ -190,7 +190,6 @@ Note in particular that the functional~$\Lf$
 does not admit any obvious convexity property, making classical duality results unusable (see for example~\cite[Section~4]{Rockafellar1974ConjugateOptimization}).
 Recent results about duality and optimality conditions in stochastic optimisation~\cite{Biagini2018DualityFinance, Pennanen2011ConvexFinance} could provide some hints though.
 \end{remark}
-
 %The question still remains: how to choose the appropriate~$X^{\eps}$ and~$H^{\eps}$ ? We will look when possible at different representations: the small-noise approximation (for~$X$ or~$\E^{X}$ since the latter is used in~\cite{Robertson2010SampleModels}), the small-time approximation and the large-time approximation (and their counterparts in moderate deviations afterwards).
 \begin{remark}
 Small-time approximations may induce important loss of information
@@ -587,7 +586,7 @@ and the linear growth condition from the global Lipschitz condition in Assumptio
 \frac{1}{T} \int_0^T \EE\left[ \exp\left\{ \frac{T}\eps f(V_s^\eps) \right\} \right] \D s &\leq \frac{1}{T} \int_0^T \EE\left[ \exp\left\{ \frac{T}\eps\left(1 + |V_s^\eps| \right) \right\} \right] \D s \\
 &= \frac{1}{T}\E^{\frac{T}{\eps}} \int_0^T \EE\left[ \exp\left\{ \frac{T}\eps |V_s^\eps| \right\} \right] \D s\,.
 \end{align*}
-Next, by the properties of the logarithm and the supremum
+Next, by the properties of the logarithm and the supremum,
 \begin{align*}
 & \limsup_{\eps\downarrow 0}\eps\ln\EE\left[ \exp\left\{ \frac 1\eps \int_0^T f(V_s^\eps)\D s \right\} \right] \\ & \qquad \qquad \leq \limsup_{\eps\downarrow 0}\left\{\eps\ln\frac1T\right\} + T + \limsup_{\eps\downarrow 0}\eps\ln\left\{\int_0^T  \EE\left[ \exp\left\{ \frac{T}\eps |V_s^\eps| \right\} \right] \D s\right\}\,.
 \end{align*}
@@ -641,7 +640,7 @@ Variance reduction for affine stochastic volatility processes via importance sam
 %$$
 %\frac{\E^{\int_0^TX_t\D\mu_t}}{\EE\Big[\E^{\int_0^TX_t\D\mu_t}\Big]},
 %$$
-%for some measure~$\mu$ and in large-time Heston using the form of the characteristic function of the log-price in the Heston model. The optimisation problem that is found is easy to solve for Geometric Asian Call options (see numerical results) and is fast to compute. The corresponding change of drift is also given in~\cite{ldp-heston-largetime}: it is a change of drift of the form~$\int_0^Tf(t)\sqrt{V_t}\D t$ but for specific type of functions~$f$. It is therefore a specific case of the slightly adaptive changes of drift we were looking at.
+%for some measure~$\mu$ and in large-time Heston using the form of the characteristic function of the log-price in the Heston model. The optimisation problem that is found is easy to solve for Geometric Asian Call options (see numerical results) and is fast to compute. The corresponding change of drift is also given in~\cite{ldp-heston-largetime}: it is a change of drift of the form~$\int_0^Tf(t)\sqrt{V_t}\D t$ but for a specific type of functions~$f$. It is therefore a specific case of the slightly adaptive changes of drift we were looking at.
 
 
 
@@ -953,7 +952,7 @@ The payoff is then a continuous function of the path. Now let~$F = \ln|G|$ and~$
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{\textit{Deterministic change of drift}}
-We proceed in a similar fashion as in Section~\ref{sec:LDP_IS} and consider the  transformations
+We proceed similarly as in Section~\ref{sec:LDP_IS} and consider the  transformations
 $$
 \dot{\varphi} = \sqrt{\bar\psi}\left( \rho\dot{x}_1 + \brho\dot{x}_2 \right) - \frac{\eta}{2} \qquad \text{and} \qquad \dot{\eta} = \dot{f}(\bar\psi)\eta + g(\bar\psi)\dot{x}_1\,,
 $$
@@ -1095,7 +1094,7 @@ ${\widetilde{X}^\eps \defEqual \eps^{-\alpha} X^{\eps}}$, so that
 \D V_t^\eps &= \displaystyle\eps f(V_t^\eps)\D t + \sqrt{\eps}g(V_t^\eps)\D W_t\,,  & V_0^\eps = v_0\,.
 \end{array}
 \end{equation*}
-As a consequence of Theorem~\ref{mdp-small-time} the results remain the same as in the case of small-noise moderate deviations of the previous section with~$f = 0$ and~$\bar\psi = v_0$. This being the case, we do not repeat them here. Let us nevertheless note that in the case of change of measure with deterministic drift, the problem is similar to the one, where~$V$ is constant equal to~$v_0$.
+As a consequence of Theorem~\ref{mdp-small-time}, the results remain the same as in the case of small-noise moderate deviations of the previous section with~$f = 0$ and~$\bar\psi = v_0$. This being the case, we do not repeat them here. Let us nevertheless note that in the case of change of measure with deterministic drift, the problem is similar to the one, where~$V$ is constant equal to~$v_0$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Theoretical results}
 
@@ -1143,7 +1142,7 @@ defined as~$V_t^\eps = V_{\frac{t}{\eps}}$ and~$X_t^\eps = \eps X_{\frac{t}{\eps
 \end{array}
 \right.\end{equation}
 which leads to Regime 2 in the slow-fast setting of~\cite[Theorem 2.1]{Morse2017ModerateDiffusions}, 
-by choosing the time-scale separation parameter equal to~$\eps$. The following assumption is needed in order to conform to the conditions in~\cite{Morse2017ModerateDiffusions}.
+by choosing the time-scale separation parameter equal to~$\eps$. The following assumption is needed to conform to the conditions in~\cite{Morse2017ModerateDiffusions}.
 \begin{assumption}\label{ass:SDE_largetime_MDP}\
 \begin{enumerate}[(i)]
     \item~$f$ is locally bounded and of the form~$f(y) = -\kappa y +\tau(y)$ with~$\tau$ globally Lipschitz with Lipschitz constant~$L_{\tau}<\kappa$. In addition, the tail condition~${\lim_{|y| \uparrow\infty}\frac{\tau(y)y}{|y|^2} = \kappa}$ holds.
@@ -1181,17 +1180,17 @@ Furthermore, denote
 $\Qbold:=\int_0^\infty\qbold(y)\qbold^\top(y)\mu(\D y)$, where
 $$
 \qbold(y) =
-\begin{pmatrix}
+\begin{bmatrix}
 \rho\sqrt{y} + \dot{\varsigma}(y)g(y) & \brho\sqrt{y}\\
 1 & 0 \\
 0 & 1 \\
-\end{pmatrix}.
+\end{bmatrix}\,.
 % \qquad\text{and}\qquad \boldsymbol \alpha_2 =
-% \begin{pmatrix}
+% \begin{bmatrix}
 % \dot{\varsigma}(y)g(y) & 0\\
 % \sqrt{y} & 0\\
 % 0 & \sqrt{y} \\
-% \end{pmatrix}.
+% \end{bmatrix}.
 $$
 Then the triple~$\{X^{\eps},\sqrt{\eps}W,\sqrt{\eps}\Wp\}$ follows an MDP with good rate function~$I_{\Qbold}$,
 % Furthermore 
@@ -1234,8 +1233,8 @@ by Cauchy-Schwarz, where equality would imply that~$V$ is constant~$\mu$-almost 
 \subsubsection{\textbf{Application to options with path-dependent payoff}}
 Let us again consider an option with a continuous payoff function~$G$ and let~${F=\ln|G|}$. Following the approach of the previous sections and with similar notations, we search for solutions to the dual problems for deterministic change of drift.
 Let 
-$\xx \defEqual \begin{pmatrix}x_1& x_2& x_3\end{pmatrix}^\top$ and 
-$\underline{\xx}\defEqual \begin{pmatrix}x_2 &  x_3\end{pmatrix}^\top$. 
+$\xx \defEqual \begin{bmatrix}x_1& x_2& x_3\end{bmatrix}^\top$ and 
+$\underline{\xx}\defEqual \begin{bmatrix}x_2 &  x_3\end{bmatrix}^\top$. 
 By considering a deterministic change of drift in a similar way as before, our problem becomes 
 \[
 L(\hh) = \limsup\limits_{\eps \downarrow 0} \eps\ln\EE\Big[\exp\frac{1}{\eps}\Big\{
@@ -1256,7 +1255,7 @@ $$
 \end{cases}
 $$
 where 
-$\Abold := \Qbold^{-1} + \operatorname{diag}(0,1,1)$, 
+$\Abold \defEqual \Qbold^{-1} + \operatorname{diag}(0,1,1)$, 
 which is equivalent to
 \begin{equation}\label{eq:SupInfInt}
 \sup\limits_{x_1\in L^2([0,T]; \RR)}\left \{F\left(\int_0^\cdot x_1(t) \D t\right) - \frac{1}{4}\int_0^T \inf_{\underline{\xx}\in L^2([0,T]; \RR^2)} \xx^\top(t) \Abold\xx(t) \D t \right \}\,.
@@ -1264,19 +1263,19 @@ which is equivalent to
 This substantially simplifies the main optimisation problem, which can now be solved explicitly, since 
 $
 \Abold =
-\begin{pmatrix}
+\begin{bmatrix}
 a_{11} & \abold_{21}^\top\\
 \abold_{21} &\Abold_{22}\\
-\end{pmatrix}$,
+\end{bmatrix}$,
 with~$a_{11} \in\RR$,~$\abold_{21}\in\RR^{2}$,~$\Abold_{22}\in\RR^{2\times 2}$, so that the infimum in~\eqref{eq:SupInfInt} yields\footnote{Since~$\Qbold$ is positive-definite, both~$\Abold$ and~$\Abold_{22}$ are positive-definite and thus invertible.}~${\underline{\xx}^{*} = - \Abold_{22}^{1} \abold_{21} x_1 \eqqcolon \Bbold x_1}$. The quadratic form in fact reduces to~${\xx^\top \Abold \xx = \left( a_{11} - \abold_{21}^\top \Abold_{22}^{-1} a_{21} \right ) x_1^2 \defEqual \nu\, x_1^2}$, where both constants
 \begin{equation}\label{eq:ConstPDP}
 \begin{array}{rl}
 \nu = & \displaystyle 
 \EE_\mu\left[ \left| \rho\sqrt{Y} + \dot{\varsigma}(Y)g(Y)\right|^2 \right ] + \brho^2\EE_\mu[Y] - \frac{\EE_\mu\left[ \rho\sqrt{Y} + \dot{\varsigma}(Y)g(Y)\right]^2}{2} - \frac{\brho\EE_\mu[\sqrt{Y}]^2}{2}\,, \\
-\Bbold = & \displaystyle -\frac{1}{2}\begin{pmatrix}
+\Bbold = & \displaystyle -\frac{1}{2}\begin{bmatrix}
 \EE_\mu[\rho\sqrt{Y}+\dot{\varsigma}(Y)g(Y)] \\
 \brho\EE_\mu[\sqrt{Y}]\,,
-\end{pmatrix}\,,
+\end{bmatrix}\,,
 \end{array}
 \end{equation}
 are obtained from the definition of~$\Qbold$. Finally, we have
@@ -1416,7 +1415,7 @@ $$
 L(h^{*}) = 2F\left(-\frac{1}{2}\int_0^\cdot \sigma^2(t)\D t + \int_0^\cdot \sigma(t) \dot{h}^{*}_t \D t\right) - \int_0^T |\dot{h}^{*}_t|^2 \D t\,.
 $$
 
-Therefore, in order to derive a change of measure, we search for~$h^{*} \in \HH_T^0$ such that
+Therefore, to derive a change of measure, we search for~$h^{*} \in \HH_T^0$ such that
 $$
 h^{*} = \argmax\limits_{x \in \HH_T^0}F\left(-\frac{1}{2}\int_0^\cdot \sigma^2(t)\D t + \int_0^\cdot \sigma(t) \dot{x}_t \D t\right)
  - \frac{1}{2}\int_0^T \dot{x}_t^2 \D t\,.
@@ -1665,10 +1664,10 @@ From this, noting that~$\dot{\varsigma}(y)g(y) = -\xi\sqrt{y}/(2\kappa)$ we can 
 \nu = \left( \left( \rho - \frac{\xi}{2\kappa} \right)^2 + 1-\rho^2 \right)\left( \theta - \EE_\mu\left[\sqrt{Y}\right]\right)
 \qquad \text{and} \qquad
 B = -\frac{1}{2}
-\begin{pmatrix}
+\begin{bmatrix}
 \rho - \frac{\xi}{2\kappa}\\
 \brho\\
-\end{pmatrix}\EE_\mu\left[\sqrt{Y}\right]\,.
+\end{bmatrix}\EE_\mu\left[\sqrt{Y}\right]\,.
 \end{align*}
 
 \subsubsection{Other}
@@ -1751,7 +1750,7 @@ with payoff~$(\frac{1}{T}\int_0^T \exp\{X_t\} \D t - K)^+$. The form of the solu
 Instead of simulating~$\int_0^T \exp(X_t)\D t$, we consider a discretised payoff on~$n=252$ dates and draw~$10^5$ paths.
 For the LDP-based estimator, the law of~$W$ after the change of measure is given by the Girsanov theorem.
 In what follows, when we refer to variance reduction we mean the ratio of the variance of the classical Monte-Carlo estimator over the variance of estimator in question.
-As we can see in Table~\ref{table:BSCompare} and in Figure~\ref{fig:BSLDP}, 
+As we can see in Table~\ref{table:BSCompare} and Figure~\ref{fig:BSLDP}, 
 even in non-rare events, the estimator derived using LDP provides good variance reduction. 
 However, it is mainly in the context of rare events that it performs best and outperforms the other estimators (Figure~\ref{fig:BSCompare} and Table~\ref{table:BSCompare}), 
 revealing the true power of LDP-based importance sampling estimators.
@@ -1760,7 +1759,7 @@ revealing the true power of LDP-based importance sampling estimators.
     \centering
     \includegraphics[width=0.4\textwidth]{content/reschap3/Figures/BS/compare1.png}
     \includegraphics[width=0.4\textwidth]{content/reschap3/Figures/BS/compare2.png}
-    \caption{Left:~Estimator with the highest variance reduction among antithetic, control and LDP estimators (Section~\ref{sec:BS_numerical_results}) for different values of~$\sigma$,~$K$,~$T$. Right:~Best performing estimator in terms of variance reduction among antithetic, control and LDP estimators (Section~\ref{sec:BS_numerical_results}) as a function of probability of a positive payoff (estimated using Monte-Carlo). Clearly, the LDP estimator performs best when the probability of exercising an option is low.
+    \caption{Left:~Estimator with the highest variance reduction among antithetic, control and LDP estimators (Section~\ref{sec:BS_numerical_results}) for different values of~$\sigma$,~$K$,~$T$. Right:~Best performing estimator in terms of variance reduction among antithetic, control and LDP estimators (Section~\ref{sec:BS_numerical_results}) as a function of the probability of a positive payoff (estimated using Monte-Carlo). The LDP estimator performs best when the probability of exercising an option is low.
     }\label{fig:BSCompare}
 \end{figure}
 \begin{figure}[H]
@@ -1813,7 +1812,7 @@ $$
 To simulate the paths~$(X,V)$ on~$[0,T]$, 
 we use a standard Euler-Maruyama scheme for~$X$, but use the scheme~\cite{Lord2009AModels} for the CIR process in the volatility, 
 which is upward biased\footnote{There are many discretisation schemes for the Heston model. 
-Since the objective of this chapter is not to study the effects of different schemes we satisfy ourselves with~\cite{Lord2009AModels}.}, however nevertheless converges strongly in~$L^1$ to the true process~$V$, which is enough for the purpose of pricing. For~$n\in\NN$,~$\Delta =\frac{T}{n}$ and the increments of the Brownian motion~$\{\Delta W_{i}^n\}_{i=0}^{n-1}$ the discretisation scheme over~$[0,T]$ for the variance process~$\{V_i^n\}_{i=0}^n$ reads:
+Since the objective of this chapter is not to study the effects of different schemes we satisfy ourselves with~\cite{Lord2009AModels}.}, however nevertheless converges strongly in~$L^1$ to the true process~$V$, which is enough for pricing. For~$n\in\NN$,~$\Delta =\frac{T}{n}$ and the increments of the Brownian motion~$\{\Delta W_{i}^n\}_{i=0}^{n-1}$ the discretisation scheme over~$[0,T]$ for the variance process~$\{V_i^n\}_{i=0}^n$ reads:
 \begin{equation*}
 \left\{
 \begin{array}{rcl}
@@ -1855,7 +1854,7 @@ by the variance reduction they can provide.
 \subsubsection{MDP results in different settings}
 
 In the deterministic case, all considered estimators have similar variance reduction (see Figure~\ref{fig:MDPvarianceRedu}). 
-To be more precise, the BS estimator has a very similar variance reduction or even slightly outperforms the MDP-based estimators (left plot of Figure~\ref{fig:MDPvarianceRedu}, where the lines are almost indistinguishable except for very high strikes, outside the `moderate' domain, which hence cause numerical problems). Therefore, in that aspect, MDP-based estimators do not justify their higher computational cost compared to the simple LDP-BS estimator. In the adaptive case, the BS estimator performs slightly better than before, whereas the MDP-based estimators significantly outperform their results from the deterministic case \textit{and} those of the BS estimator. Moreover, as it will be discussed in the next section, their variance reduction is in fact even close to that of the LDP-based estimators.
+To be more precise, the BS estimator has a very similar variance reduction or even slightly outperforms the MDP-based estimators (left plot of Figure~\ref{fig:MDPvarianceRedu}, where the lines are almost indistinguishable except for very high strikes, outside the `moderate' domain, which hence cause numerical problems). Therefore, in that aspect, MDP-based estimators do not justify their higher computational cost compared to the simple LDP-BS estimator. In the adaptive case, the BS estimator performs slightly better than before, whereas the MDP-based estimators significantly outperform their results from the deterministic case \textit{and} those of the BS estimator. Moreover, as will be discussed in the next section, their variance reduction is in fact even close to that of the LDP-based estimators.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.495\textwidth, trim={2cm 0.5cm 2cm 1cm }]{content/reschap3/Figures/HESTON/compare-mdp-new.pdf}

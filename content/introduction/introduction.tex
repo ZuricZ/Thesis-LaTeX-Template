@@ -1,24 +1,20 @@
-Introduce general option pricing ...
-\red{
-\section{TODOs}
-\begin{itemize}
-    \item iid vs i.i.d.
-    \item define ball $\Bb_R$
-    \item all matrices with $[\;]$
-    \item use $\Phi$ as payoff consistently?
-    \item relu consistency, function and name relu vs ReLu
-    % \item consistent payoff vs pay-off
-    % \item fix Call and Put
-    \item "other" in refs
-    \item use definition from the introduction throughout the paper (e.g. for NN/RWNNs)
-    \item randomLY weighted NNs
-    \item $\RWNN$ is a set, not a single NN
-    % \item paper $\to$ work/chapter/thesis
-\end{itemize}
-}
-
-
-\red{Use of NNs/ML In finance ...}
+% \red{
+% \section{TODOs}
+% \begin{itemize}
+%     % \item iid vs i.i.d.
+%     % \item define ball $\Bb_R$
+%     % \item all matrices with bmatrix
+%     % \item use $\Phi$ as payoff consistently?
+%     % \item relu consistency, function and name relu vs ReLu
+%     % \item consistent payoff vs pay-off
+%     % \item fix Call and Put
+%     % \item "other" in refs
+%     % \item use definition from the introduction throughout the paper (e.g. for NN/RWNNs)
+%     % \item randomLY weighted NNs
+%     % \item $\RWNN$ is a set, not a single NN
+%     % \item paper $\to$ work/chapter/thesis
+% \end{itemize}
+% }
 
 The complex and ever-evolving history of financial derivatives offers a captivating narrative that stretches back centuries and continues to shape the modern-day global financial landscape. The history of derivatives can be traced back to the origins of commerce in Mesopotamia in the fourth millennium BC, where futures contracts were used to hedge against price fluctuations~\cite{Weber2009AMarkets}. In Europe, the first derivatives market was established in Amsterdam in the early 1600s, with options contracts being traded on the shares of the Dutch East India Company~\cite{Petram2011The1602-1700}. Derivatives markets continued to evolve over the centuries, with the development of new financial instruments and the emergence of new trading technologies. Today, derivative markets are a vital component of the global financial system, facilitating risk management and providing investors with a wide range of investment opportunities. The history of these markets is a testament to human ingenuity and the power of financial innovation to drive economic growth and prosperity. 
 
@@ -261,16 +257,17 @@ topology of uniform convergence on compact sets.
 \end{enumerate}
 \end{theorem}
 
-\subsection{Randomly weighted neural networks}\label{sec:RWNN}
-Randomly Weighted Neural Networks (RWNNs) have been a staple of artificial intelligence research for decades, although they have taken a back seat to deep learning for a good chunk of the past decade. Neural networks with random weights first appear in seminal papers of Barron \cite{Barron1992NeuralSystems, Barron1993UniversalFunction}, but a more modern version was proposed by Huang \cite{Huang2006UniversalNodes} under the name Extreme learning machines~(ELMs). Today, these networks are known under different names: reservoir networks, random feature, randomly weighted or simply random networks; we choose to follow the two latter conventions. Starting from the work of Huang, Zhu and Siew~\cite{Huang2006UniversalNodes}, RWNNs saw a surge in popularity in the early~2000s (see e.g. also~\cite{Rahimi2007RandomMachines, Rahimi2008WeightedLearning}), however, after the advent of automatic differentiation libraries experienced a sharp decline in application up until recently.
+\subsection{Random-weight neural networks}\label{sec:RWNN}
+
+Random-weight neural networks (RWNNs) have been a staple of artificial intelligence research for decades, although they have taken a back seat to deep learning for a good chunk of the past decade. Neural networks with random weights first appear in seminal papers of Barron \cite{Barron1992NeuralSystems, Barron1993UniversalFunction}, but a more modern version was proposed by Huang \cite{Huang2006UniversalNodes} under the name Extreme learning machines~(ELMs). Today, these networks are known under different names: reservoir networks, random feature, random-weight neural networks or simply random networks; we choose to follow the two latter conventions. Starting from the work of Huang, Zhu and Siew~\cite{Huang2006UniversalNodes}, RWNNs saw a surge in popularity in the early~2000s (see e.g. also~\cite{Rahimi2007RandomMachines, Rahimi2008WeightedLearning}), however, after the advent of automatic differentiation libraries experienced a sharp decline in application up until recently.
 
 ELM introduced the concept of randomly initializing the weights of a single-hidden layer feed-forward neural network. This idea was based on a universal approximation theorem by Barron~\cite{Barron1993UniversalFunction}, stating that a single-hidden layer neural network with a randomly chosen activation function could approximate any continuous function with arbitrary precision. By randomly choosing the weights, the computational complexity and time required to train the neural network were drastically reduced.
 
-To put this statement into the context of Definition~\ref{def:neuralnet}, a \textit{randomly weighted neural network} (RWNN) is a neural network where the hidden layers are randomly sampled from a given distribution and then fixed; consequently, only the last layer is trained:
+To put this statement into the context of Definition~\ref{def:neuralnet}, a \textit{random-weight neural network} is a neural network where the hidden layers are randomly sampled from a given distribution and then fixed; consequently, only the last layer is trained:
 out of all the parameters $(\Am^{(l)}, \bm^{(l)})_{l=0,\ldots,L}$ of the $L$-layered neural network, the parameters $(\Am^{(0)}, \bm^{(0)}, \ldots, A^{(L-1)}, \bm^{(L-1)})$ are randomly sampled and frozen and only $(\Am^{(L)}, \bm^{(L)})$ from the last layer are trained. 
 
-Similarly as above, we denote $\RWNN_{\infty}^{\varrho}(d_0,d_1)$ the set of random neural networks from $\RR^{d_0}$ to $\RR^{d_1}$, with activation function~$\varrho$. % $d_0,d_1=1$.
-Moreover, for any $L, K \in \NN$, $\RWNN_{L, K}^\varrho$ represents a set of random neural networks with a fixed number of hidden layers $L$ and fixed input and output dimension $K$ for each hidden layer. 
+Similarly as above, we denote $\RWNN_{\infty}^{\varrho}(d_0,d_1)$ the set of random-weight neural networks from $\RR^{d_0}$ to $\RR^{d_1}$, with activation function~$\varrho$. % $d_0,d_1=1$.
+Moreover, for any $L, K \in \NN$, $\RWNN_{L, K}^\varrho$ represents a set of random networks with a fixed number of hidden layers $L$ and fixed input and output dimension $K$ for each hidden layer. 
 We now give a precise definition of a single layer $\RWNN^\varrho_{K}\defEqual\RWNN^\varrho_{1, K}$, which we use for our approximation in Chapter~\ref{chap:reschap2}.
 
 \begin{definition}[Single layer RWNN]\label{def:RWNN}
@@ -294,7 +291,7 @@ $$
 where $\varrhob:\RR^K\rightarrow\RR^K$ acts component-wise $\varrhob(\yy)\defEqual(\varrho(y_1), \dots \varrho(y_K))$ and~${\Am: \widetilde{\Omega} \rightarrow \RR^{K\times d}}$ and~${\bm: \widetilde{\Omega} \rightarrow \RR^K}$ are the random matrix and bias respectively.
 \end{remark}
 
-The training of such an RWNN can then be simplified into a convex optimisation problem. This makes the training easier to manage and understand both practically and theoretically. We expand on the training method in Chapter~\ref{chap:reschap2}. However, by only allowing certain parts of the parameters to be trained, the overall capacity and expressivity are possibly reduced. Although it is still unclear if random neural networks still maintain any of the powerful approximation properties of general deep neural networks, these questions have been addressed to some extent in e.g.~\cite{Gonon2020ApproximationSystems, Mei2022GeneralizationConcentration}, where learning error bounds for RWNNs have been proved.
+The training of such an RWNN can then be simplified into a convex optimisation problem. This makes the training easier to manage and understand both practically and theoretically. We expand on the training method in Chapter~\ref{chap:reschap2}. However, by only allowing certain parts of the parameters to be trained, the overall capacity and expressivity are possibly reduced. Although it is still unclear if random-weight neural networks still maintain any of the powerful approximation properties of general deep neural networks, these questions have been addressed to some extent in e.g.~\cite{Gonon2020ApproximationSystems, Mei2022GeneralizationConcentration}, where learning error bounds for RWNNs have been proved.
 
 \begin{proposition}[Proposition 3 in~\cite{Gonon2020ApproximationSystems}]\label{prop:UATRWNN}
 Suppose $\psi^{*}: \RR^{q} \rightarrow \RR$, for $q\in\NN$, can be represented as
@@ -313,7 +310,7 @@ Then, there exists an $\RR^K$-valued random variable~$\Theta$ and $C^{*}>0$
 $$
 \EE^\Phi\left[\left\|\Psi(Z;\, \Theta)-\psi^{*}(Z)\right\|^{2}\right] \leq \frac{C^{*}}{K}\,,
 $$
-and for any $\delta \in(0,1)$, with probability $1-\delta$ the random neural network $\Psi(\,\cdot\,;\,\Theta)$ satisfies
+and for any $\delta \in(0,1)$, with probability $1-\delta$ the random network $\Psi(\,\cdot\,;\,\Theta)$ satisfies
 $$
 \left(\int_{\RR^{q}}\left\|\Psi(z;\, \Theta)-\psi^{*}(z)\right\|^{2} \mu_{Z}(\D z)\right)^{1 / 2} \leq \frac{\sqrt{C^{*}}}{\delta \sqrt{K}}\,.
 $$

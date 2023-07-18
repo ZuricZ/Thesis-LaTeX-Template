@@ -27,10 +27,10 @@ We note in passing that RWNNs have already been used in Finance to price America
 for financial data forecasting~\cite{Liu2018FinancialNetwork}, for PIDEs~\cite{Gonon2023DeepEquations},
 and we refer the interested reader to~\cite{Cao2018AWeights} for a general overview of their applications in data science.
 
-The Chapter is structured as follows: Section~\ref{sec:ReLu-RWNN} provides a brief overview of a type of Random-weight Neural Networks (RWNNs) from Section~\ref{sec:RWNN} used in this study, including their key features and characteristics. 
+The Chapter is structured as follows: Section~\ref{sec:ReLu-RWNN} provides a brief overview of a type of random-weight neural network from Section~\ref{sec:RWNN} used in this study, including their key features and characteristics. 
 In Section~\ref{sec:markovian_case}, we outline the scheme for the Markovian case and discuss the non-Markovian case in Section~\ref{sec:non-Markovian_case}.
 The convergence analysis is presented in Section~\ref{sec:convergence_analysis}. Additionally, Section~\ref{sec:RWNN_numerical_results} presents numerical results, which highlight the practical relevance of the scheme and its performance for different models.
-Some of the technical proofs are postponed to Appendix~\ref{apx:technical_proofs} to ease the flow of the work.
+Some of the technical proofs are postponed to Appendix~\ref{apx:technical_proofs_RWNN} to ease the flow of the work.
 
 
 \textbf{Notations:}
@@ -43,16 +43,17 @@ $$
 \Ww^{s, p}(E, \RR^m)
 \defEqual  \Big\{f \in L^p(E, \RR^m): \; \partial_{\xxbf}^{\boldsymbol{\alpha}} f \in L^p(E, \RR^m), \text{for all } |\boldsymbol{\alpha}| \leq s\Big\}\,,
 $$
-where $\boldsymbol{\alpha} = \left(\alpha_1, \ldots, \alpha_d\right)$, $|\boldsymbol{\alpha}|=\alpha_1+\ldots+\alpha_d$, and the derivatives $\partial_{\xxbf}^{\boldsymbol{\alpha}} f = \partial_{x_1}^{\alpha_1} \dots \partial_{x_d}^{\alpha_d} f$ are taken in a weak sense.
+where $\boldsymbol{\alpha} = \left(\alpha_1, \ldots, \alpha_d\right)$, $|\boldsymbol{\alpha}|=\alpha_1+\ldots+\alpha_d$, and the derivatives $\partial_{\xxbf}^{\boldsymbol{\alpha}} f = \partial_{x_1}^{\alpha_1} \dots \partial_{x_d}^{\alpha_d} f$ are taken in a weak sense. The set $\RWNN^\varrho_K$, with $K\in\NN$ and activation function $\varrho\in\Cc(\RR)$, refers to the set of all single-layer random neural networks defined in Definition~\ref{def:RWNN}.
 
-\section{Random-weight neural network with ReLu activations}\label{sec:ReLu-RWNN}
+\section{Random-weight neural network with \texttt{ReLu} activations}\label{sec:ReLu-RWNN}
 
-In recent years ReLu neural networks have been predominately used in deep learning, because of their simplicity, efficiency and ability to address the so-called vanishing gradient problem \cite{LeCun2012EfficientBackProp}. In many ways, ReLu networks also give a more tractable structure to the optimisation problem compared to their smooth counterparts such as $\tanh$ and sigmoid. 
-Gonon, Grigoryeva and Ortega~\cite{Gonon2020ApproximationSystems} derived error bounds to the convergence of a single layer RWNN with ReLu activations.
+In recent years \texttt{ReLu} neural networks have been predominately used in deep learning, because of their simplicity, efficiency and ability to address the so-called vanishing gradient problem \cite{LeCun2012EfficientBackProp}. In many ways, \texttt{ReLu} networks also give a more tractable structure to the optimisation problem compared to their smooth counterparts such as $\tanh$ and sigmoid. 
+Gonon, Grigoryeva and Ortega~\cite{Gonon2020ApproximationSystems} derived error bounds to the convergence of a single layer RWNN with \texttt{ReLu} activations. 
+To gain an initial understanding of random neural networks, Section~\ref{sec:RWNN} serves as an introductory resource.
 
-\subsection{Derivatives of ReLu-RWNN}
+\subsection{Derivatives of \texttt{ReLu}-RWNN}
 \label{sec:RWNNderivatives}
-While networks with ${\relu(y)\defEqual \max\{y,0\}}$ activation functions are performing well numerically, the function is, however, not differentiable at zero (see \cite{Berner2019TowardsEstimates} for a short exposition on the chain-rule in ReLu networks). As ReLu-RWNNs will be used in our approach to approximate solutions of partial differential equations, a discussion on its derivatives is in order. 
+While networks with ${\relu(y)\defEqual \max\{y,0\}}$ activation functions are performing well numerically, the function is, however, not differentiable at zero (see \cite{Berner2019TowardsEstimates} for a short exposition on the chain-rule in \texttt{ReLu} networks). As \texttt{ReLu}-RWNNs will be used in our approach to approximate solutions of partial differential equations, a discussion on its derivatives is in order. 
 To that end we let $\brelu(\yybf)\defEqual(\relu(y_1),\dots,\relu(y_K))$ and $\Hb(y)=\ind_{(0,\infty)}(\yybf)\in\RR^K$ for $\yybf\in\RR^K$, where the indicator function is again applied component-wise. 
 
 
@@ -136,7 +137,7 @@ This is a direct consequence of Lemma~\ref{lem:diffexpectationeq}, after noting 
 \end{proof}
 
 From a practical perspective, the second-order derivative of the network with respect to the input will be zero for all intents and purposes. 
-However, as will become apparent in Lemma~\ref{lem:derivativeBounds}, we need to investigate it further, in particular the measure zero set of points where ReLu-RWNN is not differentiable. Rewriting the diagonal operator in terms of the natural basis $\{e_{i}\}$ and evaluating the function $\Hb$ component-wise yields
+However, as will become apparent in Lemma~\ref{lem:derivativeBounds}, we need to investigate it further, in particular the measure zero set of points where \texttt{ReLu}-RWNN is not differentiable. Rewriting the diagonal operator in terms of the natural basis $\{e_{i}\}$ and evaluating the function $\Hb$ component-wise yields
 $$
 \nabla_{\xxbf}\Psi_K(\xxbf; \Theta)=\Theta \left(\sum_{j=1}^{K} e_{j} e_{j}^\top H\left(e_{j}^\top \Am \xxbf+b_{j}\right) \right) \Am\,.
 $$
@@ -246,7 +247,7 @@ for some real-valued functions $a,b,c,\widetilde{f}$ on $[0,T]\times\RR^d$ that 
 \end{assumption}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Random weighted neural network scheme}
+\subsection{Random neural network scheme}
 The first step in so-called deep BSDE schemes~\cite{E2017DeepEquations, Han2018SolvingLearning, Hure2020DeepPDEs} is to establish the BSDE associated with the PDE~\eqref{eq:markovianPDE} and the process~\eqref{eq:markovianSDE} through the nonlinear Feynman-Kac formula. By~\cite{Pardoux1990AdaptedEquation} there exist $\FF$-adapted processes $(Y, Z)$, which are unique solutions to the BSDE
 \begin{equation}\label{eq:markovianBSDE}
 Y_{t}=g\left(\XX_{T}\right)+\int_{t}^{T} f\left(s, \XX_{s}, Y_{s}, Z_{s}\right) \D s-\int_{t}^{T} Z_{s} \D W_{s}\,,
@@ -831,7 +832,7 @@ For a given $i\in\{0,\dots,N-1\}$ take $(\Theta^*, \Xi^*)\in\argmin_{\Theta, \Xi
     \end{align*}
     by Proposition~\ref{prop:UATRWNN} over any compact $\Qq = \{x\in\RR: |x|\leq Q\}$, $Q>0$.
 \end{proof}
-The rest of the proof is similar to the proofs of \cite[Theorem A.2]{Bayer2022PricingSPDEs} and \cite[Theorem~4.1]{Hure2020DeepPDEs}, but we include it in Appendix~\ref{apx:technical_proofs} for the sake of completeness. 
+The rest of the proof is similar to the proofs of \cite[Theorem A.2]{Bayer2022PricingSPDEs} and \cite[Theorem~4.1]{Hure2020DeepPDEs}, but we include it in Appendix~\ref{apx:technical_proofs_RWNN} for the sake of completeness. 
 
 \section{Numerical results}\label{sec:RWNN_numerical_results}
 We now showcase the performance of the RWNN scheme on a representative model from each--Markovian and non-Markovian--class. 

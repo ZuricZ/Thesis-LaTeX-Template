@@ -159,12 +159,12 @@ Next, through a comparative analysis of VIX log-returns using quantile-quantile~
         \includegraphics[width=\textwidth]{content/reschap4/Figures/laplace_QQ_2020-1-2-2022-10-28.pdf}
         \caption{Laplace}
     \end{subfigure}
-    \caption{Comparing the tails of empirical VIX log-returns to the corresponding theoretical distributions using QQ plots over the following periods: (a)-(c)~{2005-01-03} to {2022-10-28}; (d)-(f)~{2005-01-03} to {2009-12-31}, (g)-(i)~{2010-01-04} to {2014-12-31}; (j)-(l)~{2015-01-02} to {2019-12-31}; (m)-(o)~{2020-01-02} to {2022-10-28}.}\label{fig:QQplots}
+    \caption{\small Comparing the tails of empirical VIX log-returns to the corresponding theoretical distributions using QQ plots over the following periods: (a)-(c)~{2005-01-03} to {2022-10-28}; (d)-(f)~{2005-01-03} to {2009-12-31}, (g)-(i)~{2010-01-04} to {2014-12-31}; (j)-(l)~{2015-01-02} to {2019-12-31}; (m)-(o)~{2020-01-02} to {2022-10-28}.}\label{fig:QQplots}
 \end{figure}
 
 Subsequently, we conduct several statistical tests to assess the normality of the returns over the same periods. Table~\ref{tab:normality_test} summarizes the results of the test for normality conducted on VIX log-returns. For the entire dataset, the skewness value is 1.048, accompanied by an extremely low {$p$\nobreakdash-value} from the test~\cite{DAgostino1990ANormality}, thus rejecting the null that the skewness of the population from which the sample was drawn is normal. Similarly, the (excess)~kurtosis value is 6.104, with a significantly low {$p$\nobreakdash-value} coming from the kurtosis test~\cite{Anscombe1983DistributionSamples}, thus again rejecting the null. These findings indicate substantial deviation from normality, as evidenced by the extremely low {$p$\nobreakdash-values}. Moreover, the norm test statistic based on~\cite{DAgostino1971AnSamples, DAgostino1973Testssqrtb_1} is zero up to machine precision, further supporting the rejection of the normality assumption for the VIX log-returns.
 
-\begin{table}[]
+\begin{table}[htbp]
 \centerline{
 \begin{tabular}{@{}llllll@{}}
 \toprule
@@ -184,8 +184,9 @@ Finally, we assessed the VIX returns' stationarity and employed the Augmented Di
 We believe these findings underscore the importance of considering alternative distributional assumptions or more intricate models to comprehensively capture the unique characteristics of VIX returns, including both tail behaviour and asymmetry.
 
 
-\section{Techical Proofs}\label{apx:technical_proofs}
+\section{Techical Proofs}\label{apx:technical_proofs_ggBm}
 \begin{lemma}\label{lem:sigma_prod}
+
 Let $X, Y$ be two random variables on $(\Omega, \Ff)$ such that $X, Y \neq 0$ a.s.. Then, it holds for the generated sigma-algebra of the product that
 $$
 \sigma(X\cdot Y) \subseteq \sigma(X)\lor\sigma(Y)\,.
