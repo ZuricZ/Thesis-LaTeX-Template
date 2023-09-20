@@ -3,10 +3,10 @@ Dating back to the Black-Scholes equation~\cite{Black1973TheLiabilities}, PDEs h
 However, rough volatility models give rise to a non-Markovian framework, where the value function for a European option is not deterministic anymore, but is instead random and satisfies a backward stochastic partial differential equation (BSPDE) as was shown in~\cite{Bayer2022PricingSPDEs}.
 Moreover, even in classical diffusive models, the so-called curse of dimensionality poses a challenge when solving PDEs in high dimension;
 until recently, only the backward stochastic differential equation (BSDE) approach by~\cite{Pardoux1990AdaptedEquation} was available to tackle this, 
-which is not really feasible in dimension beyond six.
+which is not feasible in dimensions beyond six.
 
 On a positive note, machine learning methods have spread inside quantitative finance in recent years, and neural networks, in particular, have become a powerful tool to overcome problems in high-dimensional situations, because of their superior computational performance across a wide range of applications~\cite{Buehler2019DeepHedging, Gierjatowicz2023RobustEquations, Ruf2020NeuralReview};
-more precisely in the context of PDEs, examples of applications thereof can be found in~\cite{E2017DeepEquations, Han2018SolvingLearning, Sirignano2018DGM:Equations, Jacquier2019DeepVolatility, Saporito2021Path-DependentEquations, Beck2021DeepPDEs}. 
+more precisely in the context of PDEs, examples of applications thereof can be found in~\cite{E2017DeepEquations, Han2018SolvingLearning, Sirignano2018DGM:Equations, Jacquier2023DeepVolatility, Saporito2021Path-DependentEquations, Beck2021DeepPDEs}. 
 For a more thorough literature review on the use of neural networks in finance and finance-related PDEs, we refer the reader to the surveys in~\cite{Beck2023AnEquations, Germain2021NeuralFinance}.
 
 In this Chapter, we focus on the works by Hur{\'e}, Pham and Warin~\cite{Hure2020DeepPDEs}, and by Bayer, Qiu and Yao~\cite{Bayer2022PricingSPDEs}, where the classical backward resolution technique is combined with neural networks to estimate both the value function and its gradient. 
@@ -48,7 +48,7 @@ where $\boldsymbol{\alpha} = \left(\alpha_1, \ldots, \alpha_d\right)$, $|\boldsy
 \section{Random-weight neural network with \texttt{ReLu} activations}\label{sec:ReLu-RWNN}
 
 In recent years \texttt{ReLu} neural networks have been predominately used in deep learning, because of their simplicity, efficiency and ability to address the so-called vanishing gradient problem \cite{LeCun2012EfficientBackProp}. In many ways, \texttt{ReLu} networks also give a more tractable structure to the optimisation problem compared to their smooth counterparts such as $\tanh$ and sigmoid. 
-Gonon, Grigoryeva and Ortega~\cite{Gonon2020ApproximationSystems} derived error bounds to the convergence of a single layer RWNN with \texttt{ReLu} activations. 
+Gonon, Grigoryeva and Ortega~\cite{Gonon2023ApproximationSystems} derived error bounds to the convergence of a single layer RWNN with \texttt{ReLu} activations. 
 To gain an initial understanding of random neural networks, Section~\ref{sec:RWNN} serves as an introductory resource.
 
 \subsection{Derivatives of \texttt{ReLu}-RWNN}
@@ -75,8 +75,7 @@ for almost every $\xxbf\in\Aa$,
 and hence
 \begin{align*}
 \nabla_{\xxbf}(\brelu\circ\ell)(\xxbf)
-&=\operatorname{diag}\left(\ind_{\{\ell(\xxbf)\in\RR^d\setminus\Aa\}}\right)\nabla_{\xxbf}\ell(\xxbf) \\
-&=\operatorname{diag}\left(\ind_{(0,\infty)}(\ell(\xxbf))\right)\nabla_{\xxbf}\ell(\xxbf) \\
+&=\operatorname{diag}\left(\ind_{\{\ell(\xxbf)\in\RR^d\setminus\Aa\}}\right)\nabla_{\xxbf}\ell(\xxbf)=\operatorname{diag}\left(\ind_{(0,\infty)}(\ell(\xxbf))\right)\nabla_{\xxbf}\ell(\xxbf) \\
 &=\operatorname{diag}(\Hb(\Am \xxbf+\bm))\Am\,.
 \end{align*}
 \end{proof}
@@ -220,7 +219,7 @@ where
 \qquad\text{on }[0,T)\times \Aa\,,
 \end{align}
 is the infinitesimal generator associated with diffusion~\eqref{eq:markovianSDE}.
-In this Markovian setting, we thus adopt a set-up similar to~\cite{Hure2020DeepPDEs} and consider a slightly more general PDE
+In this Markovian setting, we thus adopt a set-up similar to~\cite{Hure2020DeepPDEs} and consider a slightly more general~PDE:
 \begin{equation}\label{eq:markovianPDE}
 \left\{
 \begin{array}{rll}
@@ -286,15 +285,17 @@ Z_{t_i} &\hspace*{-0.25cm}\approx \Zf_{i}(\XX_{t_i})
 \end{equation*}
 Recall that the derivative~$\Zf_{i}(\XX_{t_i})$ is the approximate derivative from Definition~\ref{def:approximatediff}. The following formulation of the loss function $\ell$ using the approximate derivative is sensible by Lemma~\ref{lem:diffexpectationeq}: notice that for the optimal parameter $\Theta^{i+1, *}$ in step $(i+1)$, the optimal approximation $\widehat \Uf_{i+1}(\XX_{t_{i+1}})\defEqual\Uf_{i+1}(\XX_{t_{i+1}}; \Theta^{i+1, *})$ 
 does not depend on $\Theta^i$, hence under Assumption~\ref{ass:faffine} with $c=0$ the loss function at the $i$-th discretisation step reads
-\begin{small}
+% \begin{small}
 \begin{align*}
-    &\ell(\Theta^i) \\
-    &\defEqual \EE^\Phi\left[\left\| \widehat \Uf_{i+1}(\XX_{t_{i+1}}) - \left[\Uf_i(\XX_{t_i};\Theta^i) - f\Big(t_{i}, \XX_{t_{i}}, \Uf_i(\XX_{t_i};\Theta^i), \Zf_{i}(\XX_{t_i}; \Theta^i)\Big)\Deli + \Zf_{i}(\XX_{t_i}; \Theta^i)\DelWi\right] \right\|^2\right] \\
-    &= \EE^\Phi\left[\left\| \widehat \Uf_{i+1}(\XX_{t_{i+1}}) - \left[(\Uf_i(\XX_{t_i};\Theta^i) - \left(a_{i}\Uf_i(\XX_{t_i};\Theta^i) + b_{i}\Zf_{i}(\XX_{t_i}; \Theta^i) + \widetilde{f}_{i}\right)\Deli + \Zf_{i}(\XX_{t_i}; \Theta^i)\DelWi\right] \right\|^2\right] \\
+    &\ell(\Theta^i) \defEqual 
+    %\EE^\Phi\bigg[\Big\| \widehat \Uf_{i+1}(\XX_{t_{i+1}}) - \Big[\Uf_i(\XX_{t_i};\Theta^i) - f\Big(t_{i}, \XX_{t_{i}}, \Uf_i(\XX_{t_i};\Theta^i), \Zf_{i}(\XX_{t_i}; \Theta^i)\Big)\Deli \\
+    % & \hspace{4cm} + \Zf_{i}(\XX_{t_i}; \Theta^i)\DelWi\Big] \Big\|^2\bigg] \\
+    \EE^\Phi\bigg[\Big\| \widehat \Uf_{i+1}(\XX_{t_{i+1}}) - \Big[(\Uf_i(\XX_{t_i};\Theta^i) - \left(a_{i}\Uf_i(\XX_{t_i};\Theta^i) + b_{i}\Zf_{i}(\XX_{t_i}; \Theta^i) + \widetilde{f}_{i}\right)\Deli \\
+    & \hspace{4cm}+ \Zf_{i}(\XX_{t_i}; \Theta^i)\DelWi\Big] \Big\|^2\bigg] \\
     &= \EE^\Phi\left[\left\| \widehat \Uf_{i+1}(\XX_{t_{i+1}}) + \widetilde{f}_{i}\Deli - \Theta^i\Big\{(1-a_{i}\Deli)\Phi_K^i(\XX_{t_i}) + \Dx \Phi_K^i(\XX_{t_i}) \Sigma_i \left(b_{i}\Deli  + \DelWi\right)\Big\} \right\|^2\right] \\
     &= \EE^\Phi\left[\left\| \Y^i - \Theta^i \X^i \right\|^2\right]\,,
 \end{align*}
-\end{small}%
+% \end{small}%
 where $p_{i} \defEqual p(t_i, \XX_{t_i})$ for $p \in \{a, b, \widetilde{f}, \Sigma\}$, and the expectation $\EE^\Phi$ is, of course, conditional on the realisation of the random basis $\Phi_K^i$, i.e., conditional on the random weights and biases of the RWNN. Furthermore, we used the notations
 \[
 \Y^i \defEqual \widehat \Uf_{i+1}(\XX_{t_{i+1}}) + \widetilde{f}_{i}\Deli
@@ -307,9 +308,9 @@ $$
 \Theta^{i,*} = \EE^\Phi\left[\Y^i\X^{i\top}\right]
 \EE^\Phi\left[\X^i\X^{i\top}\right]^{-1}\,.
 $$
-
 \subsection{Algorithm}
-We now summarise the algorithmic procedure of our RWNN scheme. See how the algorithm resembles the Least-Square Monte-Carlo method of~\cite{Longstaff2001ValuingApproach} after considering sample estimator version of RLS from Section~\ref{sec:randomizedLS}:
+\enlargethispage{\baselineskip}
+We now summarise the algorithmic procedure of our RWNN scheme in Algorithm~\ref{alg:markovian} below. See how the algorithm resembles the Least-Square Monte-Carlo method of~\cite{Longstaff2001ValuingApproach} after considering the sample estimator version of RLS from Section~\ref{sec:randomizedLS}.
 \begin{algorithm}[ht]\caption{RWNN scheme}\label{alg:markovian}
 \begin{algorithmic}
 \STATE{\textit{Input}:
@@ -452,18 +453,21 @@ $$
 f\left(t_i, \E^{X_{t_{i}}},  Y_{t_i},  Z^1_{t_i},  Z^2_{t_i}\right) = a(t_i,X_{t_i}) Y_{t_i} + b(t_i,X_{t_i}) Z^1_{t_i} + c(t_i,X_{t_i}) Z^2_{t_i} + \widetilde{f}(t_i,X_{t_i})\,,
 $$
 for some functions $a,b,c,\widetilde{f}$ mapping to~$\RR$, so that, as in the Markovian case, the minimisation of the expected quadratic loss at every time step $i\in\{N-1,\dots,0\}$ reads
+\begingroup
+\allowdisplaybreaks
 \begin{small}
 \begin{align*}
     &\ell(\Theta^i, \Xi^i) \\ &\defEqual \EE^\Phi\Bigg[\bigg|\widehat\Uf_{i+1}(X_{t_{i+1}})-\bigg\{\Uf_i(X_{t_i}; \Theta^i)-f\Big(t_{i}, X_{t_{i}}, \Uf_i(X_{t_i}; \Theta^i), \Zf^1_i(X_{t_i}; \Theta^i, \Xi^i), \Zf^2_i(X_{t_i}; \Theta^i, \Xi^i)\Big)\Deli \\
-    & \hspace{3cm} + \sum_{k=1}^2\widehat \Zf^k_i(X_{t_i}; \Theta^i, \Xi^i)\Delta^{W^k}_{i}\bigg\}\bigg|^2\Bigg] \\
+    & \hspace{4cm} + \sum_{k=1}^2\widehat \Zf^k_i(X_{t_i}; \Theta^i, \Xi^i)\Delta^{W^k}_{i}\bigg\}\bigg|^2\Bigg] \\
     &= \EE^\Phi\Bigg[\bigg|\widehat\Uf_{i+1}(X_{t_{i+1}})-\bigg\{\Uf_i(X_{t_i}; \Theta^i)-\left(a\Uf_i(X_{t_i}; \Theta^i) + b\Zf^1_i(X_{t_i}; \Theta^i, \Xi^i) + c\Zf^2_i(X_{t_i}; \Theta^i, \Xi^i) + \widetilde{f}\right)\Deli \\
-    & \hspace{3cm} + \sum_{k=1}^2\Zf^k_i(X_{t_i}; \Theta^i, \Xi^i)\Delta^{W^k}_{i}\bigg\}\bigg|^2\Bigg] \\
+    & \hspace{4cm} + \sum_{k=1}^2\Zf^k_i(X_{t_i}; \Theta^i, \Xi^i)\Delta^{W^k}_{i}\bigg\}\bigg|^2\Bigg] \\ \\
     &= \EE^\Phi\Bigg[\bigg|\widehat\Uf_{i+1}(X_{t_{i+1}}) + \widetilde{f}\Deli  - \bigg\{ \Xi^i\Phi_K^{\Xi,i}(X_{t_i})\left(\Delta^{W^1}_{i}-b\Deli \right) \\
     & \hspace{3cm} + \Theta^i\left((1-a\Deli )\Phi_K^{\Theta,i}(X_{t_i}) + \Dx\Phi_K^{\Theta,i}(X_{t_i})\sqrt{V_{t_i}}\left(\Delta^{B}_{i} - (b\rho_1 + c\rho_2)\Deli \right) \right) \bigg\}\bigg|^2\Bigg] \\
     &= \EE^\Phi\left[\left|\Y^i - \Xi^i \X_1^i -
     \Theta^i\X_2^i \right|^2\right]\,,
 \end{align*}
 \end{small}%
+\endgroup
 with $\Delta^{B}_{i}=(\rho_1\Delta^{W^1}_{i} + \rho_2\Delta^{W^2}_{i})$ and where $\widehat\Uf_{i+1}(X_{t_{i+1}})\defEqual \Uf_{i+1}(X_{t_{i+1}}; \Theta^{i+1,*})$ was set in the previous time step and is now constant (without dependence on~$\Theta^i$). We defined
 \begin{equation}\label{eq:SystemNonMark}
 \left\{
@@ -493,9 +497,9 @@ yields the solution
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\newpage
 \subsection{Algorithm}
-We summarise the steps of the algorithm  below:
+We summarise the steps of the Algorithm~\ref{alg:nonmarkovian}.
 \begin{algorithm}[H]\caption{RWNN non-Markovian scheme}\label{alg:nonmarkovian}
 \begin{algorithmic}
 \STATE{\textit{Inputs}:
@@ -603,8 +607,7 @@ Then by the martingale representation theorem~\cite[Theorem  14.5.1]{Cohen2015St
 \begin{equation}\label{eq:martingaleRep}
     \widehat{\Uf}_{i+1}\left(X^\pi_{t_{i+1}}\right)=\widehat{\Vv}_{t_{i}}-f\left(t_{i},\E^{X^\pi_{t_{i}}}, \widehat{\Vv}_{t_{i}}, \ZowO_{t_{i}}, \ZowT_{t_{i}}\right) \Deli +\int_{t_{i}}^{t_{i+1}}{\widehat{Z}}_{t}^1\D W^1_{t}+\int_{t_{i}}^{t_{i+1}} {\widehat{Z}}_{t}^2 \D W^2_{t}\,,
 \end{equation}
-since $\Zowk_{t}$ are $\Ff_t^W$-adapted as asserted by the martingale representation theorem. 
-From here, It\^o's isometry yields
+since $\Zowk_{t}$ are $\Ff_t^W$-adapted as asserted by the martingale representation theorem. From here, It\^o's isometry yields
 \begin{align*}
     \ZowO_{t_{i}} &= \widehat\Psi_i(X^\pi_{t_i}) +  \frac1{\Deli}\EE_i\left[\widehat\Uf_{i+1}(X^\pi_{t_{i+1}})\Delta^{W^k}_{i} \right] \\
     &= \frac1{\Deli}\int_{t_i}^{t_{i+1}}\widehat\Psi_i(X^\pi_{t_i})\D t +  \frac1{\Deli}\EE_i\left[\left(\widehat\Vv_{t_i} +\int_{t_{i}}^{t_{i+1}} \widehat{Z}_{t}^1 \D W^1_{t}+\int_{t_{i}}^{t_{i+1}} \widehat{Z}_{t}^2 \D W^2_{t} \right)\int_{t_i}^{t_{i+1}} \D W^1_t \right]  \\
@@ -645,7 +648,7 @@ The following corollary is immediate from~\eqref{eq:convergence_part2_result}, e
 
 \begin{remark}
 The second error term is the strong $L^2$-Monte-Carlo error and is $\Oo(N^{-H})$ for processes driven by an fBm with Hurst parameter $H\in(0, 1)$. 
-We refer the reader to~\cite{Bonesini2023RoughConvergence, Gassiat2022WeakVolatility} for an exposition on strong versus weak error rates in rough volatility models.
+We refer the reader to~\cite{Bonesini2023RoughConvergence, Gassiat2023WeakVolatility} for an exposition on strong versus weak error rates in rough volatility models.
 \end{remark}
 
 To prove Theorem~\ref{thm:convergence},
@@ -1042,7 +1045,7 @@ In this section, the same random seed was used as in Section~\ref{sec:BS_converg
 \begin{figure}[hbt!]
     \centering
     \includegraphics[width=0.75\textwidth]{content/reschap2/Figures/rBergomi_convergence_K_1e3.pdf}
-    \caption{Empirical convergence of MSE under rBergomi in terms of  the number of hidden nodes. Error bars mark 0.1 and 0.9 quantiles of 20 separate runs of the algorithm. The slope coefficient of the dashed line is obtained through regression of the means of individual runs, while the solid line represents $1/K$ convergence and is shown as a reference.}
+    \caption{Empirical convergence of MSE under rBergomi in terms of the number of hidden nodes. Error bars mark 0.1 and 0.9 quantiles of 20 separate runs of the algorithm. The slope coefficient of the dashed line is obtained through regression of the means of individual runs, while the solid line represents $1/K$ convergence and is shown as a reference.}
     \label{fig:rBconvergence}
 \end{figure}
 

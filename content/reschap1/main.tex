@@ -8,7 +8,7 @@ Until recently, these models were mostly conceived in a three-step fashion:
 Indeed, model complexity was undesirable, amongst other reasons, for increasing the computational effort required to perform calibration but, in particular, also pricing and risk calculations.
 With greater uptake of machine learning methods and greater computational power, more complex models can now be used. 
 This is due to the fact that arguably the most complicated and computationally expensive step of calibration has been addressed. 
-Indeed, the seminal paper~\cite{Hernandez2016ModelNetworks} used neural networks to learn the calibration map from market data directly to model parameters. Subsequently, many papers followed \cite{Liu2019ACalibration,Ruf2020NeuralReview,Benth2020AccuracyCurves,Gambara2020ConsistentCalibration,Sardroudi-Khosrawi2019PolynomialCalibration,Horvath2020DeepModels,Bayer2019OnModels,Bayer2018DeepModels,Vidales2018UnbiasedPDEs}. 
+Indeed, the seminal paper~\cite{Hernandez2016ModelNetworks} used neural networks to learn the calibration map from market data directly to model parameters. Subsequently, many papers followed \cite{Liu2019ACalibration,Ruf2020NeuralReview,Benth2021AccuracyCurves,Gambara2020ConsistentCalibration,Sardroudi-Khosrawi2019PolynomialCalibration,Horvath2020DeepModels,Bayer2019OnModels,Bayer2018DeepModels,Vidales2018UnbiasedPDEs}. 
 However, these approaches focused on the calibration of a fixed parametric model but did not address perhaps even more important issues -- model selection and model uncertainty. 
 
 The approach taken in this work is fundamentally different in the sense that we let the data dictate the model, however, we impose a strong prior on the model form.
@@ -28,7 +28,7 @@ Non-parametric calibration of SDE coefficients dates back to at least~\cite{Avel
 
 A more modern approach was considered in~\cite{Guo2017LocalTransport}, where time continuous martingale optimal transport was applied to interpolate between initial and final asset price distributions, to calibrate the local volatility function in a non-parametric way. 
 A similar idea was considered in~\cite{Guo2022CalibrationTransport}, where semi-martingale optimal transport was used instead. 
-The cost function given by the prices of European options was optimised to obtain the functional form of an LSV model. The resulting fully non-linear HJB equations stemming from the dual of the convex optimisation problem then had to be solved numerically. Following this, \cite{Guo2018PathDerivatives} consider calibration via semi-martingale optimal transport for path-dependent derivatives, such as barrier and lookback options, which accordingly translate to solving a path-dependent PDE.
+The cost function given by the prices of European options was optimised to obtain the functional form of an LSV model. The resulting fully non-linear HJB equations stemming from the dual of the convex optimisation problem then had to be solved numerically. Following this, \cite{Guo2021PathDerivatives} consider calibration via semi-martingale optimal transport for path-dependent derivatives, such as barrier and lookback options, which accordingly translate to solving a path-dependent PDE.
 
 In parallel to this work Cuchiero, Khosrawi, and Teichmann~\cite{Cuchiero2020AModels} considered local stochastic volatility models with the leverage function approximated with a neural network. Their model can be seen as an example of a neural SDE.
 
@@ -94,7 +94,7 @@ Observe that~$\sigma^S$ and~$\sigma^V$, set to take values in the space of appro
 Moreover, we immediately see that~$\{\E^{-rt}S_t\}_{t\in[0, T]}$ is a (local) martingale and thus the model is free of arbitrage. 
 
 In a situation when~$(b,\sigma)$ are defined to be neural networks from Definition~\ref{def:neuralnet}, we call the SDE~\eqref{eq:nsde} a neural SDE and we formally denote by~$\Mm^{\text{nsde}}(\theta)$ the class of all solutions to~\eqref{eq:nsde}. 
-Heuristically speaking, due to the universal approximation property of neural networks (see Theorem~\ref{thm:UAT} or~\cite{Hornik1991ApproximationNetworks, Sontag1997CompleteNetworks, Cuchiero2019DeepODEs}), we can expect~$\Mm^{\text{nsde}}(\theta)$ to contain a large class of SDEs solutions.
+Heuristically speaking, due to the universal approximation property of neural networks (see Theorem~\ref{thm:UAT} or~\cite{Hornik1991ApproximationNetworks, Sontag1997CompleteNetworks, Cuchiero2020DeepODEs}), we can expect~$\Mm^{\text{nsde}}(\theta)$ to contain a large class of SDEs solutions.
 Furthermore, neural networks can be efficiently trained with stochastic gradient descent methods and hence one can seek calibrated models in~$\Mm^{\text{nsde}}(\theta)$. 
 Finally, neural SDE integrates black-box neural network-type models with known and well-studied SDE models. 
 One consequence of that is that one can: a)~consistently calibrate these under the risk-neutral measure as well as the real-world measure; b)~easily integrate additional market information, e.g. constraints on realised variance; c)~verify martingale property. We want to remark that for simplicity we work in a Markovian setting, but one could consider neural SDEs with path-dependent coefficients and/or consider more general noise processes.
@@ -165,7 +165,7 @@ But in fact, we can write
 Thus we see that in this framework there needs to be no distinction between a derivative price~$\Phi_i$ and a real-world statistic~$\EE^{\PP^{\textup{mkt}}}[\Sscr_i]$. 
 % since we can simply think of this as the derivative with risk-neutral payoff~$\tilde \Phi_i \frac{\D\PP(\theta)}{\D\QQ(\theta)}$.
 Hence, from now on we will write only about risk-neutral calibrations bearing in mind that methodologically this leads to no loss of generality. 
-An alternative approach recently introduced in~\cite{Cohen2021Arbitrage-freeModels},  avoids the calculation of the Radon-Nikodym derivative by first learning the diffusion coefficient under~$\QQ(\theta)$ and then, with~$\sigma(t, X_t^\theta, \theta)$ fixed, the Neural SDE is viewed as a generative model and the drift coefficient is learned by fitting to~$\PP^{\textup{mkt}}$.
+An alternative approach recently introduced in~\cite{Cohen2021Arbitrage-freeModels},  avoids the calculation of the Radon-Nikodym derivative by first learning the diffusion coefficient under~$\QQ(\theta)$ and then, with~$\sigma(t, X_t^\theta, \theta)$ fixed, the deural SDE is viewed as a generative model and the drift coefficient is learned by fitting to~$\PP^{\textup{mkt}}$.
 
 At this point, we can make a connection between neural SDEs and the concept of generative modelling~\cite{Goodfellow2020GenerativeNetworks, Kingma2013Auto-EncodingBayes}. Let~$\QQ^{\textup{mkt}} \in \Mm$ be the true martingale measure (so by definition all liquid derivatives are perfectly calibrated under this measure, i.e.,~$\EE^{\QQ^{\textup{mkt}}}[\Phi_i] = \Pp(\Phi_i)$ for all~$i\in\{1,\ldots, M\}$).
 %Indeed, in the special case of calibrating to vanilla derivatives we are given prices of Call and Put options,~$\{p(k,t)\}_{0\leq k \leq K, 0\leq t \leq T}$, for all strikes and maturities. 
@@ -319,7 +319,7 @@ Find
 \xi^{\ast} \in \argmin_{\xi} \Var^{\QQ}\left[\phi\left(\{X^{\theta}_t\}_{t\in[0,T]}\right) -  \int_0^T \Hf\left(s,\{X^{\theta}_{s\wedge t}\}_{t\in[0,T]};\xi\right) \D W_s \bigg | \Ff_0\right]\,.
 \end{equation}
 Note that~$\xi^\ast$ depends on~$\theta$, which means that the control variate we found is good for the particular value~$\theta$, but not necessarily for other choices of~$\theta$. 
-In a similar manner, one can derive~$\Psi^{\textup{cv}}$ for the payoff of the  illiquid derivative for which we seek 
+Similarly, one can derive~$\Psi^{\textup{cv}}$ for the payoff of the  illiquid derivative for which we seek 
 the robust price bounds.  Then \eqref{eq LSV loss lb} can be restated as 
 \begin{equation}\label{eq LSV loss lb cv}
 \begin{split}
@@ -346,6 +346,7 @@ An alternative approach to~\eqref{eq loss cv}, possibly yielding a better hedge,
 \end{equation}
 for some other neural network~$\bar{\Hf}$. 
 This is the version we present in Algorithms~\ref{alg LSV calibration vanilla} and~\ref{alg LSV calibration vanilla lb exotic}.
+\enlargethispage{\baselineskip}
 
 \subsection{Time discretisation}  
 \sloppy In order to implement~\eqref{eq LSV loss lb cv}, we define a partition~$\pi$ of the time interval~$[0,T]$ as~${\pi \defEqual \{t_0=0, t_1, \ldots, t_{N_{\text{steps}}}=T\}}$. We first approximate the stochastic integral in~\eqref{eq loss cv} with the appropriate Riemann sum. Depending on the choice of the neural network architecture approximating~$b$ and~$\sigma$ in the neural SDE~\eqref{eq:nsde}, we may have coefficients, which grow super-linearly as a function of~$x$. In such a case, the moments of the classical Euler scheme are known to blow up in finite time~\cite{Hutzenthaler2011StrongCoefficients}, even if the moments of the solution to the SDE are finite.
@@ -433,7 +434,25 @@ and where~$\EE^{\QQ^N}$ denotes the empirical expected value calculated on the~$
 \end{algorithmic}
 \end{algorithm}
 
-
+\begin{algorithm}[htb]\caption{Augmented Lagrangian parameters update \cite{Hestenes1969MultiplierMethods}}\label{alg LSV Augmented Lagrangian}
+\begin{algorithmic}
+\STATE{\textit{Input}:
+\begin{ALC@g}
+\STATE~$\lambda, c>0$
+\STATE~$\tilde{\theta}\in\Theta$ neural network parameters
+\end{ALC@g}
+}
+\STATE{\textbf{Update:} 
+\begin{ALC@g}
+%\STATE Evaluate approximated exotic price~$f$ at~$\tilde{\theta}$
+\STATE Evaluate the MSE of calibration to vanilla prices~$h(\cdot)$ at~$\tilde{\theta}$
+\STATE~$\lambda \leftarrow \lambda + c\, h(\tilde{\theta})$
+\STATE{$c \leftarrow 2c$}
+\end{ALC@g}
+}
+\RETURN~$c$,~$\lambda$
+\end{algorithmic}
+\end{algorithm}
 
 \begin{algorithm}[H]
 \caption{Calibration to vanilla prices for one maturity with lower bound for exotic price}
@@ -486,27 +505,6 @@ and where~$\EE^{\QQ^N}$ denotes the empirical expected value calculated on the~$
  \STATE{\textbf{Every}~$N^{\textup{al}}$ \textbf{updates of}~$\theta$}: Update~$\lambda,c$ using Algorithm~\ref{alg LSV Augmented Lagrangian}
 \ENDFOR
 \RETURN~$\theta, \xi$
-\end{algorithmic}
-\end{algorithm}
-
-
-\begin{algorithm}[htb]\caption{Augmented Lagrangian parameters update \cite{Hestenes1969MultiplierMethods}}\label{alg LSV Augmented Lagrangian}
-\begin{algorithmic}
-\STATE{\textit{Input}:
-\begin{ALC@g}
-\STATE~$\lambda, c>0$
-\STATE~$\tilde{\theta}\in\Theta$ neural network parameters
-\end{ALC@g}
-}
-\STATE{\textbf{Update:} 
-\begin{ALC@g}
-%\STATE Evaluate approximated exotic price~$f$ at~$\tilde{\theta}$
-\STATE Evaluate the MSE of calibration to vanilla prices~$h(\cdot)$ at~$\tilde{\theta}$
-\STATE~$\lambda \leftarrow \lambda + c\, h(\tilde{\theta})$
-\STATE{$c \leftarrow 2c$}
-\end{ALC@g}
-}
-\RETURN~$c$,~$\lambda$
 \end{algorithmic}
 \end{algorithm}
 
@@ -573,7 +571,7 @@ As $\EE[G(\theta_k)]$ can rarely be computed explicitly, the above algorithm is 
 \[
 \theta_{k+1} = \theta_k - \eta_k \frac{1}{N}\sum_{i=1}^{N} \partial_{\theta}G^i(\theta_k)\,,
 \] 
-where $\{G^i(\theta)\}_{i=1}^{N}$ are independent samples from the distribution of $G(\theta)$ and $N \in\NN$. The choice of a ``good'' estimator for $\EE[G(\theta)]$ in the context of stochastic gradient algorithms is an active research area research (see e.g.~\cite{Majka2020Multi-indexAlgorithm}). 
+where $\{G^i(\theta)\}_{i=1}^{N}$ are independent samples from the distribution of $G(\theta)$ and $N \in\NN$. The choice of a ``good'' estimator for $\EE[G(\theta)]$ in the context of stochastic gradient algorithms is an active research area research (see e.g.~\cite{Majka2023Multi-indexAlgorithm}). 
 When the estimator of $\EE[G(\theta)]$ is unbiased, the SGD can be shown to converge to a minimum of $g$ \cite{Benveniste2012AdaptiveApproximations}. 
 
 
@@ -640,7 +638,7 @@ $\partial_{\theta}h(\theta)$, obtained by replacing $\QQ$ with $\QQ^N$, is given
 \partial_{\theta}h^{N}(\theta) \defEqual   \partial_x \ell\left(\EE^{\QQ^N}[\phi^{\textup{cv}}(X^{\theta})],\Pp(\Phi) \right) \EE^{\QQ^N}[\partial_\theta \phi(X^{\theta})]\,,
 \]
 is a biased estimator of $\partial_{\theta}h$. Nonetheless, the bias can be estimated in terms of the number of samples $N$ and the variance. The fact the bias is controlled by the variance, further justifies why it is important to reduce the variance when calibrating the models with a stochastic gradient algorithm. 
-An alternative perspective is to view $\partial_{\theta}h^{N}(\theta) $ as non-linear function of $\QQ^N$. For a general theory studying smoothness and corresponding expansions of such functions of measures, we refer the reader to~\cite{Chassagneux2019WeakMeasures} for more details. 
+An alternative perspective is to view $\partial_{\theta}h^{N}(\theta) $ as non-linear function of $\QQ^N$. For a general theory studying smoothness and corresponding expansions of such functions of measures, we refer the reader to~\cite{Chassagneux2022WeakMeasures} for more details. 
 
 In Appendix~\ref{sec grad des bias} we provide a result on the bias for a general loss function. 
 For the square loss function, the bias is stated below. 
@@ -737,7 +735,7 @@ Note that
 \[
 \EE^{\UU}[\ind_{[T_{U-1},T_U]}(t) \eta^U_t(\theta) ] = \sum_{i=1}^{N_{m}} \frac1{N_m}\ind_{[T_{i-1},T_i]}(t) \eta^i_t(\theta) \,.
 \]
-Now using Fubini-type Theorem for Conditional Expectation, \cite[Lemma A5]{Hammersley2019WeakNoise}, we have
+Now using Fubini-type Theorem for Conditional Expectation, \cite[Lemma A5]{Hammersley2021WeakNoise}, we have
 \[
 \begin{split}
 \D\EE^{\UU} \big[Z_t^{\theta}(U)\big] =  & \bigg(\sum_{i=1}^{N_{m}} \ind_{t\in[T_{i-1},T_i]}(t) \alpha^i_t(\theta)  \EE^{\UU} \big[Z_t^{\theta}(U)\big]   +  \sum_{i=1}^{N_{m}} \ind_{t\in[T_{i-1},T_i]}(t) \beta^i_t(\theta)  \bigg)\,\D t \\  
@@ -761,14 +759,10 @@ Recall the randomised gradient
 \[
 (\partial_\theta h)(\theta,U) =  \partial_x \ell  \left(\EE^{\QQ}[\phi(X_T^{\theta})] ,\Pp(\Phi)\right) \,\EE^{ \QQ}\left[(\partial_x\phi)( X_T^{\theta})Z_T^{\theta}(U) \right]\,.
 \]
-Note that due to \eqref{eq equivalence of gradients} 
-\[
-\EE^{\UU}\left[\EE^{ \QQ}[(\partial_x\phi)( X_T^{\theta})Z_T^{\theta}(U) ]\right] 
- =\EE^{ \QQ}\left[(\partial_x\phi)( X_T^{\theta})\partial_\theta X_T^{\theta}\right]\,.
-\]
-which implies that $\EE^{\UU}[(\partial_\theta h)(\theta,U)] = (\partial_\theta h)(\theta) $. 
+Note that due to \eqref{eq equivalence of gradients} we have $\EE^{\UU}\left[\EE^{ \QQ}[(\partial_x\phi)( X_T^{\theta})Z_T^{\theta}(U) ]\right] 
+ =\EE^{ \QQ}\left[(\partial_x\phi)( X_T^{\theta})\partial_\theta X_T^{\theta}\right]$,
+which implies that $\EE^{\UU}[(\partial_\theta h)(\theta,U)] = (\partial_\theta h)(\theta)$. 
 \end{proof}
-
 %%%%%%%%%%%%%%%%%%%%%
 
 
@@ -882,18 +876,35 @@ considered in the market data, the output of $\Hf(t_k, s_{t_k, \theta}^{i}; \xi_
 Finally, the parameterisation of the hedging strategy for the exotic options price is an LSTM network \cite{Hochreiter1997LongMemory} with 20 neurons in the hidden layer with a linear transformation in the last layer to ensure the output is in $\RR$. The choice of this architecture is motivated by the fact that the recurrent neural networks (RNNs) are path dependent by construction, which is necessary for the parametrisation of the hedging strategy of an exotic option. 
 The log-price process~\eqref{eq:LSV_SDE_log-price}, was discretised using the tamed Euler scheme~\eqref{eq tamed scheme} with 8 uniform time steps per month. As already mentioned, our empirical experiments show higher numerical stability if we employ the discretisation at the log-price level.
  
-The number of Monte Carlo trajectories in each stochastic gradient descent iteration was $N=4\times 10^4$ and the abstract hedging strategy was used as a control variate. Finally, in the evaluation of the calibrated neural SDE, the option prices are calculated using $N = 4\times 10^5$ trajectories of the calibrated neural SDEs, which we generated with $2\times 10^5$ Brownian paths and their antithetic paths; in addition, we also used the learned hedging strategies to calculate the Monte Carlo estimators with a lower variance of $\EE^{\QQ(\theta)}[\Phi_i^{\textup{cv}}]$ and $\EE^{\QQ(\theta)}[\Psi^{\textup{cv}}]$.          
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[clip,width=0.75\textwidth]{content/reschap1/Figures/figures_SPX/lookback_bounds_mse.pdf} 
-  \caption{Box plots for the Local Stochastic Volatility model~\eqref{eq:LSV_SDE}. Exotic option price quantiles are in blue in the left-hand box-plot groups. The MSE quantiles of market data calibration is in grey, in the right-hand box-plot groups. Each box plot comes from 10 different runs of neural SDE calibration, wherein each run the parameters of the neural SDE are initialised with a different seed. The three box-plots in each group arise respectively from aiming for a lower bound of the illiquid derivative (left), only calibrating to the market and then pricing the illiquid derivative (middle) and aiming for an upper bound of the illiquid derivative (right).}\label{fig:SPX LSV boxplots}
-\end{figure}
-
+The number of Monte Carlo trajectories in each stochastic gradient descent iteration was $N=4\times 10^4$ and the abstract hedging strategy was used as a control variate. Finally, in the evaluation of the calibrated neural SDE, the option prices are calculated using $N = 4\times 10^5$ trajectories of the calibrated neural SDEs, which we generated with $2\times 10^5$ Brownian paths and their antithetic paths; in addition, we also used the learned hedging strategies to calculate the Monte Carlo estimators with a lower variance of $\EE^{\QQ(\theta)}[\Phi_i^{\textup{cv}}]$ and $\EE^{\QQ(\theta)}[\Psi^{\textup{cv}}]$.
 
 \subsection{Results from calibrating for LSV neural SDE}
 Each calibration is run ten times with different initialisations of the network parameters, with the goal to check the robustness of the exotic option price 
- $\EE^{\QQ(\theta)}[\Psi]$ for each calibrated neural SDE. Each run takes on average 51 minutes on an NVIDIA Tesla V100 SXM2 GPU, meaning that in order to produce each boxplot in Figure~\ref{fig:SPX LSV boxplots} the experiment takes $51 \text{mins} \times 10 = 8.5$ hours. This is repeated to calculate the bounds of the exotic option price. Thus, in total the experiment takes $8.5 \times 3$ hours.
+ $\EE^{\QQ(\theta)}[\Psi]$ for each calibrated neural SDE. Each run takes on average 51 minutes on an \texttt{NVIDIA~Tesla~V100~SXM2} GPU, meaning that in order to produce each boxplot in Figure~\ref{fig:SPX LSV boxplots} the experiment takes $51 \text{mins} \times 10 = 8.5$ hours. This is repeated to calculate the bounds of the exotic option price. Thus, in total the experiment takes $8.5 \times 3$ hours.
+
+ \begin{figure}[htbp]
+    \centering
+    \includegraphics[clip,width=0.8\textwidth]{content/reschap1/Figures/figures_SPX/lookback_bounds_mse.pdf} 
+  \caption{Box plots for the Local Stochastic Volatility model~\eqref{eq:LSV_SDE}. Exotic option price quantiles are in blue in the left-hand box-plot groups. The MSE quantiles of market data calibration is in grey, in the right-hand box-plot groups. Each box plot comes from 10 different runs of neural SDE calibration, wherein each run the parameters of the neural SDE are initialised with a different seed. The three box-plots in each group arise respectively from aiming for a lower bound of the illiquid derivative (left), only calibrating to the market and then pricing the illiquid derivative (middle) and aiming for an upper bound of the illiquid derivative (right).}\label{fig:SPX LSV boxplots}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering 
+	\includegraphics[clip, width=0.8\textwidth]{content/reschap1/Figures/figures_SPX/iv_nsde_unbounded.pdf}
+  \caption{Comparing market implied volatility to the model implied volatility for the neural SDE LSV model~\eqref{eq:LSV_SDE} when targeting only the {\em market data}. Strikes from the market data are scaled by a factor of $10^{-3}$. Implied volatility curves of 10 different calibrated neural SDEs are presented in comparison to the market bid-ask spread for different maturities.
+}
+\label{fig:SPX LSV calibration iv}  
+\end{figure}
+
+
+\begin{figure}[htbp]
+  \centering 
+	\includegraphics[clip, width=0.8\textwidth]{content/reschap1/Figures/figures_SPX/iv_error_unbounded.pdf}
+  \caption{The average error and standard deviation in basis points (bps) of the implied volatility curves from Figure~\ref{fig:SPX LSV calibration iv}. The error is considered to be zero if the implied volatility falls into the bid-ask spread. Strikes from the market data are scaled by a factor of $10^{-3}$.  
+}
+\label{fig:SPX LSV calibration iv error}  
+\end{figure}
+
 The blue boxplots in Figure~\ref{fig:SPX LSV boxplots} provide different quantiles for the exotic option 
  price $\EE^{\QQ(\theta)}[\Psi]$ and the obtained bounds after running all the experiments $10$ times. 
 We make the following observations from calibrating the LSV neural SDE:
@@ -904,42 +915,22 @@ We make the following observations from calibrating the LSV neural SDE:
 \item The LSV neural SDE produces noticeable ranges for prices of illiquid derivatives, see again Figure~\ref{fig:SPX LSV boxplots}.  
 \end{enumerate}
 
-
-\begin{figure}[H]
-  \centering 
-	\includegraphics[clip, width=0.7\textwidth]{content/reschap1/Figures/figures_SPX/iv_nsde_unbounded.pdf}
-  \caption{Comparing market implied volatility to the model implied volatility for the neural SDE LSV model~\eqref{eq:LSV_SDE} when targeting only the {\em market data}. Strikes from the market data are scaled by a factor of $10^{-3}$. Implied volatility curves of 10 different calibrated neural SDEs are presented in comparison to the market bid-ask spread for different maturities.
-}
-\label{fig:SPX LSV calibration iv}  
-\end{figure}
-
-
-\begin{figure}[H]
-  \centering 
-	\includegraphics[clip, width=0.66\textwidth]{content/reschap1/Figures/figures_SPX/iv_error_unbounded.pdf}
-  \caption{The average error and standard deviation in basis points (bps) of the implied volatility curves from Figure~\ref{fig:SPX LSV calibration iv}. The error is considered to be zero if the implied volatility falls into the bid-ask spread. Strikes from the market data are scaled by a factor of $10^{-3}$.  
-}
-\label{fig:SPX LSV calibration iv error}  
-\end{figure}
-
-
 \subsection{Hedging strategy evaluation}
 We calculate the mean squared error of a learned portfolio hedging strategy of a lookback option at maturity $T=6$ months, given by the empirical variance for a trained set of parameters $\tilde{\theta}\in\Theta\,$:
 \[
 \Var^{\QQ^N} \left[ \psi\left(X^{\pi,\tilde{\theta}}\right)-\sum_{k=0}^{N_{\text{steps}}-1} \bar{\Hf}\left(t_k, \left\{X_{t_k\wedge t_j}^{\pi,\tilde{\theta}}\right\}_{j=0}^{N_{\text{steps}}}; \xi_{\psi}\right)\Delta \bar S^{\pi,\tilde{\theta}}_{t_{k}} \right] \,.
 \]
-The histogram in Figure~\ref{fig: SPX eval hedging strategy} is calculated on $N=400\, 000$ different paths and provides the values of $s$ and $s^{\textup{cv}}$, as well as their variances. We can observe a significant reduction in the variance. 
+The histogram in Figure~\ref{fig: SPX eval hedging strategy} is calculated on $N=400\, 000$ different paths and provides the values of $s$ and $s^{\textup{cv}}$, as well as their variances. We can observe a significant reduction in the variance. We define: 
 \[
 s\defEqual\psi\left(X^{\pi,\tilde{\theta}}\right), \qquad
-s^{\textup{cv}}\defEqual \psi\left(X^{\pi,\tilde{\theta}}\right)-\sum_{k=0}^{N_{\text{steps}}-1} \bar{\Hf}\left(t_k, \left\{X_{t_k\wedge t_j}^{\pi,\tilde{\theta}}\right\}_{j=0}^{N_{\text{steps}}}; \xi_{\psi}\right)\Delta \bar S^{\pi,\tilde{\theta}}_{t_{k}},
+s^{\textup{cv}}\defEqual \psi\left(X^{\pi,\tilde{\theta}}\right)-\sum_{k=0}^{N_{\text{steps}}-1} \bar{\Hf}\left(t_k, \left\{X_{t_k\wedge t_j}^{\pi,\tilde{\theta}}\right\}_{j=0}^{N_{\text{steps}}}; \xi_{\psi}\right)\Delta \bar S^{\pi,\tilde{\theta}}_{t_{k}}\,.
 \]
-
-\begin{figure}[H]\label{fig hedge error}
+\vspace*{-\baselineskip}
+\begin{figure}[htbp]\label{fig hedge error}
 \centering
-\includegraphics[clip,width=0.6\textwidth]{content/reschap1/Figures/figures_SPX/eval_hedging.pdf}
+\includegraphics[clip,width=0.8\textwidth]{content/reschap1/Figures/figures_SPX/eval_hedging.pdf}
 \caption{Histograms of $s, s^{\textup{cv}}$ with $\Psi$ the lookback option}	
 \label{fig: SPX eval hedging strategy}
-
 \end{figure}
 
 \subsection{Joint SPX and VIX calibration}
@@ -973,15 +964,14 @@ where $\xi^*$ is given by
 \]
 \subsubsection{Results}
 For this part, we use OptionMetrics VIX and SPX data from 20-Dec-2019. We calibrate to OTM European option prices, with the initial price of $s_0=3\,221$ and $\VIX_0=12.51$ for maturities of $1,2,\ldots,6$ months. The neural SDE~\eqref{eq:nsdeSY} is parametrised by neural networks with the same architecture as in Section~\ref{sec:LSV_DL_setting}. We assume a flat forward variance curve and use control variates for both SPX and VIX options as well as VIX futures. As explained above, calibrating to VIX inevitably amounts to nested Monte Carlo simulations. This, together with the fact that the neural SDE is now two-dimensional, contributes to high memory requirements and only allows us to use 2000 outer and 150 inner Monte Carlo samples.
-
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
 \makebox[\textwidth]{\includegraphics[width=.9\textwidth, height=7.25cm, trim={.5cm .5cm .5cm 2.cm}, clip]{content/reschap1/Figures/Graphics/VIX_call_iv_fit.png}}
 \caption{Implied volatility fit of the neural SDE model on VIX Call options on day 20-12-2019.}\label{fig:NSDEvixcall}
 \end{figure}
 
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 \centering
 \makebox[\textwidth]{\includegraphics[width=.9\textwidth, height=7.25cm, trim={.5cm .5cm .5cm 2.cm}, clip]{content/reschap1/Figures/Graphics/SPX_call_iv_fit.png}}
 \caption{Implied volatility fit of the neural SDE model on SPX Call options on day 20-12-2019.}\label{fig:NSDEspxcall}

@@ -225,7 +225,7 @@ Another drawback of the outlined method exists. In most cases, solving the dual 
 \end{remark}
 %\begin{remark}
 %$$S[h] \defEqual \int L(t,h(t), \dot{h}(t))\D t.$$
-%Stationary point is solution to the EUler-Lagrange equation
+%Stationary point is the solution to the Euler-Lagrange equation
 %$$\frac{\partial L}{\partial h} - \frac{\D }{\D t}\frac{\partial L}{\partial \dot{h}} = 0.$$
 %Here~$L(t, h(t), \dot{h}(t)) = \dot{h}(t)\dot{x}(t)$.
 %$$\max_{\phi} \int \phi(t) \dot{x}(t)\D t.$$
@@ -234,7 +234,7 @@ Another drawback of the outlined method exists. In most cases, solving the dual 
 %To conclude, whenever possible we consider~$H$ as a continuous function of~$\Wf\defEqual(W,\Wp)$.  Regarding the path~$\hh$ two cases are studied:
 %\begin{enumerate}[i)]
 %\item~$\hh$ is either merely a function of time~$\hh(t)$, we call this a \textit{deterministic change of measure}
-%\item~$\dot{\hh}$ is a path dependent function of volatility~$\int_0^\cdot\dot{\hh}(t)\sqrt{V_t}\D t$, which we call \textit{stochastic change of measure}
+%\item~$\dot{\hh}$ is a path-dependent function of volatility~$\int_0^\cdot\dot{\hh}(t)\sqrt{V_t}\D t$, which we call \textit{stochastic change of measure}
 %\end{enumerate}
 % Furthermore, with this representation of~$H$,~$\EE[\E^{\frac{F(X^\eps)}{\eps}}] = \EE_{\QQ_{\eps}}[\E^{\frac{F(X^\eps)}{\eps}} \E^{-\frac{H^{\eps}}{\eps}}]$ where~$\frac{d\QQ_\eps}{dP} = \E^{\frac{H^{\eps}}{\eps}}$. Minimising~$\EE[\E^{\frac{2F(X^\eps)}{\eps}} \E^{-\frac{H^{\eps}}{\eps}}]$ can therefore be seen as finding a good change of measure to compute~$\EE[\E^{\frac{F(X^\eps)}{\eps}}]$.
 
@@ -371,7 +371,7 @@ where in the second line, the fact that absolute continuity implies bounded vari
 The form of the rate function is the same as in~\cite[Lemma 3.1]{Robertson2010SampleModels} but now holds for a general volatility process adhering to aforementioned Assumption~\ref{ass:LDP_robertson}.
 \end{remark}
 %$\{Y^{\eps}\}\sim\LDP(\II^Y, \Cc_T)$ with~$\II^Y(\phi) = \inf\left\{\II^{\sqrt{V}, W}(\psi, w): \phi=\psi\circ w,\; w\in\BV\right\}$. Finally, the LDP for the pair~$\{V^\eps, Y^\eps\}$ can be obtained~$$\II^{V,Y}(\psi, \phi) = \IIV(\psi) + \II^Y(\phi)=\IIV(\psi) + \inf\left\{\IIV(\psi) + \IIW(w): \phi=\int_0^\cdot\sqrt{\psi_t} \dot w_t \D t\right\}\,,$$
-% where a change of variable~$\psi\mapsto\sqrt\psi$ was made in infinumum.
+% where a change of variable~$\psi\mapsto\sqrt\psi$ was made in infimum.
 We now continue similarly to~\cite[Section~3]{Robertson2010SampleModels}:
 the LDP for~$X^\eps$ and its corresponding price process~$S^\eps$ are obtained from Theorem~\ref{thm:garciaLDP} using the Contraction principle~\cite[Theorem 4.2.1]{Dembo2010LargeApplications}, 
 since both maps~$X^\eps=X^\eps(V^\eps,Y^\eps)$ and~$S^\eps=\nobreak S^\eps(V^\eps,Y^\eps)$ are continuous.
@@ -1177,7 +1177,7 @@ Under Assumption~\ref{ass:SDE_coeffs} and Assumption~\ref{ass:SDE_largetime_MDP}
     \]
 \end{enumerate}
 Furthermore, denote 
-$\Qbold:=\int_0^\infty\qbold(y)\qbold^\top(y)\mu(\D y)$, where
+$\Qbold\defEqual\int_0^\infty\qbold(y)\qbold^\top(y)\mu(\D y)$, where
 $$
 \qbold(y) =
 \begin{bmatrix}
@@ -1461,8 +1461,8 @@ $v\lambda + \ln(\lambda - 1) - \ln(\lambda) - c = 0$.
 The following payoffs are standard
 and satisfy this setup:
 \begin{itemize}
-\item \text{(European Call option):}~$G(x) = (\E^{x} - K)^+$ and~$\vartheta_t=1$ with~$x^+ = \max(0,x)$. 
-\item \text{(Geometric Asian Call option):}~$G(x) = (\E^{x} - K)^+$ and~$\vartheta_t=1 - t/T$. 
+\item \text{European Call option: }~$G(x) = (\E^{x} - K)^+$ and~$\vartheta_t=1$ with~$x^+ = \max(0,x)$. 
+\item \text{Geometric Asian Call option: }~$G(x) = (\E^{x} - K)^+$ and~$\vartheta_t=1 - t/T$. 
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1483,6 +1483,7 @@ In this small-time setting, we lose all information on the path of~$\sigma$, exc
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \subsection{Ornstein-Uhlenbeck}\label{sec:OU}
 Lognormal-based stochastic volatility models, 
 such as~\cite{Sepp2012BetaModel}, read
@@ -1883,21 +1884,21 @@ In the following three tables and plots, we use the following short notations (w
     \item \textbf{Classic}: Classic Monte-Carlo estimator.
 \end{enumerate}
 
-\begin{figure}[hbt!]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[scale=0.4]{content/reschap3/Figures/HESTON/compare-all-new.pdf}
+    \includegraphics[scale=0.5]{content/reschap3/Figures/HESTON/compare-all-new.pdf}
     % \includegraphics[width=0.495\textwidth, trim={2cm 0.5cm 2cm 1cm }]{HESTON/compare-sample.eps}
     \caption{Variance reduction for different estimators in log-scale. 
     The antithetic estimator offers almost no variance reduction for OTM options, because with high strikes very few paths end up in-the-money, thus reducing the effect of antithetic samples.}\label{ref:OverallVarRedu}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htbp]
     \centering
-    \includegraphics[scale=0.4]{content/reschap3/Figures/HESTON/compare-perf-new.pdf}
+    \includegraphics[scale=0.5]{content/reschap3/Figures/HESTON/compare-perf-new.pdf}
     \caption{Ratio of variance reduction over computation time for selected estimators in log-scale.}\label{ref:OverallVarComp}
 \end{figure}
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{lrrrrrrrr}
 \toprule
@@ -1921,7 +1922,7 @@ Strike &   Prob. &  LDPsn &  LDPsn A &   BS &  BS A &  MDPsn A &  BS A2 &  Ant \
 \caption{Variance reduction for different types of estimators and probability of positive payoff.}\label{tab:VarRedu}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{lrrrrrrrr}
 \toprule
@@ -1945,7 +1946,7 @@ Strike &   Prob. &  LDPsn &  LDPsn A &  BS &  BS A &  MDPsn A &  BS A2 &  Ant \\
 \caption{Ratio of variance reduction over computation time for different estimators.}\label{tab:VarComp}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \begin{tabular}{lrrrrrrrr}
 \toprule

@@ -1,8 +1,11 @@
 \section{Introduction}
 
-Rough volatility models have recently been developed in the context of Equity markets~\cite{Gatheral2018VolatilityRough}. They have been shown to outperform most existing models under the historical measure by characterising the volatility dynamics and under the pricing measure, i.e., for option pricing purposes. Rough Bergomi has been featured as combining desired characteristics with relative simplicity among this new model class. However, one of its main drawbacks is that the instantaneous variance is Log-Normal, which is inconsistent with observed data for the VIX and consequently with options on the VIX. We investigate here a generalised family, preserving self-similarity and stationary increments, deviating from the log-normality constraint and examine its small-time asymptotics.
+Rough volatility models have recently been developed in the context of Equity markets~\cite{Gatheral2018VolatilityRough}. They have been shown to outperform most existing models under the historical measure by characterising the volatility dynamics and under the pricing measure, i.e., for option pricing purposes. Rough Bergomi has been featured as combining desired characteristics with relative simplicity among this new model class. However, one of its main drawbacks is that the instantaneous variance is Log-Normal, which is inconsistent with observed data for the VIX and consequently with options on the VIX. We investigate here a generalised family, preserving self-similarity and stationary increments, deviating from the Log-Normality constraint and examine its small-time asymptotic.
+
+In preparation for the introduction of our generalized model, we shall first lay the groundwork by exploring the essential preliminaries of the (generalised) grey Brownian motion~(ggBm). This stochastic process not only upholds the principles of stationary increments but also liberates itself from the constraints of Log-Normality mentioned above.
 
 \section{Generalised grey Brownian Motion (ggBm)}\label{sec:ggBm_definitions}
+% \enlargethispage{\baselineskip}
 
 For $\beta>0$, the standard Mittag-Leffler function~$\Eff_{\beta}$ is defined as an entire function by the series representation
 \begin{equation}\label{def:MLf}
@@ -45,12 +48,10 @@ Note that the Mittag-Leffler function~$\Eff_{\beta}$ and the M-Wright function a
 \int_0^{\infty} \E^{-s u} \Mff_{\beta}(u) \D u
 = \Eff_{\beta}(-s)\,,
 \end{equation}
-valid for any $s\geq 0$.
-Finally, a random variable~$Y_\beta$ follows the (one-sided) $\mathrm{M}$-Wright distribution
+valid for any $s\geq 0$. Finally, a random variable~$Y_\beta$ follows the (one-sided) $\mathrm{M}$-Wright distribution
 if it is supported on the positive half line
 %\jack{or on the whole real line?? \red{We consider the standard one-sided M-Wright distribution so indeed the support is positive (we need $\sqrt{Y_\beta}$ to represent vol-of-vol)}} 
-and admits 
-the~M-Wright function in~\eqref{eq:M_Wright}
+and admits the~M-Wright function in~\eqref{eq:M_Wright}
 as the probability density function.
 Then its moment of order $\kappa>-1$ exists~\cite{Piryatinska2005ModelsCase} and is equal to
 \begin{equation}\label{eq:MWrightMom}
@@ -165,8 +166,8 @@ where we define the stochastic exponential for any $\eta>0$ as
     \Ee^\blacklozenge(\eta Z) \coloneqq \exp\left\{\eta Z - \log\mathfrak{M}^Z_{\cdot}(\eta)\right\}, \quad \textup{ for }  t\in[0,T]\,,
 \end{equation}
 which, whenever well-defined, ensures $\EE\left[\Ee^\blacklozenge(\eta Z)\right] = 1$ and collapses into the standard Wick exponential $\Ee^\lozenge(\eta Z)$ in the case where~$Z$ is a centered-Gaussian process. 
-By definition, the forward variance is defined as $\xi_{s}(t) := \EE[V_t | \Ff_{s}]$, for $0\leq s\leq t$, so that in particular
-$\xi_{0}(t) := \EE[V_t]$, which explains the requirement $\EE\left[\Ee^\blacklozenge(\eta Z)\right] = 1$.
+By definition, the forward variance is defined as $\xi_{s}(t) \defEqual \EE[V_t | \Ff_{s}]$, for $0\leq s\leq t$, so that in particular
+$\xi_{0}(t) \defEqual \EE[V_t]$, which explains the requirement $\EE\left[\Ee^\blacklozenge(\eta Z)\right] = 1$.
 
 Now, we may choose $\tilde\eta = \eta\sqrt{Y_\beta}$ for $\eta>0$, where $Y_\beta$ is an independent non-negative random variable with probability density function $\Mff_{\beta}(\tau)$ for $\tau \geq 0$ (see Section~\ref{sec:ggBm_definitions} for the definition of the M-Wright function). Notice that the property Lemma~\ref{lem:gBm_decomposition} provides us with a convenient decomposition of ggBm to $B^{\beta, \alpha}_t = \sqrt{Y_\beta} B^{\frac\alpha2}_t$, where $B^{\frac\alpha2}$ is a standard fBm with Hurst parameter $H=\nobreak\alpha / 2$. The model can thus be viewed as a generalisation of the rough Bergomi model~\cite{Bayer2015PricingVolatility} with a random volatility-of-volatility coefficient.
 
@@ -251,13 +252,13 @@ For the related definitions of implied volatility, skew and curvature and other 
 % $$
 % \BS(t, x, k, \sigma)= \begin{cases}\E^x \Nn\left(d_{+}(x, k, \sigma)\right)-\E^k \Nn\left(d_{-}(x, k, \sigma)\right), & \text {if } \sigma \sqrt{T-t}>0, \\ \left(\E^x-\E^k\right)^{+}, & \text {if } \sigma \sqrt{T-t}=0,\end{cases}
 % $$
-% with $d_{\pm}(x, k, \sigma):=\frac{x-k}{\sigma \sqrt{T-t}} \pm \frac{\sigma \sqrt{T-t}}{2}$, and~$\Nn$ the Gaussian cumulative distribution function.
+% with $d_{\pm}(x, k, \sigma)\defEqual\frac{x-k}{\sigma \sqrt{T-t}} \pm \frac{\sigma \sqrt{T-t}}{2}$, and~$\Nn$ the Gaussian cumulative distribution function.
 % \begin{definition}\
 % \begin{enumerate}[i.]
-%     \item For any $k \in \RR$, the implied volatility $\Ii_T(k)$ is the unique non-negative solution to $C_0(k)=$ $\BS\left(0, \log\Ffr_0^T, k, \Ii_T(k)\right)$; we drop the $k$ dependence when considering it at-the-money, i.e., $k=\log\Ffr_0^T$.
-%     \item The at-the-money implied skew $\Ss$ and curvature $\Cc$ at time zero are defined as
+%     \item For any $k \in \RR$, the implied volatility $\Iiatm_T(k)$ is the unique non-negative solution to $C_0(k)=$ $\BS\left(0, \log\Ffr_0^T, k, \Iiatm_T(k)\right)$; we drop the $k$ dependence when considering it at-the-money, i.e., $k=\log\Ffr_0^T$.
+%     \item The at-the-money implied skew $\Ssatm$ and curvature $\Ccatm$ at time zero are defined as
 %     $$
-%     \Ss_T\coloneqq\left|\partial_k \Ii_T(k)\right|_{k=\log\Ffr_0^T} \quad \text { and } \quad \Cc_T:=\left|\partial_k^2 \Ii_T(k)\right|_{k=\log\Ffr_0^T}
+%     \Ssatm_T\coloneqq\left|\partial_k \Iiatm_T(k)\right|_{k=\log\Ffr_0^T} \quad \text { and } \quad \Ccatm_T\defEqual\left|\partial_k^2 \Iiatm_T(k)\right|_{k=\log\Ffr_0^T}
 %     $$
 % \end{enumerate}
 % \end{definition}
@@ -287,10 +288,10 @@ reads, for each $t \in [0, T]$,
 $$
 \Ffr_{t,T}^{\VIX}=\EE\left[\Ffr_{t,T}^{\VIX}\right] + \int_0^t \ff_{s}(\VIX_T) \D B_s,
 $$
-where $\ff_{s}(\VIX_T)\coloneqq \EE\left[\Dr_s \VIX_T \mid \FfB_s\right]$. Since $\Ffr_{s,T}^{\VIX} \neq 0$ almost surely we can define $\phi_s:=\ff_{s}(\VIX_T) / \Ffr_{s,T}^{\VIX}$ and we arrive at the desired setting with $N=1$. To state the following result, consider, 
+where $\ff_{s}(\VIX_T)\coloneqq \EE\left[\Dr_s \VIX_T \mid \FfB_s\right]$. Since $\Ffr_{s,T}^{\VIX} \neq 0$ almost surely we can define $\phi_s\defEqual\ff_{s}(\VIX_T) / \Ffr_{s,T}^{\VIX}$ and we arrive at the desired setting with $N=1$. To state the following result, consider, 
 for $n\in\{1,2,3\}$, the function
 $$
-\ratio_{n}(r) := \eta^n C_{\alpha}^n\frac{\Eff_{\beta,1+\frac{n\beta}{2}}^{\frac{2+n}{2}} \left(\frac{\eta^2 C_{\alpha}^2}{2}r^{\alpha}\right)}{\Eff_{\beta}\left(\frac{\eta^2}{2}r^{\alpha}\right)} r^{\frac{n(\alpha-1)}2},
+\ratio_{n}(r) \defEqual \eta^n C_{\alpha}^n\frac{\Eff_{\beta,1+\frac{n\beta}{2}}^{\frac{2+n}{2}} \left(\frac{\eta^2 C_{\alpha}^2}{2}r^{\alpha}\right)}{\Eff_{\beta}\left(\frac{\eta^2}{2}r^{\alpha}\right)} r^{\frac{n(\alpha-1)}2},
 $$
 as well as the quantities
 $$
@@ -301,10 +302,10 @@ $$
 The following small-time behaviours hold:
 \begin{equation}
 \begin{aligned}
-\lim _{T \downarrow 0} \Ii_T & =\frac{J_1}{2 \DVIX_0^2}, & \textup{ if } \alpha \in\left(0, 1\right)\,, \\
-\lim _{T \downarrow 0} \Ss_T & =
+\lim _{T \downarrow 0} \Iiatm_T & =\frac{J_1}{2 \DVIX_0^2}, & \textup{ if } \alpha \in\left(0, 1\right)\,, \\
+\lim _{T \downarrow 0} \Ssatm_T & =
 \frac{J_2}{2J_1} - \frac{J_1}{2\DVIX_0^2}, & \textup{ if } \alpha \in\left(0, 1\right)\,, \\
-\lim _{T \downarrow 0} \frac{\Cc_T}{T^{\frac{3\alpha-1}{2}}} &= \frac{2 \DVIX_0^2}{3J_1^2} \lim _{T \downarrow 0} \frac{J_3(T)}{T^{\frac{3\alpha-1}{2}}}, & \textup{ if } \textstyle\alpha \in\left(0, \frac{1}{3}\right)\,.
+\lim _{T \downarrow 0} \frac{\Ccatm_T}{T^{\frac{3\alpha-1}{2}}} &= \frac{2 \DVIX_0^2}{3J_1^2} \lim _{T \downarrow 0} \frac{J_3(T)}{T^{\frac{3\alpha-1}{2}}}, & \textup{ if } \textstyle\alpha \in\left(0, \frac{1}{3}\right)\,.
 \end{aligned}
 \end{equation}
 \end{proposition}
@@ -332,7 +333,7 @@ for all $t \leq s \leq u \leq T \leq r$,
 We first prove that the assumptions hold for the grey Bergomi model.
     \begin{enumerate}[(i)]
         \item By Lemma~\ref{lem:AssOneAsy} the assumption is satisfied.
-        \item Based on the form of~\eqref{eq:malliavin_ggBergomi} the choice of~$R:=\sum_{k=0}^3|\tilde\eta|^k V_r$ for all $r\geq 0$ is readily apparent. Moreover, due to the existence of all moments as indicated by the MGF of ggBm~\ref{eq:ggBmMGF} and~\eqref{eq:MWrightMom}, it follows that~$R\in L^p$.
+        \item Based on the form of~\eqref{eq:malliavin_ggBergomi} the choice of~$R\defEqual\sum_{k=0}^3|\tilde\eta|^k V_r$ for all $r\geq 0$ is readily apparent. Moreover, due to the existence of all moments as indicated by the MGF of ggBm~\ref{eq:ggBmMGF} and~\eqref{eq:MWrightMom}, it follows that~$R\in L^p$.
         \item By Lemma~\ref{lem:AssThreeAsy} the assumption is satisfied.
         \item From the Malliavin derivatives in~\eqref{eq:malliavin_ggBergomi}, continuity of the maps is straightforward.
     \end{enumerate}
@@ -372,17 +373,18 @@ $\VIX_0 = \sqrt{\xi_0}$.
 \end{proof}
 Unfortunately, these integrals do not seem to simplify in any obvious way, 
 but can nevertheless be solved either numerically or, since~$\Delta$ equals one month, by approximation:
+\newpage
 \begin{corollary}\label{cor:ATMSkewTaylor}
 The ATM level, skew and curvature of VIX smiles under ggBergomi for a constant forward variance curve $\xi_0(\cdot)=\xi_0>0$ satisfy the expansions,
 as $\Delta\downarrow 0$,
 \begin{equation}
 \begin{aligned}
-    \lim_{T\downarrow 0}\Ii_T &= \sqrt{\pi} \eta C_{\alpha} \left\{ \frac{C_0^1}{1+\alpha} 
+    \lim_{T\downarrow 0}\Iiatm_T &= \sqrt{\pi} \eta C_{\alpha} \left\{ \frac{C_0^1}{1+\alpha} 
  \Delta^{\frac{\alpha-1}{2}} + \frac{C_1^1}{1+3\alpha} 
  \Delta^{\frac{3\alpha-1}{2}}  + \frac{C_2^1}{1+5\alpha} 
  \Delta^{\frac{5\alpha-1}{2}}\right\} + \Oo\left(\Delta^{\frac{7\alpha - 1}2}\right), \\
- \lim_{T\downarrow 0}\Ss_T &= \Delta^{\frac{1-\alpha}2} \left(\frac{\sum_{j=0}^2 B_j \Delta^{j\alpha}}{\sum_{j=0}^2 2A_j \Delta^{j\alpha}}\right) + \sum_{j=0}^2 \frac{A_j}{2\xi_0} \Delta^{\frac{(1+2j)\alpha-1}{2}} + \Oo\left(\Delta^{\frac{7\alpha - 1}{2}}\right) \\
-\lim_{T\downarrow 0}\frac{\Cc_T}{T^{\frac{3\alpha-1}{2}}} &= - \frac{\sqrt{\pi}\xi_0^2(\eta C_{\alpha})^3}{\Delta^{\alpha}\left(\sum_{j=0}^2 A_j \Delta^{j\alpha}\right)^2} \frac{C_0^3}{3\alpha-1} + \Oo(\Delta^{2\alpha})\,, \quad \textup{ for } \quad \textstyle \alpha\in\left(\frac19, \frac13\right)\,,
+ \lim_{T\downarrow 0}\Ssatm_T &= \Delta^{\frac{1-\alpha}2} \left(\frac{\sum_{j=0}^2 B_j \Delta^{j\alpha}}{\sum_{j=0}^2 2A_j \Delta^{j\alpha}}\right) + \sum_{j=0}^2 \frac{A_j}{2\xi_0} \Delta^{\frac{(1+2j)\alpha-1}{2}} + \Oo\left(\Delta^{\frac{7\alpha - 1}{2}}\right) \\
+\lim_{T\downarrow 0}\frac{\Ccatm_T}{T^{\frac{3\alpha-1}{2}}} &= - \frac{\sqrt{\pi}\xi_0^2(\eta C_{\alpha})^3}{\Delta^{\alpha}\left(\sum_{j=0}^2 A_j \Delta^{j\alpha}\right)^2} \frac{C_0^3}{3\alpha-1} + \Oo(\Delta^{2\alpha})\,, \quad \textup{ for } \quad \textstyle \alpha\in\left(\frac19, \frac13\right)\,,
 \end{aligned}
 \end{equation}
 where $C^i_j$ and $A_j, B_j$ are given in~\eqref{eq:C_ATMSkewTaylor} and~\eqref{eq:AB_ATMSkewTaylor} respectively.
@@ -394,41 +396,43 @@ The ratio of Mittag-Leffler functions can indeed be approximated with a Taylor e
 \]
 For $r \approx 0$, terms $R$ and $G$ are expected to be small. Let us, therefore, only consider the terms up-to-the-second order
 % \jack{Write a precise $\mathcal{O}(\cdots)$ terms}
-\begin{align}
+\begin{align*}
     R &= \frac{\eta^2}{2\Gamma(a+1)} r^\alpha + \frac{\eta^4}{4\Gamma(2a+1)}r^{2\alpha} + \Oo\left(r^{3\alpha}\right) \eqqcolon R_{(1)}r^\alpha + R_{(2)}r^{2\alpha} + \Oo\left(r^{3\alpha}\right), \\
-    G &= \frac{(\eta C_{\alpha})^2 \Gamma(c+1)}{2\Gamma(c)\Gamma(a+b)} r^\alpha + \frac{(\eta C_{\alpha})^4 \Gamma(c+2)}{8 \Gamma(c) \Gamma(2a+b)}r^{2\alpha} + \Oo\left(r^{3\alpha}\right) \eqqcolon G_{(1)}r^\alpha + G_{(2)}r^{2\alpha} + \Oo\left(r^{3\alpha}\right).
-\end{align}
+    G &= \frac{(\eta C_{\alpha})^2 \Gamma(c+1)}{2\Gamma(c)\Gamma(a+b)} r^\alpha + \frac{(\eta C_{\alpha})^4 \Gamma(c+2)}{8 \Gamma(c) \Gamma(2a+b)}r^{2\alpha} + \Oo\left(r^{3\alpha}\right) \eqqcolon G_{(1)}r^\alpha + G_{(2)}r^{2\alpha} + \Oo\left(r^{3\alpha}\right)\,.
+\end{align*}
 Next, the Taylor expansion of $1/(1+R)$ gives
-\begin{align}
-    \frac{\frac{1}{\Gamma(b)} + G}{1 + R} &= \left(\frac{1}{\Gamma(b)} + G_{(1)}r^{\alpha} + G_{(2)}r^{2\alpha} + \Oo\left(r^{3\alpha}\right)\right) \\ & \qquad \times\left(1 - \left(R_{(1)}r^{\alpha} + R_{(2)}r^{2\alpha}\right) + R_{(1)}^2r^{2\alpha} + \Oo\left(r^{3\alpha}\right)\right) + \Oo\left(r^{3\alpha}\right) \\
-    &= \underbrace{\frac{1}{\Gamma(b)}}_{\eqqcolon C_0} + \underbrace{\left\{- \frac{1}{\Gamma(b)} R_{(1)} + G_{(1)} \right\}}_{\eqqcolon C_1}r^{\alpha} \\ & \qquad + \underbrace{\left\{-\frac{1}{\Gamma(b)} R_{(2)} + \frac{1}{\Gamma(b)} R_{(1)}^2 - G_{(1)} R_{(1)} + G_{(2)}\right\}}_{\eqqcolon C_2}r^{2\alpha} + \Oo\left(r^{3\alpha}\right),
-\end{align}
+{\small
+\begin{align*}
+    &\frac{\frac{1}{\Gamma(b)} + G}{1 + R} = \left(\frac{1}{\Gamma(b)} + G_{(1)}r^{\alpha} + G_{(2)}r^{2\alpha} + \Oo\left(r^{3\alpha}\right)\right) \\ & \hspace{2.5cm} \times\left(1 - \left(R_{(1)}r^{\alpha} + R_{(2)}r^{2\alpha}\right) + R_{(1)}^2r^{2\alpha} + \Oo\left(r^{3\alpha}\right)\right) + \Oo\left(r^{3\alpha}\right) \\
+    &= \underbrace{\frac{1}{\Gamma(b)}}_{\eqqcolon C_0} + \underbrace{\left\{- \frac{1}{\Gamma(b)} R_{(1)} + G_{(1)} \right\}}_{\eqqcolon C_1}r^{\alpha} + \underbrace{\left\{-\frac{1}{\Gamma(b)} R_{(2)} + \frac{1}{\Gamma(b)} R_{(1)}^2 - G_{(1)} R_{(1)} + G_{(2)}\right\}}_{\eqqcolon C_2}r^{2\alpha} + \Oo\left(r^{3\alpha}\right)\,, %\\ & \qquad
+\end{align*}}%
 with
+{\small
 \begin{equation}
 \begin{aligned}
     C_0(a,b,c) &\coloneqq \frac{1}{\Gamma(b)}, \\
     C_1(a,b,c) &\coloneqq \frac12\left\{-\frac{\eta^2}{\Gamma(b)\Gamma(a+1)} + \frac{(\eta C_{\alpha})^2 \Gamma(c+1)}{\Gamma(c)\Gamma(a+b)}\right\}, \\
-    C_2(a,b,c) &\coloneqq \frac14 \left\{ -\frac{\eta^4}{\Gamma(b)\Gamma(2a+1)} +\frac{\eta^4}{\Gamma(b)\Gamma^2(a+1)} - \frac{(\eta C_{\alpha})^2 \eta^2 \Gamma(c+1)}{\Gamma(c)\Gamma(a+b)\Gamma(a+1)} + \frac{(\eta C_{\alpha})^4 \Gamma(c+2)}{2\Gamma(c)\Gamma(2a+b)}\right\}.
+    C_2(a,b,c) &\coloneqq \frac14 \left\{ -\frac{\eta^4}{\Gamma(b)\Gamma(2a+1)} +\frac{\eta^4}{\Gamma(b)\Gamma^2(a+1)} - \frac{(\eta C_{\alpha})^2 \eta^2 \Gamma(c+1)}{\Gamma(c)\Gamma(a+b)\Gamma(a+1)} + \frac{(\eta C_{\alpha})^4 \Gamma(c+2)}{2\Gamma(c)\Gamma(2a+b)}\right\}\,.
 \end{aligned}
-\end{equation}
+\end{equation}}%
 Finally, after setting
 \begin{equation}\label{eq:C_ATMSkewTaylor}
     C_i^1 \coloneqq C_i\left(\beta, 1+\frac\beta2, \frac32\right), \qquad
         C_i^2 \coloneqq C_i\left(\beta, 1+\beta, 2\right),\qquad
-        C_i^3 \coloneqq C_i\left(\beta, 1+\frac32\beta, \frac52\right),
+        C_i^3 \coloneqq C_i\left(\beta, 1+\frac32\beta, \frac52\right)\,,
 \end{equation}
 for $i\in\{0,1,2\}$, the integration gives the approximations
 \begin{align*}
     J_1 &= \sqrt{\pi} \xi_0 \eta C_{\alpha} \left\{ \frac{C_0^1}{1+\alpha} 
  \Delta^{\frac{1+\alpha}{2}} + \frac{C_1^1}{1+3\alpha} 
  \Delta^{\alpha+\frac{1+\alpha}{2}}  + \frac{C_2^1}{1+5\alpha} 
- \Delta^{2\alpha+\frac{1+\alpha}{2}}\right\} + \Oo\left(\Delta^{\frac12(7\alpha+1)}\right), \\
+ \Delta^{2\alpha+\frac{1+\alpha}{2}}\right\} + \Oo\left(\Delta^{\frac12(7\alpha+1)}\right)\,, \\
     J_2 &= \xi_0 (\eta C_{\alpha})^2 \left\{ \frac{C_0^2}{\alpha} 
  \Delta^{\alpha} + \frac{C_1^2}{2\alpha} 
  \Delta^{2\alpha}  + \frac{C_2^2}{3\alpha} 
  \Delta^{3\alpha}\right\} + \Oo\left(\Delta^{4\alpha}\right)\,.
 \end{align*}
-From here, the expression for the short-time ATM level $\lim_{T\downarrow 0}\Ii_T=J_1/(2\Delta \xi_0)$ is immediate. We now turn our attention to the skew and first study the remainder of the ratio $J_2/J_1$. To that end let 
+From here, the expression for the short-time ATM level $\lim_{T\downarrow 0}\Iiatm_T=J_1/(2\Delta \xi_0)$ is immediate. We now turn our attention to the skew and first study the remainder of the ratio $J_2/J_1$. To that end let 
 \begin{align}\label{eq:AB_ATMSkewTaylor}
 & A_j \coloneqq \sqrt{\pi} \xi_0 \eta C_{\alpha} \frac{C^1_{j}}{1+(1+2j)\alpha}\,, & B_j \coloneqq \xi_0 (\eta C_{\alpha})^2\frac{C_j^2}{j\alpha}\,,
 \end{align}
@@ -441,7 +445,7 @@ Then, since
     \frac{\sum_{j=0}^2 B_j \Delta^{j\alpha} + \Oo\left(\Delta^{3\alpha}\right)}{\sum_{j=0}^2 A_j \Delta^{j\alpha} + \Oo\left(\Delta^{3\alpha}\right)} - \frac{\sum_{j=0}^2 B_j \Delta^{j\alpha}}{\sum_{j=0}^2 A_j \Delta^{j\alpha}} 
     &= \frac{\Oo\left(\Delta^{3\alpha}\right)\left(\sum_{j=0}^2 (B_j - A_j) \Delta^{j\alpha}\right)}{\left|\sum_{j=0}^2 A_j \Delta^{j\alpha}\right|^2 + \Oo\left(\Delta^{3\alpha}\right)\left(\sum_{j=0}^2 B_j \Delta^{j\alpha}\right)} \\
     &= \frac{\Oo\left(\Delta^{3\alpha}\right)}{\left|\sum_{j=0}^2 A_j \Delta^{j\alpha}\right|^2 + \Oo\left(\Delta^{3\alpha}\right)} \\
-    & = \Oo\left(\Delta^{3\alpha}\right)
+    & = \Oo\left(\Delta^{3\alpha}\right)\,,
 \end{align*}
 we have that
 \begin{equation*}
@@ -449,7 +453,7 @@ we have that
 \end{equation*}
 Therefore, for $\alpha\in(0,1)$ the approximation for the short-time ATM skew yields:  
 \begin{align*}
-    \lim _{T \downarrow 0} \Ss_T = \frac{J_2}{2J_1} - \frac{J_1}{2\Delta\xi_0} = \Delta^{\frac{1-\alpha}2} \left(\frac{\sum_{j=0}^2 B_j \Delta^{j\alpha}}{\sum_{j=0}^2 2A_j \Delta^{j\alpha}}\right) + \sum_{j=0}^2 \frac{A_j}{2\xi_0} \Delta^{\frac{(1+2j)\alpha-1}{2}} + \Oo\left(\Delta^{\frac{7\alpha - 1}{2}}\right)\,.
+    \lim _{T \downarrow 0} \Ssatm_T = \frac{J_2}{2J_1} - \frac{J_1}{2\Delta\xi_0} = \Delta^{\frac{1-\alpha}2} \left(\frac{\sum_{j=0}^2 B_j \Delta^{j\alpha}}{\sum_{j=0}^2 2A_j \Delta^{j\alpha}}\right) + \sum_{j=0}^2 \frac{A_j}{2\xi_0} \Delta^{\frac{(1+2j)\alpha-1}{2}} + \Oo\left(\Delta^{\frac{7\alpha - 1}{2}}\right)\,.
 \end{align*}
 Finally, let us consider the curvature for $\alpha\in\left(\frac{1}{9}, \frac{1}{3}\right)\setminus\{\frac15, \frac17\}$, i.e., for now excluding the points where the exponents in of the last two terms are $p=-1$. Hence, we have\footnote{For the integration of the Landau symbol for $J_3$ we remark that for $f(x)=\Oo(x^p)$ and $p > -1$:
 $$\int_b^c|f(u)| \D u \leq M \int_b^c u^p \D u = \frac{M}{p+1}\left(c^{p+1}-b^{p+1}\right)=\Oo\left(c^{p+1}\right)+\Oo(1)=\Oo\left(c^{p+1}\right)$$
@@ -473,21 +477,21 @@ Taking the limit yields
 \end{align*}
 As for the points $\{\frac15, \frac17\}$, the integral in calculation of $J_3$ evaluates to $\log((T+\Delta)/T)$, however the corresponding limit stays the same, i.e., $\lim_{T\downarrow 0}\frac{\log((T+\Delta)/T)}{T^{\frac{3\alpha-1}{2}}}=0$ and the above result holds for the entire interval $(\frac19,\frac13)$. For the remainder, we get, similarly as for the skew, $1/J_1^2=\Delta^{-(\alpha+1)}/(\sum_{j=0}^2 A_j \Delta^{j\alpha}) + \Oo(\Delta^{2\alpha-1})$. Then
 \begin{align*}
-    \lim _{T \downarrow 0} \frac{\Cc_T}{T^{\frac{3\alpha-1}{2}}} &= \frac{2 \Delta \xi_0}{3J_1^2} \lim _{T \downarrow 0} \frac{J_3(T)}{T^{\frac{3\alpha-1}{2}}} \\
+    \lim _{T \downarrow 0} \frac{\Ccatm_T}{T^{\frac{3\alpha-1}{2}}} &= \frac{2 \Delta \xi_0}{3J_1^2} \lim _{T \downarrow 0} \frac{J_3(T)}{T^{\frac{3\alpha-1}{2}}} \\
     &= - \frac{\sqrt{\pi}\xi_0^2(\eta C_{\alpha})^3}{\Delta^{\alpha}\left(\sum_{j=0}^2 A_j \Delta^{j\alpha}\right)^2} \frac{C_0^3}{3\alpha-1} + \Oo(\Delta^{2\alpha})\,.
 \end{align*}
 
 \end{proof}
 Although not immediately obvious from the Corollary~\ref{cor:ATMSkewTaylor}, numerical analysis shows that the short-time ATM skew is positive for all choices of parameters, which is indeed what we observe in the markets --- an upward-slopping VIX smile.
 \subsection{SPX asymptotics}\label{sec:SPX_asymptotics}
-To differentiate from the VIX framework, we slightly modify the notations, i.e., the ATM implied volatility level is denoted $\widehat \Ii_T$ and the skew $\widehat\Ss_T$. The general set-up introduced above still applies in the case of SPX, however now with two sources of noise.
+To differentiate from the VIX framework, we slightly modify the notations, i.e., the ATM implied volatility level is denoted $ \wIiatm_T$ and the skew $\wSsatm_T$. The general set-up introduced above still applies in the case of SPX, however now with two sources of noise.
 
 \begin{proposition}\label{prop:ggBergomi_SPX_asym}
 The following small~$T$ behaviours hold:
 $$
-\lim _{T \downarrow 0} \widehat{\Ii}_T = \sqrt{\xi_0}
+\lim _{T \downarrow 0} {\wIiatm}_T = \sqrt{\xi_0}
 \qquad\text{and}\qquad
-\lim_{T\downarrow 0} \frac{\widehat\Ss_T}{T^{\frac{\alpha+3}{2}}} = \frac{\sqrt{\pi}\rho \eta C_\alpha}{(\alpha+1)(\alpha+3)\Gamma\left(1+\frac{\beta}{2}\right)}.
+\lim_{T\downarrow 0} \frac{\wSsatm_T}{T^{\frac{\alpha+3}{2}}} = \frac{\sqrt{\pi}\rho \eta C_\alpha}{(\alpha+1)(\alpha+3)\Gamma\left(1+\frac{\beta}{2}\right)}.
 $$
 \end{proposition}
 \begin{proof}
@@ -503,7 +507,7 @@ The proof of the proposition relies on
     \end{enumerate}
 Under these assumptions, Proposition~5.1 in~\cite{Jacquier2021RoughOptions} states that the short-time limit of the implied volatility is given as in the proposition and the short-time skew reads\footnote{Since $\Dr^W_u V_s = 0$, the Brownian motion driving the stock does not play a role~\cite[Section~5]{Jacquier2021RoughOptions}.}
 \[
-\lim _{T \downarrow 0} \frac{\widehat{\Ss}_T}{T^{\frac{\alpha-1}{2}}}
+\lim _{T \downarrow 0} \frac{{\wSsatm}_T}{T^{\frac{\alpha-1}{2}}}
  = \frac{\rho}{2 V_0}
      \lim _{T \downarrow 0} \frac{\int_0^T \int_s^T \EE\left[\Dr_s V_u\right] \D u \D s}{T^{\frac{\alpha+3}2}}.
 \]

@@ -96,7 +96,7 @@ and
  & + 2 \| \partial_x^2 \ell\|_{\infty}  \left( \frac{1}{N} \Var ^{\QQ}[\partial_{\theta}\phi(X^{\theta})]   \right)^{1/2}\left( \frac{1}{N} \Var ^{\QQ}[\phi^{\textup{cv}}(X^{\theta})] \right)^{1/2}\Bigg\}\,.
  \end{split}
  \]
-Now let ~$\lambda^i:= \phi^{\textup{cv}}(X^{\theta,i}) - \EE^{\QQ}[\phi^{\textup{cv}}(X^{\theta})]~$, and note that
+Now let ~$\lambda^i\defEqual \phi^{\textup{cv}}(X^{\theta,i}) - \EE^{\QQ}[\phi^{\textup{cv}}(X^{\theta})]~$, and note that
  \[
  \begin{split}
 \left( \sum_{i=1}^N \lambda^i \right)^4 
@@ -116,7 +116,7 @@ The proof is complete.
 
 
 \section{Additional results of calibration to market data}\label{apx:calibration market data}
-In this section we include additional figures displaying the neural SDE fit to market data when targeting the SPX option prices and minimising (Figures~\ref{fig:SPX LSV calibration iv lower bound exotic},~\ref{fig:SPX LSV calibration iv error lower bound exotic}) or maximising the exotic option price (Figures~\ref{fig:SPX LSV calibration iv upper bound exotic},~\ref{fig:SPX LSV calibration iv error upper bound exotic}). 
+In this section, we include additional figures displaying the neural SDE fit to market data when targeting the SPX option prices and minimising (Figures~\ref{fig:SPX LSV calibration iv lower bound exotic},~\ref{fig:SPX LSV calibration iv error lower bound exotic}) or maximising the exotic option price (Figures~\ref{fig:SPX LSV calibration iv upper bound exotic},~\ref{fig:SPX LSV calibration iv error upper bound exotic}). 
 
 \begin{figure}[H]
   \centering 
@@ -162,12 +162,12 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %
 %In this experiment, we calibrate to European option prices
 %\[
-%\Pp(\Phi) := \EE^{\QQ(\theta)}[\Phi] = e^{-rT} \EE^{\QQ} \left[\left(S_T^\theta - K \right)_+ \middle\vert \, S_0 = 1\right]
+%\Pp(\Phi) \defEqual \EE^{\QQ(\theta)}[\Phi] = e^{-rT} \EE^{\QQ} \left[\left(S_T^\theta - K \right)_+ \middle\vert \, S_0 = 1\right]
 %\]
 %for maturities of~$2,4,\ldots,12$ months and~$21$ uniformly spaced strikes between in~$[0.8, 1.2]$. 
 %As an example of an illiquid derivative for which we wish to find robust bounds we take the lookback option
 %\[
-%\Pp(\Psi) := \EE^{\QQ(\theta)}[\Psi] = e^{-rT} \EE^{\QQ} \left[\max_{t\in[0,T]}S_t^\theta - S_T \middle\vert \, S_0 = 1 \right]\, .
+%\Pp(\Psi) \defEqual \EE^{\QQ(\theta)}[\Psi] = e^{-rT} \EE^{\QQ} \left[\max_{t\in[0,T]}S_t^\theta - S_T \middle\vert \, S_0 = 1 \right]\, .
 %\]
 %The asset price~$S_t$ is generated using the Heston model described in Appendix~\ref{CalData}. We consider the same setting as in Section~\ref{sec numerics} and additionally also fit a Local volatility neural SDE model. 
 %
@@ -179,7 +179,7 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %  \D S_t = rS_t\,\D t + S_t \, \sigma(t,S_t)\D W_t\,,\,\,\,S_0=1\,
 %\end{align}
 %the model prices and market prices match exactly. 
-%In practice only some calls / put prices are liquid in the market and so to apply~\cite{dupire1994pricing} one has to interpolate, in an arbitrage free way, the missing data. 
+%In practice only some calls / put prices are liquid in the market and so to apply~\cite{dupire1994pricing} one has to interpolate, in an arbitrage-free way, the missing data. 
 %The choice of interpolation method is a further modelling choice on top of the one already made by postulating that the risky asset evolution is governed by~\eqref{LV}.   
 %
 %We will use a neural SDE instead of directly interpolating the missing data. 
@@ -207,7 +207,7 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %\end{split}
 %\end{equation}
 %where 
-%$\theta := \{\nu, \phi, \varphi, v_0, \rho \},\,\,\rho\in[-1,1], \,v_0>0, 
+%$\theta \defEqual \{\nu, \phi, \varphi, v_0, \rho \},\,\,\rho\in[-1,1], \,v_0>0, 
 %$
 %as the set of (multi-dimensional) parameters that we aim to optimise so that 
 %the model is calibrated to the observed market data. 
@@ -222,7 +222,7 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %
 %The parameterisation of the hedging strategy for the vanilla option prices is also a feed-forward
 %linear network with 3 hidden layers, 20 neurons per hidden layer and \texttt{relu} activation functions. 
-%However, in order to get one hedging strategy per vanilla option 
+%However, to get one hedging strategy per vanilla option 
 %considered in the market data, the output of~$\mathfrak{h}(t_k, s_{t_k, \theta}^{i}, \xi_{K_j})$ has as many neurons as strikes and maturities.
 %
 %Finally, the parameterisation of the hedging strategy for the exotic options price is also a feed-forward
@@ -231,7 +231,7 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %The neural SDEs~\eqref{NeuralLV} and~\eqref{eq LSV SDE} were discretized using the tamed Euler scheme~\eqref{eq tamed scheme} with~$N_{\text{steps}} = 8 \times 12$ uniform time steps for~$T=1$ year (i.e.~$16$ for every~$2$ months). 
 %The number of Monte Carlo trajectories in each stochastic gradient descent iteration was~$N=4\times 10^4$ and the abstract hedging strategy was used as a control variate.
 %
-%Finally in the evaluation of the calibrated neural SDE, the option prices are calculated using~$N = 4\times 10^5$ trajectories of the calibrated neural SDEs, which we generated with~$2\times 10^5$ Brownian paths and their antithetic paths; in addition we also used the learned hedging strategies to calculate the Monte Carlo estimators with lower variance~$\EE^{\QQ(\theta)}[\Phi_i^{\textup{cv}}]$ and~$\EE^{\QQ(\theta)}[\Psi^{\textup{cv}}]$.          
+%Finally in the evaluation of the calibrated neural SDE, the option prices are calculated using~$N = 4\times 10^5$ trajectories of the calibrated neural SDEs, which we generated with~$2\times 10^5$ Brownian paths and their antithetic paths; in addition, we also used the learned hedging strategies to calculate the Monte Carlo estimators with lower variance~$\EE^{\QQ(\theta)}[\Phi_i^{\textup{cv}}]$ and~$\EE^{\QQ(\theta)}[\Psi^{\textup{cv}}]$.          
 
 
 %\begin{figure}[h]
@@ -243,7 +243,7 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %Exotic option price quantiles are in blue in the left-hand box-plot groups.
 %The MSE quantiles of market data calibration is in grey, in the right-hand box-plot groups. 
 %Each box plot comes from 10 different runs of neural SDE calibration. 
-%The three box-plots in each group arise respectively from aiming for a lower bound of the illiquid derivative (left), only calibrating to the market and then pricing the illiquid derivative (middle) and aiming for a upper bound of the illiquid derivative (right).}
+%The three box-plots in each group arise respectively from aiming for a lower bound of the illiquid derivative (left), only calibrating to the market and then pricing the illiquid derivative (middle) and aiming for an upper bound of the illiquid derivative (right).}
 %\label{fig LV boxplots}
 %\end{figure}
 
@@ -256,15 +256,15 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %The blue boxplots in Figure~\ref{fig LV boxplots} provide different quantiles for the exotic option 
 % price~$\EE^{\QQ(\theta)}[\Psi]$ and the obtained bounds after running. We make the following observations from calibrating LV neural SDE:
 %\begin{enumerate}[i)]
-%\item It is possible to obtain high accuracy of calibration with MSE of about~$10^{-9}$ for~$6$ month maturity, about~$10^{-8}$ for 12 month maturity when the only target is to fit market data. If we are minimizing / maximizing the illiquid derivative price at the same time, then the MSE increases somewhat so that it is about~$10^{-8}$ for both~$6$ and~$12$ month maturities. 
+%\item It is possible to obtain high accuracy of calibration with MSE of about~$10^{-9}$ for~$6$ month maturity, about~$10^{-8}$ for 12-month maturity when the only target is to fit market data. If we are minimizing / maximizing the illiquid derivative price at the same time, then the MSE increases somewhat so that it is about~$10^{-8}$ for both~$6$ and~$12$ month maturities. 
 %See Figure~\ref{fig LV boxplots}. 
 %The calibration has been performed using~$K=21$ strikes.
-%\item The calibration is accurate not only in terms of MSE on prices but also on individual implied volatility curves, see Figure~\ref{FigUnc}
+%\item The calibration is accurate not only in terms of MSE on prices but also individual implied volatility curves, see Figure~\ref{FigUnc}
 % and others in Appendix~\ref{LVfitquality}.
 %\item As we increase the number of strikes per maturity the range of possible values for the illiquid derivative narrows. 
 %See Figure~\ref{Strikechart} and Tables~\ref{InitialisationImpact11strikes}, \ref{InitialisationImpact21strikes}, \ref{InitialisationImpact31strikes} and~\ref{InitialisationImpact41strikes}.
 %One expects, assuming sufficient expressiveness of the neural network, that as the number of strikes (and maturities) would increase to infinity we would recover the unique~$\sigma$ given by the Dupire formula that fits the continuum of European option prices.
-%\item With limited amount of market data (which is closer to practical applications) even the LV neural SDE produces noticeable ranges for prices of illiquid derivatives, see again Figure~\ref{fig LV boxplots}.  
+%\item With a limited amount of market data (which is closer to practical applications) even the LV neural SDE produces noticeable ranges for prices of illiquid derivatives, see again Figure~\ref{fig LV boxplots}.  
 %\end{enumerate}
 %
 %
@@ -276,14 +276,14 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %\includegraphics[clip,width=0.3\textwidth]{content/reschap1/Figures/figures_LV/Neural_SDE_maturity64_iv}
 %\includegraphics[clip,width=0.3\textwidth]{content/reschap1/Figures/figures_LV/Neural_SDE_maturity80_iv} 
 %\includegraphics[clip,width=0.3\textwidth]{content/reschap1/Figures/figures_LV/Neural_SDE_maturity96_iv}
-%\caption{Calibrated neural SDE LV model and target market implied volatility comparison.}
+%\caption{Calibrated neural SDE LV model and target numbers implied volatility comparison.}
 %\label{FigUnc}
 %\end{figure}
 %
 %
 %In Appendix~\ref{LVtables} we provide more details on how different random seeds, different constrained optimization algorithms and different number of strikes used in the market data input affect the illiquid derivative price.  
 %
-%In Appendix~\ref{LVfitquality} we present market price and implied  volatility fit for constrained and unconstrained calibrations. 
+%In Appendix~\ref{LVfitquality} we present market price and implied volatility fit for constrained and unconstrained calibrations. 
 %High level of accuracy in all calibrations is achieved due to the hedging neural network incorporated into model training.
 %
 %
@@ -295,7 +295,7 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %  \caption{Box plots for the Local Stochastic Volatility model~\eqref{eq LSV SDE}. Exotic option price quantiles are in blue in the left-hand box-plot groups.
 %The MSE quantiles of market data calibration is in grey, in the right-hand box-plot groups. 
 %Each box plot comes from 10 different runs of neural SDE calibration. 
-%The three box-plots in each group arise respectively from aiming for a lower bound of the illiquid derivative(left), only calibrating to market and then pricing the illiquid derivative (middle) and aiming for a upper bound of the illiquid derivative (right).}
+%The three box-plots in each group arise respectively from aiming for a lower anound of the illiquid derivative(left), only calibrating to market and then pricing the illiquid derivative (middle) and aiming for a upper bound of the illiquid derivative (right).}
 %\label{fig LSV boxplots}
 %\end{figure}
 %
@@ -310,7 +310,7 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %\begin{enumerate}[i)]
 %\item We note that our methods achieve high calibration accuracy to the market data (measured by MSE) with consistent bounds on the exotic option prices. 
 %See Figure~\ref{fig LSV boxplots}.
-%\item The calibration is accurate not only in MSE on prices but also on individual implied volatility curves, see Figure~\ref{fig LSV calibration}
+%\item The calibration is accurate not only in MSE on prices but also individual implied volatility curves, see Figure~\ref{fig LSV calibration}
 % and others in Appendix~\ref{sec LSVfitquality}.
 %\item The LSV neural SDE produces noticeable ranges for prices of illiquid derivatives, see again Figure~\ref{fig LSV boxplots}.  
 %\end{enumerate}
@@ -335,7 +335,7 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %\]
 %The histogram in Figure~\ref{fig hedge error} is calculated on~$N=400\, 000$ different paths and provides the values of~$s$,
 %\[
-%s:=\Psi\left(X^{\pi,\tilde{\theta}}\right)-\sum_{k=0}^{N_{\text{steps}}-1} \bar{\Hf}(t_k, (X_{t_k\wedge t_j}^{\pi,\tilde{\theta}})_{j=0}^{N_{\text{steps}}}, \xi_{\Psi})\Delta \bar S^{\pi,\tilde{\theta}}_{t_{k}} - \EE^{\QQ^N}\left[\Psi\left(X^{\pi,\tilde{\theta}}\right)\right],
+%s\defEqual\Psi\left(X^{\pi,\tilde{\theta}}\right)-\sum_{k=0}^{N_{\text{steps}}-1} \bar{\Hf}(t_k, (X_{t_k\wedge t_j}^{\pi,\tilde{\theta}})_{j=0}^{N_{\text{steps}}}, \xi_{\Psi})\Delta \bar S^{\pi,\tilde{\theta}}_{t_{k}} - \EE^{\QQ^N}\left[\Psi\left(X^{\pi,\tilde{\theta}}\right)\right],
 %\]
 %i.e., such that 
 %\[
@@ -368,7 +368,7 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %We recall that from Section~\ref{sec many maturities}, the Monte Carlo estimator~$\partial_{\theta}h^{N}(\theta)$ is a biased estimator of 
 %$\partial_{\theta}h(\theta)$
 %An upper bound of the bias is given by Corollary~\ref{eq cor sq loss bias}, that shows
-%that by reducing the variance of Monte Carlo estimator of the option price then the bias of~$\partial_{\theta}h^{N}(\theta)$ is also reduced, yielding better convergence behaviour of the 
+%that by reducing the variance of the Monte Carlo estimator of the option price then the bias of~$\partial_{\theta}h^{N}(\theta)$ is also reduced, yielding better convergence behaviour of the 
 %stochastic approximation algorithm. 
 %This can be observed in Figure~\ref{fig test cv}. 
 %\begin{figure}[h]
@@ -429,13 +429,13 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 
 %\section{Data used in calibration to synthetic data}\label{CalData}
 %
-%We used Heston model to generate prices of calls and puts. The model is
+%We used the Heston model to generate prices of calls and puts. The model is
 %\begin{eqnarray}\label{CalDataEq}
 %dX_t &=& r X_t\D t + X_t \sqrt{V_t}\D W_t, \quad X_0 = x_0 \\
 %dV_t &=& \kappa (\mu - V_t)dt + \eta \sqrt{V_t}dB_t, \quad V_0 = v_0 \\
 %d\langle B, W \rangle_t &=& \rho\D t\,.
 %\end{eqnarray}
-%It is well know that for this model a semi-analytic formula can be used to calculate option prices, see~\cite{heston1997closed} but also~\cite{LHT}. 
+%It is well known that for this model a semi-analytic formula can be used to calculate option prices, see~\cite{heston1997closed} but also~\cite{LHT}. 
 %The parameters below were used to generate target model calibration prices and were chosen so that the model produces a large skew at the short end of the smile:
 %\begin{equation}
 %\label{eq heston params}
@@ -445,15 +445,15 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %\begin{figure}[h!tbp]
 %  \centering 
 %  \includegraphics[width=0.45\textwidth]{content/reschap1/Figures/figures_LV/IV_more_points}
-%\caption{The ``market'' data used in calibration of the neural SDE models. 
+%\caption{The ``market'' data used in the calibration of the neural SDE models. 
 %In fact the implied volatility surface comes from~\eqref{CalDataEq} and~\eqref{eq heston params}.}
 %\label{TargetIVs}
 %\end{figure}
 %
 %
-%Options with bi-monthly maturities up to one year with varying range of strikes were used as market data for neural SDE calibration.
+%Options with bi-monthly maturities of up to one year with varying ranges of strikes were used as market data for neural SDE calibration.
 %The call / put option prices were obtained from the Heston model using Monte Carlo simulation with~$10^7$ Brownian trajectories.
-%We use bi-monthly maturities up to one year for considered calibrations. Varying range of strikes is used among different calibrations. 
+%We use bi-monthly maturities of up to one year for considered calibrations. A varying range of strikes is used among different calibrations. 
 %%See Figure~\ref{TargetIVs} for the resulting ``market'' data.
 
 
@@ -464,7 +464,7 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %
 %
 %
-%Feed-forward neural networks are functions constructed by composition of affine map and non-linear activation function.
+%Feed-forward neural networks are functions constructed by the composition of affine map and non-linear activation function.
 %We fix a locally Lipschitz activation function~$\mathbf a:\RR \to \RR$ as \texttt{relu}  function~$a(z)=\max(0,z)$ and
 %for~$d\in \NN$ define~$\mathbf A_d : \RR^d \to \RR^d$ as the function given, for~$x=(x_1,\ldots,x_d)$ by 
 %$\mathbf A_d(x) = (\mathbf a(x_1),\ldots, \mathbf a(x_d))$.
@@ -484,7 +484,7 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %%\[
 %%\mathcal P(\Phi) = \sum_{i=1}^L (l_{k-1}l_k + l_k )\,.
 %%\]
-%We will call such class of fully connected artificial neural networks~$\mathcal{DN}$.
+%We will call such a class of fully connected artificial neural networks~$\mathcal{DN}$.
 %Note that since the activation functions and architecture are fixed the learning task entails
 %finding the optimal~$\theta \in \RR^{\mathcal P}$ where~$p$ is the number of parameters in
 %$\theta$ given by
@@ -497,8 +497,8 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %\section{LV neural SDEs calibration accuracy}
 %\label{LVfitquality}
 %
-%Figures~\ref{FigUnc}, \ref{FigLB}, \ref{FigUB} present implied volatility fit of the local volatility neural SDE model~\eqref{NeuralLV} calibrated to: market vanilla data only; market vanilla data with lower bound constraint on lookback option payoff; market vanilla data with upper bound constraint on lookback option payoff respectively. 
-%Figures~\ref{FigUncprice}, \ref{FigLBprice}, \ref{FigUBprice} present target option price fit of local volatility neural SDE model~\eqref{NeuralLV} calibrated to: market vanilla data only; market vanilla data with lower bound constraint on lookback option payoff; market vanilla data with upper bound constraint on lookback option payoff respectively. 
+%Figures~\ref{FigUnc}, \ref{FigLB}, \ref{FigUB} present implied volatility fit of the local volatility neural SDE model~\eqref{NeuralLV} calibrated to market vanilla data only; market vanilla data with a lower bound constraint on lookback option payoff; market vanilla data with an upper bound constraint on lookback option payoff respectively. 
+%Figures~\ref{FigUncprice}, \ref{FigLBprice}, \ref{FigUBprice} present target option price fit of local volatility neural SDE model~\eqref{NeuralLV} calibrated to market vanilla data only; market vanilla data with a lower bound constraint on lookback option payoff; market vanilla data with an upper bound constraint on lookback option payoff respectively. 
 %High level of accuracy in all calibrations is achieved due to the hedging neural network incorporated into model training.
 %
 %
@@ -570,8 +570,8 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 %
 %Figures~\ref{fig LSV calibration lb}, \ref{fig LSV calibration} and~\ref{fig LSV calibration ub} provide the Vanilla call option price and the implied volatility curve
 %for the calibrated models. 
-%In each plot, the blue line corresponds to the target data (generated using Heston model), and each orange line corresponds to one run of the 
-%neural SDE calibration. We note again in this plots how the absolute error of the calibration to the vanilla prices is consistently of~$\Oo(10^{-4})$.  
+%In each plot, the blue line corresponds to the target data (generated using the Heston model), and each orange line corresponds to one run of the 
+%neural SDE calibration. We note again in this plot how the absolute error of the calibration to the vanilla prices is consistently of~$\Oo(10^{-4})$.  
 %
 %
 %
@@ -604,13 +604,13 @@ We see implied volatility curves of the 10 calibrated neural SDEs vs. the market
 
 %\section{Exotic price in LV neural SDEs}\label{LVtables}
 %
-%Below we see how different random seeds, constrained optimization algorithms and number of strikes used in the market data input affect the illiquid derivative price in the Local Volatility neural SDE model.
+%Below we see how different random seeds, constrained optimization algorithms and a number of strikes used in the market data input affect the illiquid derivative price in the Local Volatility neural SDE model.
 %
 %\begin{figure}[h]
 %  \centering 
 %  \includegraphics[clip,width=0.45\textwidth]{content/reschap1/Figures/figures_LV/Strikes_6months}
 %  \includegraphics[clip,width=0.45\textwidth]{content/reschap1/Figures/figures_LV/Strikes_12months}
-%  \caption{Lookback exotic option price in lower, upper and unconstrained implied by perfectly calibrated LV neural SDE calibrated to varying number of market option quotes.}
+%  \caption{Lookback exotic option price in lower, upper and unconstrained implied by perfectly calibrated LV neural SDE calibrated to a varying number of market options quotes.}
 %\label{Strikechart} 
 %\end{figure}
 %

@@ -162,6 +162,31 @@
 \newcommand{\fnmark}[1]{\refstepcounter{footnote}\label{#1}\footnotemark[\getrefnumber{#1}]}
 \newcommand{\fntext}[2]{\footnotetext[\getrefnumber{#1}]{#2}}
 
+\makeatletter
+% define new boolean conditional switch for whether
+% the abstract is being typeset
+\newif\ifabstract
+\abstractfalse
+% redefine `\chapter` so it only starts a new page if not typesetting
+% the abstract; sets abstract conditional to false after doing so
+\renewcommand\chapter{\ifabstract\relax\else%
+                    \if@openright\cleardoublepage\else\clearpage\fi%
+                    \fi
+                    \abstractfalse%
+                    \thispagestyle{plain}%
+                    \global\@topnum\z@
+                    \@afterindentfalse
+                    \secdef\@chapter\@schapter}
+% command for putting the title and name above the abstract; switches
+% abstract boolean to true for next `\chapter*` command...
+\newcommand{\abstracttitleandname}{%
+ \if@openright\cleardoublepage\else\clearpage\fi
+\textbf{\LARGE{\thesistitle}}\par
+\large{\emph{\name}}\par %
+\normalsize{Thesis advisor: \emph{\advisor}}\par\vspace*{\baselineskip}
+\abstracttrue}% Author: \hspace*{2em}
+\makeatother
+
 % for demonstration only
 \usepackage{lipsum}
 

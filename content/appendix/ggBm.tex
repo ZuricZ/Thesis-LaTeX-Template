@@ -1,6 +1,7 @@
 \section{Malliavin Calculus}\label{apx:malliavin_calculus}
-
-We provide a brief introduction to these concepts and tools in this section. However, for a more in-depth understanding of this field, we recommend referring to Nualart~\cite{Nualart2006TheTopics}. Malliavin calculus deals with the study of the differentiability properties of random variables, particularly those defined on a Wiener space. The calculus uses a differentiation operator called the Malliavin derivative, which is defined with respect to the underlying Brownian motion. The Malliavin derivative operator is a powerful tool that enables us to compute derivatives of stochastic integrals. This is especially useful in finance, where stochastic integrals are commonly used to model complex financial products. By applying the Malliavin derivative operator to stochastic integrals, we can derive formulas for the sensitivities of these products to their underlying parameters, such as interest rates, volatilities, and maturities. Let now $\SSb$ be the set of random variables of the form
+We provide a brief introduction to these concepts and tools in this section. However, for a more in-depth understanding of this field, we recommend referring to Nualart~\cite{Nualart2006TheTopics}. Malliavin calculus deals with the study of the differentiability properties of random variables, particularly those defined on a Wiener space. The calculus uses a differentiation operator called the Malliavin derivative, which is defined with respect to the underlying Brownian motion. The Malliavin derivative operator is a powerful tool that enables us to compute derivatives of stochastic integrals. This is especially useful in finance, where stochastic integrals are commonly used to model complex financial products. By applying the Malliavin derivative operator to stochastic integrals, we can derive formulas for the sensitivities of these products to their underlying parameters, such as interest rates, volatilities, and maturities.
+\begin{spacing}{1.15}
+Let now $\SSb$ be the set of random variables of the form
 \[
 F=f\left(W\left(h_1\right), \ldots, W\left(h_n\right)\right)
 \]
@@ -26,11 +27,12 @@ where $F_i \in \SSb$, and $h_i \in L^2([0, T])$ for $i\in\{1,\dots n\}$. Then, w
 \]
 Finally, the following result gives us an explicit martingale representation for random variables in $\DD_W^{1,2}$. For the proof in one-dimensional case see e.g.~\cite[Proposition 1.3.14]{Nualart2006TheTopics}.
 \begin{theorem}[Clark-Ocone formula]\label{thm:ClarkOcone}
-Let a random variable $F \in \DD_W^{1,2}$, then the following decomposition holds 
+Let a random variable $F \in \DD_W^{1,2}$, then the following decomposition holds
 \[
 F = \EE[F] + \int_0^T \EE_s\left[\Dr_s F\right] \D W_s\,.
 \]
 \end{theorem}
+\end{spacing}
 
 \section{Empirical analysis of the VIX distribution}\label{apx:VIX_smile_rBergomi}
 
@@ -59,28 +61,28 @@ Examining the distribution of log-returns based on daily CBOE data spanning from
     \label{fig:VIX_dist}
 \end{figure}
 
-Next, through a comparative analysis of VIX log-returns using quantile-quantile~(QQ) plots in Figure~\ref{fig:QQplots}, we examine the suitability of various probability distributions, including the normal, Student's~t, and Laplace distributions over different periods. The results reveal that while the normal distribution fails to capture the tail behaviour of VIX returns, both the Student's t and Laplace distributions exhibit improved fit in the tails. However, a notable limitation is observed in the inability of these distributions to capture the asymmetry present in the VIX returns fully, although the severity of miss-fit differed throughout different periods.
+Next, through a comparative analysis of VIX log-returns using quantile-quantile~(QQ) plots in Figure~\ref{fig:QQplots}, we examine the suitability of various probability distributions, including the normal, Student's~t, and Laplace distributions over different periods. The results reveal that while the normal distribution fails to capture the tail behaviour of VIX returns, both the Student's t and Laplace distributions exhibit improved fit in the tails. However, a notable limitation is observed in the inability of these distributions to capture the asymmetry present in the VIX returns fully, although the severity of error differed throughout different periods.
 
 \begin{figure}[htbp]
     \centering
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/gauss_QQ_2005-1-3-2022-10-28.pdf}
-        \caption{Gaussian}
+        \caption{\small Gaussian}
         % \label{fig:image1}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/student_QQ_2005-1-3-2022-10-28.pdf}
-        \caption{Student's t}
+        \caption{\small Student's t}
         % \label{fig:image2}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/laplace_QQ_2005-1-3-2022-10-28.pdf}
-        \caption{Laplace}
+        \caption{\small Laplace}
         % \label{fig:image3}
     \end{subfigure}
 
@@ -88,78 +90,79 @@ Next, through a comparative analysis of VIX log-returns using quantile-quantile~
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/gauss_QQ_2005-1-3-2009-12-31.pdf}
-        \caption{Gaussian}
+        \caption{\small Gaussian}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/student_QQ_2005-1-3-2009-12-31.pdf}
-        \caption{Student's t}
+        \caption{\small Student's t}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/laplace_QQ_2005-1-3-2009-12-31.pdf}
-        \caption{Laplace}
+        \caption{\small Laplace}
     \end{subfigure}
 
     \centering
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/gauss_QQ_2010-1-4-2014-12-31.pdf}
-        \caption{Gaussian}
+        \caption{\small Gaussian}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/student_QQ_2010-1-4-2014-12-31.pdf}
-        \caption{Student's t}
+        \caption{\small Student's t}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/laplace_QQ_2010-1-4-2014-12-31.pdf}
-        \caption{Laplace}
+        \caption{\small Laplace}
     \end{subfigure}
 
     \centering
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/gauss_QQ_2015-1-2-2019-12-31.pdf}
-        \caption{Gaussian}
+        \caption{\small Gaussian}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/student_QQ_2015-1-2-2019-12-31.pdf}
-        \caption{Student's t}
+        \caption{\small Student's t}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/laplace_QQ_2015-1-2-2019-12-31.pdf}
-        \caption{Laplace}
+        \caption{\small Laplace}
     \end{subfigure}
 
     \centering
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/gauss_QQ_2020-1-2-2022-10-28.pdf}
-        \caption{Gaussian}
+        \caption{\small Gaussian}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/student_QQ_2020-1-2-2022-10-28.pdf}
-        \caption{Student's t}
+        \caption{\small Student's t}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \centering
         \includegraphics[width=\textwidth]{content/reschap4/Figures/laplace_QQ_2020-1-2-2022-10-28.pdf}
-        \caption{Laplace}
+        \caption{\small Laplace}
     \end{subfigure}
-    \caption{\small Comparing the tails of empirical VIX log-returns to the corresponding theoretical distributions using QQ plots over the following periods: (a)-(c)~{2005-01-03} to {2022-10-28}; (d)-(f)~{2005-01-03} to {2009-12-31}, (g)-(i)~{2010-01-04} to {2014-12-31}; (j)-(l)~{2015-01-02} to {2019-12-31}; (m)-(o)~{2020-01-02} to {2022-10-28}.}\label{fig:QQplots}
+    \vspace*{-0.2\baselineskip}
+    \caption{\small Comparing the tails of empirical VIX log-returns to the corresponding theoretical distributions using QQ plots over the following periods: \\ (a)-(c)~{2005-01-03} to {2022-10-28}; (d)-(f)~{2005-01-03} to {2009-12-31}, (g)-(i)~{2010-01-04} to {2014-12-31}; (j)-(l)~{2015-01-02} to {2019-12-31}; (m)-(o)~{2020-01-02} to {2022-10-28}.}\label{fig:QQplots}
 \end{figure}
 
 Subsequently, we conduct several statistical tests to assess the normality of the returns over the same periods. Table~\ref{tab:normality_test} summarizes the results of the test for normality conducted on VIX log-returns. For the entire dataset, the skewness value is 1.048, accompanied by an extremely low {$p$\nobreakdash-value} from the test~\cite{DAgostino1990ANormality}, thus rejecting the null that the skewness of the population from which the sample was drawn is normal. Similarly, the (excess)~kurtosis value is 6.104, with a significantly low {$p$\nobreakdash-value} coming from the kurtosis test~\cite{Anscombe1983DistributionSamples}, thus again rejecting the null. These findings indicate substantial deviation from normality, as evidenced by the extremely low {$p$\nobreakdash-values}. Moreover, the norm test statistic based on~\cite{DAgostino1971AnSamples, DAgostino1973Testssqrtb_1} is zero up to machine precision, further supporting the rejection of the normality assumption for the VIX log-returns.
@@ -223,7 +226,7 @@ and therefore $f$ is $\sigma(X)\lor\sigma(Y)$-measurable.
     for some $C>0$, where the estimate~\cite[Theorem~9]{Jia2019SomeFunction} was used for the MfL function in the last inequality. Since the first two terms in the integral are clearly finite, we now turn our attention to the conditional expectation. By~\cite[Theorem 3.1]{Fink2013ConditionalMotion} we have
 \begin{align*}
     &\int_{T_1}^{T_2}\log\left(\EE\left[\exp(\eta\sqrt{y} B_r^{\alpha/2})\middle\vert \Ff_u^B,\; Y_\beta = y\right]\right) \D r \\
-    &\quad = \int_{T_1}^{T_2} \eta\sqrt{y}\left(B_u^{\alpha/2} + \int_0^u \Psi(u,r,v)\D B_v^{\alpha/2}\right) + \frac{\eta^2 y}{2}\left(|r-u|^\alpha - \EE\left[\left|\int_0^u \Psi(u,r,v)\D B_v^{\alpha/2}\right|^2\right]\right) \D r
+    &= \int_{T_1}^{T_2} \eta\sqrt{y}\left(B_u^{\alpha/2} + \int_0^u \Psi(u,r,v)\D B_v^{\alpha/2}\right) + \frac{\eta^2 y}{2}\left(|r-u|^\alpha - \EE\left[\left|\int_0^u \Psi(u,r,v)\D B_v^{\alpha/2}\right|^2\right]\right) \D r
 \end{align*}
 for~$y\geq 0$ and~$\Psi$ defined in~\eqref{eq:Psi}. The second term can be written as an integral of the kernel function
 $$

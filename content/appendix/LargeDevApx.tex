@@ -25,7 +25,7 @@
 % \end{proof}
 \subsection{Proof of Lemma~\ref{lem:degenerate}}\label{sec:lem:degenerate_Proof}
 Let $\beta > 1$, $(\Xx, \D)$ be a metric space and the random variable ${Z^\eps:\Omega\rightarrow \Xx}$. We first show that $Z^{\eps^\beta}$ is exponentially equivalent to $x_0\in \Xx$. For $\delta > 0$, let~${\Gamma_{\delta} \defEqual \{x \in \Xx : \, \mathrm{d}(x,x_0)>\delta \, \}}$ and note that $\{\omega \in \Omega : \, Z^{\eps^\beta}(\omega)\in\Gamma_\delta\}$ is measurable since $\Gamma_\delta$ is an open set. 
-Since~$\tilde\II$ is  a good rate function and hence lower semi-continuous, it achieves the infimum over a closed set. 
+Since~$\tilde\II$ is a good rate function and hence lower semi-continuous, it achieves the infimum over a closed set. 
 It thus follows that $\inf_{x\in\overline{\Gamma}_\delta} \tilde\II(x) > 0$, since $\tilde\II(x)=0$ if and only if $x=x_0$. Recall also that $Z^\eps$ satisfies an LDP with the good rate function~$\tilde\II$, then $\limsup_{\eps\downarrow 0}\eps^\beta\log\PP[ Z^{\eps^\beta} \in \Gamma_\delta] \leq - \inf_{x\in\overline{\Gamma}_\delta}\tilde\II(x)$ and therefore
 \begin{align}\label{eq:ProofExpEquiv}
 \limsup_{\eps\downarrow 0} \eps \log \PP \left[ Z^{\eps^\beta} \in \Gamma_\delta \right] &= \limsup_{\eps\downarrow 0} \eps^{1-\beta}\left(\eps^\beta \log \PP \left[ Z^{\eps^\beta} \in \Gamma_\delta \right]\right) \\
@@ -162,7 +162,7 @@ for all $t\in[0,T]$ and $\varphi, \phi\in\Aa$. Therefore, since
 \left \vert \Phi_t(\psi^n) - \Phi_t(\psi) \right \vert \leq \sup_{t\in[0,T]} \left \vert\psi_t^n - \psi_t\right \vert + t L \sup_{t\in[0,T]} \left \vert\psi_t^n - \psi_t\right \vert\,,
 \]
 then~$\Phi_t$ is continuous. Since $\{V^\eps\}_{\eps>0}$ is tight as a family of random variables by Lemma~\ref{lem:tightness}, we know that by taking a subsequence, $\{V^\eps\}_{\eps>0}$ converges in distribution to some random variable, call it $\bar\psi$, on the same probability space. 
-Then, observing that~$\Phi_t$ is continuous and bounded, we have by the Continuous mapping theorem that $\lim_{\eps\downarrow 0} \EE[\Phi_t(V^\eps)]=\EE\left[\Phi\left(\bar\psi\right)\right]$. Next, by definition of~$\Phi_t$, $\bar{\psi}=v_0 + \int_0^\cdot f\left(\bar{\psi}_s\right)\D s$ will be the limiting function if we are able to show the above limit is zero for that particular choice of~$\bar\psi$. Indeed, by H{\"o}lder's inequality % and It{\^o} isometry
+Then, observing that~$\Phi_t$ is continuous and bounded, we have by the Continuous mapping theorem that $\lim_{\eps\downarrow 0} \EE[\Phi_t(V^\eps)]=\EE\left[\Phi\left(\bar\psi\right)\right]$. Next, by definition of~$\Phi_t$, $\bar{\psi}=v_0 + \int_0^\cdot f\left(\bar{\psi}_s\right)\D s$ will be the limiting function if we can show the above limit is zero for that particular choice of~$\bar\psi$. Indeed, by H{\"o}lder's inequality % and It{\^o} isometry
 \begin{align*}
 \EE[\Phi_t(V^\eps)]
  = \EE\left[\left\vert h(\eps) \int_0^t g(V_s^\eps) \D W_s \right\vert\right]
@@ -170,7 +170,7 @@ Then, observing that~$\Phi_t$ is continuous and bounded, we have by the Continuo
   %&= \left( \eps \; \EE\left[ \int_0^t \left\vert g(V_s^\eps)\right\vert^2 \D s \right] \right)^{\frac{1}{2}}
   \leq h(\eps) M\,,
 \end{align*}
-since the integral can be shown to bounded by $M>0$ by the same arguments as in the proof of Lemma~\ref{lem:tightness}. Therefore $\lim_{\eps\downarrow 0} \EE[\Phi_t(V^\eps)] = 0$ and the limiting function indeed solves the ODE $\bar{\psi}=v_0 + \int_0^\cdot f(\bar{\psi}_s)\D s$ almost surely for all $t\in[0,T]$.
+since the integral can be shown to be bounded by $M>0$ by the same arguments as in the proof of Lemma~\ref{lem:tightness}. Therefore $\lim_{\eps\downarrow 0} \EE[\Phi_t(V^\eps)] = 0$ and the limiting function indeed solves the ODE $\bar{\psi}=v_0 + \int_0^\cdot f(\bar{\psi}_s)\D s$ almost surely for all $t\in[0,T]$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -250,12 +250,12 @@ Then for all $t\in[0,T]$ we have
 &\leq \int_0^t\big|f'(\psi_s)\big| |\eta_{s}^\eps|\D s + \int_0^t|\eta_{s}^\eps|^2\eps^{\beta} \int_0^1(1-u)\left|f''\left(\psi_u + u(V^\eps_u - \psi_u)\right)\right|\D u\,\D s + \left|Y_t^\eps(\omega)\right|\\
 &\leq \alpha \int_0^t\left(|\eta_{s}^\eps| + |\eta_{s}^\eps|^2\eps^{\beta}\right) \D s + \eps^{-\frac{\beta}{4}}\,,
 \end{align*}
-where 
+where
 \begin{align*}
-\alpha &\defEqual 1+\max\Big\{\sup_{x \in \Ii_\psi}\big|f'(x)\big|, \sup_{x\in \Ii_\psi}\big|f''(x)\big| \Big\} > 0\,, \\
+\alpha &\defEqual 1+\max\Big\{\sup_{x \in \Ii_\psi}\big|f'(x)\big|, \sup_{x\in \Ii_\psi}\big|f''(x)\big| \Big\}>0\,, \\
 \Ii_\psi &\defEqual  \Big[-\sup_{u \in [0,1]}\left\{|\psi_u|+ R\right\},\sup_{u \in [0,1]}\left\{|\psi_u| + R\right\}\Big]\,.
 \end{align*}
-It is clear that $\alpha$ is finite, since continuous functions admit a maximiser on compact sets. Then by Lemma~\ref{lem:Gronwall-bis} $G(|\eta_{t}^\eps(\omega)|) \leq G(\eps^{-\frac{\beta}{4}}) + \alpha t$ for all $t \in [0,T]$ and $u>0$ with 
+It is clear that $\alpha$ is finite since continuous functions admit a maximiser on compact sets. Then by Lemma~\ref{lem:Gronwall-bis} $G(|\eta_{t}^\eps(\omega)|) \leq G(\eps^{-\frac{\beta}{4}}) + \alpha t$ for all $t \in [0,T]$ and $u>0$ with 
 $$
 G(u) = \int_1^u\frac{1}{x + \eps^\beta x^2}\D x = \log\left(u\frac{1+\eps^\beta}{1 + \eps^\beta u}\right)\,,
 $$
